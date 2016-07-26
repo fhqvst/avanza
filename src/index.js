@@ -1,8 +1,21 @@
 import querystring from 'querystring';
 import Request from './Request';
 import Position from './Position';
+import Instrument from './Instrument';
+import Orderbook from './Orderbook';
+import Cache from 'node-cache';
 
 export default class Avanza {
+
+    constructor(options) {
+        if(options && options.storage) {
+            this._storage = options.storage;
+        } else {
+            this._storage = new Cache({
+                stdTTL: 120
+            })
+        }
+    }
 
     get authenticationSession() {
         return this._authenticationSession;
@@ -25,7 +38,7 @@ export default class Avanza {
      */
     getPositions() {
 
-        var that = this;
+        let that = this;
         return new Promise((resolve, reject) => {
             new Request({
                 path: '/_mobile/account/positions?sort=changeAsc',
@@ -42,6 +55,7 @@ export default class Avanza {
                         temp.push(new Position(positions.instrumentPositions[i].positions[j]));
                     }
                 }
+                that._storage.set('positions', temp);
                 resolve(temp);
 
             }).catch(error => reject(error));
@@ -113,13 +127,20 @@ export default class Avanza {
      * @param id The instrument id
      */
     getStock(id) {
-        return new Request({
-            path: '/_mobile/market/stock/' + id,
-            headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
-            }
-        });
+
+        return new Promise((resolve, reject) => {
+            return new Request({
+                path: '/_mobile/market/stock/' + id,
+                headers: {
+                    'X-AuthenticationSession': this._authenticationSession,
+                    'X-SecurityToken': this._securityToken
+                }
+            }).then(instrument => {
+                resolve(new Instrument(instrument));
+            }).catch(error => reject(error));
+        })
+
+
     }
 
     /**
@@ -145,15 +166,21 @@ export default class Avanza {
      * exchange_traded_fund or index.
      */
     getOrderbook(id, type) {
-        return new Request({
-            path: '/_mobile/order/' + type.toLowerCase() + '?' + querystring.stringify({
-                orderbookId: id
-            }),
-            headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
-            }
-        });
+        return new Promise((resolve, reject) => {
+
+            return new Request({
+                path: '/_mobile/order/' + type.toLowerCase() + '?' + querystring.stringify({
+                    orderbookId: id
+                }),
+                headers: {
+                    'X-AuthenticationSession': this._authenticationSession,
+                    'X-SecurityToken': this._securityToken
+                }
+            }).then(orderbook => {
+                resolve(new Orderbook(orderbook));
+            }).catch(error => reject(error));
+
+        })
     }
 
     /**

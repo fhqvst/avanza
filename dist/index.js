@@ -18,13 +18,33 @@ var _Position = require('./Position');
 
 var _Position2 = _interopRequireDefault(_Position);
 
+var _Instrument = require('./Instrument');
+
+var _Instrument2 = _interopRequireDefault(_Instrument);
+
+var _Orderbook = require('./Orderbook');
+
+var _Orderbook2 = _interopRequireDefault(_Orderbook);
+
+var _nodeCache = require('node-cache');
+
+var _nodeCache2 = _interopRequireDefault(_nodeCache);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Avanza = function () {
-    function Avanza() {
+    function Avanza(options) {
         _classCallCheck(this, Avanza);
+
+        if (options && options.storage) {
+            this._storage = options.storage;
+        } else {
+            this._storage = new _nodeCache2.default({
+                stdTTL: 120
+            });
+        }
     }
 
     _createClass(Avanza, [{
@@ -53,6 +73,7 @@ var Avanza = function () {
                             temp.push(new _Position2.default(positions.instrumentPositions[i].positions[j]));
                         }
                     }
+                    that._storage.set('positions', temp);
                     resolve(temp);
                 }).catch(function (error) {
                     return reject(error);
@@ -140,12 +161,20 @@ var Avanza = function () {
     }, {
         key: 'getStock',
         value: function getStock(id) {
-            return new _Request2.default({
-                path: '/_mobile/market/stock/' + id,
-                headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
-                }
+            var _this = this;
+
+            return new Promise(function (resolve, reject) {
+                return new _Request2.default({
+                    path: '/_mobile/market/stock/' + id,
+                    headers: {
+                        'X-AuthenticationSession': _this._authenticationSession,
+                        'X-SecurityToken': _this._securityToken
+                    }
+                }).then(function (instrument) {
+                    resolve(new _Instrument2.default(instrument));
+                }).catch(function (error) {
+                    return reject(error);
+                });
             });
         }
 
@@ -178,14 +207,23 @@ var Avanza = function () {
     }, {
         key: 'getOrderbook',
         value: function getOrderbook(id, type) {
-            return new _Request2.default({
-                path: '/_mobile/order/' + type.toLowerCase() + '?' + _querystring2.default.stringify({
-                    orderbookId: id
-                }),
-                headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
-                }
+            var _this2 = this;
+
+            return new Promise(function (resolve, reject) {
+
+                return new _Request2.default({
+                    path: '/_mobile/order/' + type.toLowerCase() + '?' + _querystring2.default.stringify({
+                        orderbookId: id
+                    }),
+                    headers: {
+                        'X-AuthenticationSession': _this2._authenticationSession,
+                        'X-SecurityToken': _this2._securityToken
+                    }
+                }).then(function (orderbook) {
+                    resolve(new _Orderbook2.default(orderbook));
+                }).catch(function (error) {
+                    return reject(error);
+                });
             });
         }
 

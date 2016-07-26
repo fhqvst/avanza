@@ -15,19 +15,11 @@ var Position = function () {
         this._accountId = position.accountId || '';
         this._acquiredValue = position.acquiredValue || 0;
         this._averageAcquiredPrice = position.averageAcquiredPrice || 0;
-        this._change = position.change || 0;
-        this._changePercent = position.changePercent || 0;
-        this._currency = position.currency || '';
-        this._flagCode = position.flagCode || '';
-        this._lastPrice = position.lastPrice || 0;
-        this._lastPriceUpdated = position.lastPriceUpdated ? new Date(position.lastPriceUpdated) : new Date('1970-01-01');
-        this._name = position.name || '';
-        this._orderbookId = position.orderbookId || '';
         this._profit = position.profit || 0;
         this._profitPercent = position.profitPercent || 0;
-        this._tradable = !!position.tradable;
         this._value = position.value || 0;
         this._volume = position.volume || 0;
+        this._instrumentId = position.orderbookId || '';
     }
 
     _createClass(Position, [{
@@ -52,56 +44,9 @@ var Position = function () {
             this._averageAcquiredPrice = value;
         }
     }, {
-        key: 'change',
+        key: 'instrumentId',
         get: function get() {
-            return this._change;
-        },
-        set: function set(value) {
-            this._change = value;
-        }
-    }, {
-        key: 'changePercent',
-        get: function get() {
-            return this._changePercent;
-        },
-        set: function set(value) {
-            this._changePercent = value;
-        }
-    }, {
-        key: 'currency',
-        get: function get() {
-            return this._currency;
-        }
-    }, {
-        key: 'flagCode',
-        get: function get() {
-            return this._flagCode;
-        }
-    }, {
-        key: 'lastPrice',
-        get: function get() {
-            return this._lastPrice;
-        },
-        set: function set(value) {
-            this._lastPrice = value;
-        }
-    }, {
-        key: 'lastPriceUpdated',
-        get: function get() {
-            return this._lastPriceUpdated;
-        },
-        set: function set(value) {
-            this._lastPriceUpdated = value;
-        }
-    }, {
-        key: 'name',
-        get: function get() {
-            return this._name;
-        }
-    }, {
-        key: 'orderbookId',
-        get: function get() {
-            return this._orderbookId;
+            return this._instrumentId;
         }
     }, {
         key: 'profit',
@@ -118,14 +63,6 @@ var Position = function () {
         },
         set: function set(value) {
             this._profitPercent = value;
-        }
-    }, {
-        key: 'tradable',
-        get: function get() {
-            return this._tradable;
-        },
-        set: function set(value) {
-            this._tradable = value;
         }
     }, {
         key: 'value',

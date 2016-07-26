@@ -36,5 +36,7 @@
       "transform-class-properties"
     ]
   },
-  "dependencies": {}
+  "dependencies": {
+    "node-cache": "^3.2.1"
+  }
 }

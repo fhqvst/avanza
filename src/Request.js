@@ -17,7 +17,7 @@ export default class {
             }, response => {
 
                 if (response.statusCode < 200 || response.statusCode > 299) {
-                    reject(new Error('The request returned an error: ' + response.statusCode));
+                    reject(new Error('The request returned an error: ' + response.statusCode + ' ' + response.statusMessage));
                 }
 
                 let body = [];
