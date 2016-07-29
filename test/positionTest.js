@@ -46,7 +46,10 @@ describe('positions', () => {
             change: -42.5
         });
 
-        expect(position.lastPriceUpdated.getTime()).to.equal(1469454303000);
+        expect(position).to.have.property('instrumentId');
+        expect(position).to.have.property('profitPercent');
+        expect(position).to.have.property('accountId');
+
         done();
 
     });

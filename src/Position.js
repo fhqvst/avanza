@@ -8,7 +8,7 @@ export default class Position {
         this._profitPercent = position.profitPercent || 0;
         this._value = position.value || 0;
         this._volume = position.volume || 0;
-        this._instrumentId = position.orderbookId || ''
+        this._instrumentId = position.orderbookId || '';
     }
 
     get accountId() {
