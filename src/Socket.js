@@ -1,7 +1,6 @@
 import WebSocket from 'ws';
 import {EventEmitter} from 'events';
 
-
 export default class Socket {
     
     constructor(options) {
@@ -102,10 +101,23 @@ export default class Socket {
         return this._events.on(event, callback);
     };
 
+    /**
+     * Checks if the socket is currently connected.
+     *
+     * @returns {boolean}
+     */
+    isOpened() {
+        return this._socket.readyState === this._socket.OPEN;
+    }
+
+    /**
+     * Opens a connection with the current subscription ID, handshakes and
+     * sets a valid client ID if successful.
+     */
     initialize() {
 
         if(typeof this._subscriptionId === 'undefined') {
-            throw new Error('Socket requires a subscription ID to work.')
+            throw new Error('The socket requires a subscription ID to work.')
         }
 
         if(this._socket.readyState === this._socket.OPEN) {
@@ -140,6 +152,10 @@ export default class Socket {
      * or deals. Defaults to quotes only.
      */
     subscribe(id, channels = ['quotes']) {
+
+        if(!this.isOpened()) {
+            throw new Error('The socket is not yet initialized. You must initialize() before subscribing to channels.');
+        }
 
         // channels = ['quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals']
 

@@ -17,6 +17,9 @@ export default class Avanza {
             url: 'wss://www.avanza.se/_push/cometd',
             events: this._events
         });
+
+        this._events.emit('init', this)
+
     }
 
     /**
@@ -125,14 +128,14 @@ export default class Avanza {
      * @param watchlistId
      */
     addToWatchlist(instrumentId, watchlistId) {
-            return new Request({
-                path: '/_api/usercontent/watchlist/' + watchlistId + '/orderbooks/' + instrumentId,
-                method: 'PUT',
-                headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
-                }
-            });
+        return new Request({
+            path: '/_api/usercontent/watchlist/' + watchlistId + '/orderbooks/' + instrumentId,
+            method: 'PUT',
+            headers: {
+                'X-AuthenticationSession': this._authenticationSession,
+                'X-SecurityToken': this._securityToken
+            }
+        });
     }
 
     /**
@@ -362,6 +365,8 @@ export default class Avanza {
                         authenticationSession: that._authenticationSession,
                         subscriptionId: that._subscriptionId
                     });
+
+                    this._events.emit('authenticate')
 
                 }).catch(e => reject(e));
 
