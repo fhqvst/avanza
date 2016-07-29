@@ -26,6 +26,10 @@ var _Orderbook = require('./Orderbook');
 
 var _Orderbook2 = _interopRequireDefault(_Orderbook);
 
+var _Socket = require('./Socket');
+
+var _Socket2 = _interopRequireDefault(_Socket);
+
 var _nodeCache = require('node-cache');
 
 var _nodeCache2 = _interopRequireDefault(_nodeCache);
@@ -38,14 +42,15 @@ var Avanza = function () {
     function Avanza(options) {
         _classCallCheck(this, Avanza);
 
-        if (options && options.storage) {
-            this._storage = options.storage;
-        } else {
-            this._storage = new _nodeCache2.default({
-                stdTTL: 120
-            });
-        }
+        this._storage = options && options.storage ? options.storage : new _nodeCache2.default({ stdTTL: 120 });
+        this._socket = options && options.socket ? options.socket : new _Socket2.default({
+            url: 'wss://www.avanza.se/_push/cometd'
+        });
     }
+
+    /**
+     * Getters & Setters
+     */
 
     _createClass(Avanza, [{
         key: 'getPositions',
@@ -401,6 +406,9 @@ var Avanza = function () {
                             that._securityToken = securityToken;
                             that._authenticationSession = response.authenticationSession;
                             that._subscriptionId = response.pushSubscriptionId;
+                            that._customerId = response.customerId;
+
+                            that._socket.subscriptionId = response.pushSubscriptionId;
 
                             resolve({
                                 securityToken: that._securityToken,
@@ -429,6 +437,14 @@ var Avanza = function () {
         },
         set: function set(value) {
             this._securityToken = value;
+        }
+    }, {
+        key: 'socket',
+        get: function get() {
+            return this._socket;
+        },
+        set: function set(value) {
+            this._socket = value;
         }
     }]);
 

@@ -3,19 +3,21 @@ import Request from './Request';
 import Position from './Position';
 import Instrument from './Instrument';
 import Orderbook from './Orderbook';
+import Socket from './Socket';
 import Cache from 'node-cache';
 
 export default class Avanza {
 
     constructor(options) {
-        if(options && options.storage) {
-            this._storage = options.storage;
-        } else {
-            this._storage = new Cache({
-                stdTTL: 120
-            })
-        }
+        this._storage = (options && options.storage) ? options.storage : new Cache({stdTTL: 120})
+        this._socket = (options && options.socket) ? options.socket : new Socket({
+            url: 'wss://www.avanza.se/_push/cometd'
+        });
     }
+
+    /**
+     * Getters & Setters
+     */
 
     get authenticationSession() {
         return this._authenticationSession;
@@ -31,6 +33,14 @@ export default class Avanza {
 
     set securityToken(value) {
         this._securityToken = value;
+    }
+
+    get socket() {
+        return this._socket;
+    }
+
+    set socket(value) {
+        this._socket = value;
     }
 
     /**
@@ -339,6 +349,9 @@ export default class Avanza {
                     that._securityToken = securityToken;
                     that._authenticationSession = response.authenticationSession;
                     that._subscriptionId = response.pushSubscriptionId;
+                    that._customerId = response.customerId;
+
+                    that._socket.subscriptionId = response.pushSubscriptionId;
 
                     resolve({
                         securityToken: that._securityToken,
