@@ -22,7 +22,7 @@ $ npm install
 
 ## Documentation
 
-...to be written.
+See the [wiki](https://github.com/fhqvst/avanza/wiki).
 
 ## Test auth file
 
@@ -38,7 +38,45 @@ ORDER=12345         # the id of an order belonging to the specified account
 
 ## Example
 
-...to be written.
+Authenticate and fetch currently held positions:
+```javascript
+import Avanza from 'avanza'
+const avanza = new Avanza()
+
+avanza.authenticate({
+    username: 'draghimario',
+    password: 'cashisking1337'
+}).then() => {
+
+   avanza.getPositions().then(positions => {
+      console.log(positions);
+   });
+   
+})
+```
+
+Subscribe to real-time quotes for a given instrument
+```javascript
+import Avanza from 'avanza'
+const avanza = new Avanza()
+
+avanza.authenticate({
+    username: 'draghimario',
+    password: 'cashisking1337'
+}).then() => {
+
+  avanza.socket.on('connect', () => {
+      client.socket.subscribe('5479', ['quotes']); // Telia
+  });
+
+  avanza.socket.on('subscribe', data => {
+      console.info('Received quote: ', data);
+  });
+  
+  avanza.socket.initialize();
+   
+})
+```
 
 ## Authentication
 
