@@ -4,14 +4,17 @@ import {EventEmitter} from 'events';
 
 export default class Socket {
     
-    constructor(options = {
-        url: '',
-        subscriptionId: ''
-    }) {
+    constructor(options) {
+
+        options = Object.assign({}, {
+            url: '',
+            subscriptionId: '',
+            events: new EventEmitter()
+        }, options);
 
         let _socket = options.socket ? new options.socket : new WebSocket(options.url);
         let _subscriptionId = options.subscriptionId;
-        let _events = new EventEmitter();
+        let _events = options.events;
 
         this._socket = _socket;
         this._events = _events;
@@ -130,19 +133,25 @@ export default class Socket {
 
     }
 
-    subscribe(id) {
+    /**
+     *
+     * @param id
+     * @param channels An array of channels. Valid channels are: quotes, orderdepths, trades, brokertradesummary, orders
+     * or deals. Defaults to quotes only.
+     */
+    subscribe(id, channels = ['quotes']) {
 
-        const subscriptions = ['quotes']; // ['quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals']
+        // channels = ['quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals']
 
         let that = this;
-        subscriptions.forEach((subscription) => {
+        channels.forEach((channel) => {
 
             this._socket.send(JSON.stringify([
                 {
                     channel: '/meta/subscribe',
                     clientId: that._clientId,
                     id: that._id++,
-                    subscription: '/' + subscription + '/' + id
+                    subscription: '/' + channel + '/' + id
                 }])
             );
 

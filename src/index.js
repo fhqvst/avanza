@@ -1,17 +1,21 @@
 import querystring from 'querystring';
+import Cache from 'node-cache';
+import {EventEmitter} from 'events';
+
 import Request from './Request';
 import Position from './Position';
 import Instrument from './Instrument';
 import Orderbook from './Orderbook';
 import Socket from './Socket';
-import Cache from 'node-cache';
 
 export default class Avanza {
 
     constructor(options) {
+        this._events = new EventEmitter();
         this._storage = (options && options.storage) ? options.storage : new Cache({stdTTL: 120})
         this._socket = (options && options.socket) ? options.socket : new Socket({
-            url: 'wss://www.avanza.se/_push/cometd'
+            url: 'wss://www.avanza.se/_push/cometd',
+            events: this._events
         });
     }
 
@@ -365,6 +369,10 @@ export default class Avanza {
 
         });
 
+    }
+
+    on(event, callback) {
+        return this._events.on(event, callback);
     }
 
 }
