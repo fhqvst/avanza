@@ -92,7 +92,7 @@ Run all tests
 ```bash
 $ npm test
 ```
-NOTE: No tests will run without an `.env` file, and as surprising as it may seem, the file also needs values in it must be valid. 
+NOTE: No tests will run without an `.env` file and, as surprising as it may seem, the values in it must be valid. 
 
 ## LICENSE
 
