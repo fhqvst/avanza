@@ -92,12 +92,7 @@ Run all tests
 ```bash
 $ npm test
 ```
-
-Or run a specific test
-
-```bash
-$ npm test test/exampleTest.js
-```
+NOTE: No tests will run without an `.env` file, and as surprising as it may seem, the file also needs values in it must be valid. 
 
 ## LICENSE
 
