@@ -66,7 +66,7 @@ avanza.authenticate({
 }).then() => {
 
   avanza.socket.on('connect', () => {
-      client.socket.subscribe('5479', ['quotes']); // Telia
+      avanza.socket.subscribe('5479', ['quotes']); // Telia
   });
 
   avanza.socket.on('subscribe', data => {
