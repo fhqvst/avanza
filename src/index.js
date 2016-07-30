@@ -316,6 +316,14 @@ export default class Avanza {
         let that = this;
         return new Promise((resolve, reject) => {
 
+            if(
+                typeof credentials === 'undefined' ||
+                !credentials.username ||
+                !credentials.password
+            ) {
+                reject('Avanza.authenticate received no credentials.')
+            }
+
             if(that.isAuthenticated && !force) {
 
                 resolve({
