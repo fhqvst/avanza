@@ -29,9 +29,7 @@ export default class Avanza {
             url: 'wss://www.avanza.se/_push/cometd',
             events: this._events
         });
-
         this._events.emit('init', this)
-
     }
 
     /**
@@ -52,6 +50,14 @@ export default class Avanza {
 
     set securityToken(value) {
         this._securityToken = value;
+    }
+
+    get subscriptionId() {
+        return this._subscriptionId;
+    }
+
+    set subscriptionId(value) {
+        this._subscriptionId = value
     }
 
     get socket() {
