@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.INDEX = exports.ETF = exports.WARRANT = exports.CERTIFICATE = exports.FUTURE = exports.OPTION = exports.BOND = exports.FUND = exports.STOCK = undefined;
+exports.CONVERTIBLE = exports.EQUITY_LINKED_BOND = exports.SUBSCRIPTION_OPTION = exports.PREMIUM_BOND = exports.INDEX = exports.ETF = exports.WARRANT = exports.CERTIFICATE = exports.FUTURE_FORWARD = exports.OPTION = exports.BOND = exports.FUND = exports.STOCK = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -41,11 +41,15 @@ var STOCK = exports.STOCK = 'stock';
 var FUND = exports.FUND = 'fund';
 var BOND = exports.BOND = 'bond';
 var OPTION = exports.OPTION = 'option';
-var FUTURE = exports.FUTURE = 'future_forward';
+var FUTURE_FORWARD = exports.FUTURE_FORWARD = 'future_forward';
 var CERTIFICATE = exports.CERTIFICATE = 'certificate';
 var WARRANT = exports.WARRANT = 'warrant';
 var ETF = exports.ETF = 'exchange_traded_fund';
 var INDEX = exports.INDEX = 'index';
+var PREMIUM_BOND = exports.PREMIUM_BOND = 'premium_bond';
+var SUBSCRIPTION_OPTION = exports.SUBSCRIPTION_OPTION = 'subscription_option';
+var EQUITY_LINKED_BOND = exports.EQUITY_LINKED_BOND = 'equity_linked_bond';
+var CONVERTIBLE = exports.CONVERTIBLE = 'convertible';
 
 var Avanza = function () {
     function Avanza(options) {
@@ -216,8 +220,7 @@ var Avanza = function () {
          * Fetch detailed orderbook information for a given instrument. Note that both id and type is required.
          *
          * @param id
-         * @param type One of the following lowercase strings: stock, fund, bond, option, future_forward, certificate, warrant,
-         * exchange_traded_fund or index.
+         * @param type Any of the constants defined at the top of this file.
          */
 
     }, {
@@ -333,8 +336,7 @@ var Avanza = function () {
          * Searches for the given query. If type is supplied, only search for results of specified type.
          *
          * @param query
-         * @param type One of the following uppercase strings: STOCK, FUND, BOND, OPTION, FUTURE_FORWARD, CERTIFICATE, WARRANT,
-         * EXCHANGE_TRADED_FUND or INDEX.
+         * @param type Any of the constants defined at the top of this file.
          */
 
     }, {
