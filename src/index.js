@@ -11,11 +11,15 @@ export const STOCK = 'stock'
 export const FUND = 'fund'
 export const BOND = 'bond'
 export const OPTION = 'option'
-export const FUTURE = 'future_forward'
+export const FUTURE_FORWARD = 'future_forward'
 export const CERTIFICATE = 'certificate'
 export const WARRANT = 'warrant'
 export const ETF = 'exchange_traded_fund'
 export const INDEX = 'index';
+export const PREMIUM_BOND = 'premium_bond'
+export const SUBSCRIPTION_OPTION = 'subscription_option'
+export const EQUITY_LINKED_BOND = 'equity_linked_bond';
+export const CONVERTIBLE = 'convertible';
 
 export default class Avanza {
 
@@ -186,8 +190,7 @@ export default class Avanza {
      * Fetch detailed orderbook information for a given instrument. Note that both id and type is required.
      *
      * @param id
-     * @param type One of the following lowercase strings: stock, fund, bond, option, future_forward, certificate, warrant,
-     * exchange_traded_fund or index.
+     * @param type Any of the constants defined at the top of this file.
      */
     getOrderbook(id, type) {
         return new Promise((resolve, reject) => {
@@ -285,8 +288,7 @@ export default class Avanza {
      * Searches for the given query. If type is supplied, only search for results of specified type.
      *
      * @param query
-     * @param type One of the following uppercase strings: STOCK, FUND, BOND, OPTION, FUTURE_FORWARD, CERTIFICATE, WARRANT,
-     * EXCHANGE_TRADED_FUND or INDEX.
+     * @param type Any of the constants defined at the top of this file.
      */
     search(query, type) {
 
