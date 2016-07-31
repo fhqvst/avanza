@@ -60,7 +60,6 @@ var Avanza = function () {
             url: 'wss://www.avanza.se/_push/cometd',
             events: this._events
         });
-
         this._events.emit('init', this);
     }
 
@@ -462,6 +461,14 @@ var Avanza = function () {
         },
         set: function set(value) {
             this._securityToken = value;
+        }
+    }, {
+        key: 'subscriptionId',
+        get: function get() {
+            return this._subscriptionId;
+        },
+        set: function set(value) {
+            this._subscriptionId = value;
         }
     }, {
         key: 'socket',

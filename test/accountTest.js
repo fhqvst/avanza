@@ -8,7 +8,6 @@ import Avanza from '../dist';
 chai.use(chaiAsPromised);
 chai.should();
 
-
 describe('account', () => {
 
     let client;
@@ -33,7 +32,7 @@ describe('account', () => {
         return client.search('telia').should.not.be.rejected;
     });
 
-    it('should successfully perform a GET request to /_mobile/market/search/', () => {
+    it('should successfully perform a GET request with type to /_mobile/market/search/', () => {
         return client.search('omx', 'equity_linked_bond').should.not.be.rejected;
     });
     

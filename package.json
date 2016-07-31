@@ -1,6 +1,6 @@
 {
   "name": "avanza",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "A wrapper for the unofficial Avanza API",
   "main": "dist/index.js",
   "scripts": {
@@ -37,7 +37,6 @@
     ]
   },
   "dependencies": {
-    "promise-queue": "^2.2.3",
     "ws": "^1.1.1"
   }
 }
