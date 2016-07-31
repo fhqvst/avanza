@@ -3,12 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.INDEX = exports.ETF = exports.WARRANT = exports.CERTIFICATE = exports.FUTURE = exports.OPTION = exports.BOND = exports.FUND = exports.STOCK = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _querystring = require('querystring');
 
 var _querystring2 = _interopRequireDefault(_querystring);
+
+var _events = require('events');
 
 var _Request = require('./Request');
 
@@ -30,22 +33,31 @@ var _Socket = require('./Socket');
 
 var _Socket2 = _interopRequireDefault(_Socket);
 
-var _nodeCache = require('node-cache');
-
-var _nodeCache2 = _interopRequireDefault(_nodeCache);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var STOCK = exports.STOCK = 'stock';
+var FUND = exports.FUND = 'fund';
+var BOND = exports.BOND = 'bond';
+var OPTION = exports.OPTION = 'option';
+var FUTURE = exports.FUTURE = 'future_forward';
+var CERTIFICATE = exports.CERTIFICATE = 'certificate';
+var WARRANT = exports.WARRANT = 'warrant';
+var ETF = exports.ETF = 'exchange_traded_fund';
+var INDEX = exports.INDEX = 'index';
 
 var Avanza = function () {
     function Avanza(options) {
         _classCallCheck(this, Avanza);
 
-        this._storage = options && options.storage ? options.storage : new _nodeCache2.default({ stdTTL: 120 });
+        this._events = new _events.EventEmitter();
         this._socket = options && options.socket ? options.socket : new _Socket2.default({
-            url: 'wss://www.avanza.se/_push/cometd'
+            url: 'wss://www.avanza.se/_push/cometd',
+            events: this._events
         });
+
+        this._events.emit('init', this);
     }
 
     /**
@@ -78,7 +90,6 @@ var Avanza = function () {
                             temp.push(new _Position2.default(positions.instrumentPositions[i].positions[j]));
                         }
                     }
-                    that._storage.set('positions', temp);
                     resolve(temp);
                 }).catch(function (error) {
                     return reject(error);
@@ -362,9 +373,14 @@ var Avanza = function () {
     }, {
         key: 'authenticate',
         value: function authenticate(credentials, force) {
+            var _this3 = this;
 
             var that = this;
             return new Promise(function (resolve, reject) {
+
+                if (typeof credentials === 'undefined' || !credentials.username || !credentials.password) {
+                    reject('Avanza.authenticate received no credentials.');
+                }
 
                 if (that.isAuthenticated && !force) {
 
@@ -415,12 +431,19 @@ var Avanza = function () {
                                 authenticationSession: that._authenticationSession,
                                 subscriptionId: that._subscriptionId
                             });
+
+                            _this3._events.emit('authenticate');
                         }).catch(function (e) {
                             return reject(e);
                         });
                     })();
                 }
             });
+        }
+    }, {
+        key: 'on',
+        value: function on(event, callback) {
+            return this._events.on(event, callback);
         }
     }, {
         key: 'authenticationSession',

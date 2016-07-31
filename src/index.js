@@ -7,6 +7,16 @@ import Instrument from './Instrument';
 import Orderbook from './Orderbook';
 import Socket from './Socket';
 
+export const STOCK = 'stock'
+export const FUND = 'fund'
+export const BOND = 'bond'
+export const OPTION = 'option'
+export const FUTURE = 'future_forward'
+export const CERTIFICATE = 'certificate'
+export const WARRANT = 'warrant'
+export const ETF = 'exchange_traded_fund'
+export const INDEX = 'index';
+
 export default class Avanza {
 
     constructor(options) {

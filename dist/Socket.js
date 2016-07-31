@@ -17,19 +17,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Socket = function () {
-    function Socket() {
+    function Socket(options) {
         var _this = this;
-
-        var options = arguments.length <= 0 || arguments[0] === undefined ? {
-            url: '',
-            subscriptionId: ''
-        } : arguments[0];
 
         _classCallCheck(this, Socket);
 
+        options = Object.assign({}, {
+            url: '',
+            subscriptionId: '',
+            events: new _events2.EventEmitter()
+        }, options);
+
         var _socket = options.socket ? new options.socket() : new _ws2.default(options.url);
         var _subscriptionId = options.subscriptionId;
-        var _events = new _events2.EventEmitter();
+        var _events = options.events;
 
         this._socket = _socket;
         this._events = _events;
@@ -94,12 +95,30 @@ var Socket = function () {
             return this._events.on(event, callback);
         }
     }, {
+        key: 'isOpened',
+
+
+        /**
+         * Checks if the socket is currently connected.
+         *
+         * @returns {boolean}
+         */
+        value: function isOpened() {
+            return this._socket.readyState === this._socket.OPEN;
+        }
+
+        /**
+         * Opens a connection with the current subscription ID, handshakes and
+         * sets a valid client ID if successful.
+         */
+
+    }, {
         key: 'initialize',
         value: function initialize() {
             var _this2 = this;
 
             if (typeof this._subscriptionId === 'undefined') {
-                throw new Error('Socket requires a subscription ID to work.');
+                throw new Error('The socket requires a subscription ID to work.');
             }
 
             if (this._socket.readyState === this._socket.OPEN) {
@@ -123,21 +142,36 @@ var Socket = function () {
                 });
             }
         }
+
+        /**
+         *
+         * @param id
+         * @param channels An array of channels. Valid channels are: quotes, orderdepths, trades, brokertradesummary, orders
+         * or deals. Defaults to quotes only.
+         */
+
     }, {
         key: 'subscribe',
         value: function subscribe(id) {
             var _this3 = this;
 
-            var subscriptions = ['quotes']; // ['quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals']
+            var channels = arguments.length <= 1 || arguments[1] === undefined ? ['quotes'] : arguments[1];
+
+
+            if (!this.isOpened()) {
+                throw new Error('The socket is not yet initialized. You must initialize() before subscribing to channels.');
+            }
+
+            // channels = ['quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals']
 
             var that = this;
-            subscriptions.forEach(function (subscription) {
+            channels.forEach(function (channel) {
 
                 _this3._socket.send(JSON.stringify([{
                     channel: '/meta/subscribe',
                     clientId: that._clientId,
                     id: that._id++,
-                    subscription: '/' + subscription + '/' + id
+                    subscription: '/' + channel + '/' + id
                 }]));
             });
         }
