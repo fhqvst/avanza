@@ -1,5 +1,4 @@
 import querystring from 'querystring';
-import Cache from 'node-cache';
 import {EventEmitter} from 'events';
 
 import Request from './Request';
@@ -12,7 +11,6 @@ export default class Avanza {
 
     constructor(options) {
         this._events = new EventEmitter();
-        this._storage = (options && options.storage) ? options.storage : new Cache({stdTTL: 120})
         this._socket = (options && options.socket) ? options.socket : new Socket({
             url: 'wss://www.avanza.se/_push/cometd',
             events: this._events
@@ -72,7 +70,6 @@ export default class Avanza {
                         temp.push(new Position(positions.instrumentPositions[i].positions[j]));
                     }
                 }
-                that._storage.set('positions', temp);
                 resolve(temp);
 
             }).catch(error => reject(error));
