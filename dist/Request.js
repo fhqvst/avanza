@@ -30,7 +30,7 @@ var Request = function Request(options) {
         }, function (response) {
 
             if (response.statusCode < 200 || response.statusCode > 299) {
-                reject(new Error('The request returned an error: ' + response.statusCode + ' ' + response.statusMessage));
+                return reject(new Error('The request returned an error: ' + response.statusCode + ' ' + response.statusMessage));
             }
 
             var body = [];

@@ -27,9 +27,14 @@ var Instrument = function () {
         this._ticker = instrument.tickerSymbol || '';
         this._totalVolumeTraded = instrument.totalVolumeTraded || 0;
         this._totalValueTraded = instrument.totalValueTraded || 0;
-        this._volatility = instrument.keyRatios.volatility || 0;
-        this._pe = instrument.keyRatios.priceEarningsRatio || 0;
-        this._yield = instrument.keyRatios.directYield || 0;
+
+        if (instrument.keyRatios) {
+            this._volatility = instrument.keyRatios.volatility ? instrument.keyRatios.volatility : 0;
+            this._pe = instrument.keyRatios.priceEarningsRatio || 0;
+            this._yield = instrument.keyRatios.directYield || 0;
+        } else {
+            this._volatility = this._pe = this._yield = 0;
+        }
     }
 
     _createClass(Instrument, [{
