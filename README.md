@@ -46,7 +46,7 @@ const avanza = new Avanza()
 avanza.authenticate({
     username: 'draghimario',
     password: 'cashisking1337'
-}).then() => {
+}).then(() => {
 
    avanza.getPositions().then(positions => {
       console.log(positions);
@@ -60,21 +60,21 @@ Subscribe to real-time quotes for a given instrument
 import Avanza from 'avanza'
 const avanza = new Avanza()
 
+avanza.socket.on('connect', () => {
+  avanza.socket.subscribe('5479', ['quotes']); // Telia
+});
+
+avanza.socket.on('subscribe', data => {
+  console.info('Received quote: ', data);
+});
+
 avanza.authenticate({
     username: 'draghimario',
     password: 'cashisking1337'
-}).then() => {
+}).then(() => {
 
-  avanza.socket.on('connect', () => {
-      avanza.socket.subscribe('5479', ['quotes']); // Telia
-  });
-
-  avanza.socket.on('subscribe', data => {
-      console.info('Received quote: ', data);
-  });
-  
   avanza.socket.initialize();
-   
+
 })
 ```
 
