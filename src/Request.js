@@ -1,5 +1,5 @@
-const https = require('https');
-export default class {
+import https from 'https';
+export default class Request {
 
     constructor(options) {
         return new Promise((resolve, reject) => {

@@ -4,16 +4,20 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _https = require('https');
+
+var _https2 = _interopRequireDefault(_https);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var https = require('https');
-
-var _class = function _class(options) {
-    _classCallCheck(this, _class);
+var Request = function Request(options) {
+    _classCallCheck(this, Request);
 
     return new Promise(function (resolve, reject) {
 
-        var request = https.request({
+        var request = _https2.default.request({
             host: options.host || 'www.avanza.se',
             port: options.port || 443,
             path: options.path || '/_mobile/account/positions?sort=changeAsc',
@@ -52,4 +56,4 @@ var _class = function _class(options) {
     });
 };
 
-exports.default = _class;
+exports.default = Request;
