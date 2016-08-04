@@ -56,7 +56,7 @@ var Avanza = function () {
         _classCallCheck(this, Avanza);
 
         this._events = new _events.EventEmitter();
-        this._socket = options && options.socket ? options.socket : new _Socket2.default({
+        this.socket = options && options.socket ? options.socket : new _Socket2.default({
             url: 'wss://www.avanza.se/_push/cometd',
             events: this._events
         });
@@ -64,16 +64,12 @@ var Avanza = function () {
     }
 
     /**
-     * Getters & Setters
+     * Fetch all positions held by the current user
      */
+
 
     _createClass(Avanza, [{
         key: 'getPositions',
-
-
-        /**
-         * Fetch all positions held by the current user
-         */
         value: function getPositions() {
 
             var that = this;
@@ -111,8 +107,8 @@ var Avanza = function () {
                 path: '/_mobile/account/overview',
                 method: 'GET',
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -128,8 +124,8 @@ var Avanza = function () {
                 path: '/_mobile/account/dealsandorders',
                 method: 'GET',
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -145,8 +141,8 @@ var Avanza = function () {
                 path: '/_mobile/usercontent/watchlist',
                 method: 'GET',
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -165,8 +161,8 @@ var Avanza = function () {
                 path: '/_api/usercontent/watchlist/' + watchlistId + '/orderbooks/' + instrumentId,
                 method: 'PUT',
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -186,8 +182,8 @@ var Avanza = function () {
                 return new _Request2.default({
                     path: '/_mobile/market/stock/' + id,
                     headers: {
-                        'X-AuthenticationSession': _this._authenticationSession,
-                        'X-SecurityToken': _this._securityToken
+                        'X-AuthenticationSession': _this.authenticationSession,
+                        'X-SecurityToken': _this.securityToken
                     }
                 }).then(function (instrument) {
                     resolve(new _Instrument2.default(instrument));
@@ -209,8 +205,8 @@ var Avanza = function () {
             return new _Request2.default({
                 path: '/_mobile/market/fund/' + id,
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -234,8 +230,8 @@ var Avanza = function () {
                         orderbookId: id
                     }),
                     headers: {
-                        'X-AuthenticationSession': _this2._authenticationSession,
-                        'X-SecurityToken': _this2._securityToken
+                        'X-AuthenticationSession': _this2.authenticationSession,
+                        'X-SecurityToken': _this2.securityToken
                     }
                 }).then(function (orderbook) {
                     resolve(new _Orderbook2.default(orderbook));
@@ -259,8 +255,8 @@ var Avanza = function () {
                     sort: 'name'
                 }),
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -279,8 +275,8 @@ var Avanza = function () {
                 path: '/_api/order',
                 data: options,
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -302,8 +298,8 @@ var Avanza = function () {
                 }),
                 method: 'GET',
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -325,8 +321,8 @@ var Avanza = function () {
                 }),
                 method: 'DELETE',
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -358,8 +354,8 @@ var Avanza = function () {
                 path: path,
                 method: 'GET',
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             });
         }
@@ -386,9 +382,9 @@ var Avanza = function () {
                 if (that.isAuthenticated && !force) {
 
                     resolve({
-                        securityToken: that._securityToken,
-                        authenticationSession: that._authenticationSession,
-                        subscriptionId: that._subscriptionId
+                        securityToken: that.securityToken,
+                        authenticationSession: that.authenticationSession,
+                        subscriptionId: that.subscriptionId
                     });
                 } else {
                     (function () {
@@ -420,17 +416,17 @@ var Avanza = function () {
                         authenticate.then(function (response) {
 
                             that.isAuthenticated = true;
-                            that._securityToken = securityToken;
-                            that._authenticationSession = response.authenticationSession;
-                            that._subscriptionId = response.pushSubscriptionId;
-                            that._customerId = response.customerId;
+                            that.securityToken = securityToken;
+                            that.authenticationSession = response.authenticationSession;
+                            that.subscriptionId = response.pushSubscriptionId;
+                            that.customerId = response.customerId;
 
-                            that._socket.subscriptionId = response.pushSubscriptionId;
+                            that.socket.subscriptionId = response.pushSubscriptionId;
 
                             resolve({
-                                securityToken: that._securityToken,
-                                authenticationSession: that._authenticationSession,
-                                subscriptionId: that._subscriptionId
+                                securityToken: that.securityToken,
+                                authenticationSession: that.authenticationSession,
+                                subscriptionId: that.subscriptionId
                             });
 
                             _this3._events.emit('authenticate');
@@ -445,38 +441,6 @@ var Avanza = function () {
         key: 'on',
         value: function on(event, callback) {
             return this._events.on(event, callback);
-        }
-    }, {
-        key: 'authenticationSession',
-        get: function get() {
-            return this._authenticationSession;
-        },
-        set: function set(value) {
-            this._authenticationSession = value;
-        }
-    }, {
-        key: 'securityToken',
-        get: function get() {
-            return this._securityToken;
-        },
-        set: function set(value) {
-            this._securityToken = value;
-        }
-    }, {
-        key: 'subscriptionId',
-        get: function get() {
-            return this._subscriptionId;
-        },
-        set: function set(value) {
-            this._subscriptionId = value;
-        }
-    }, {
-        key: 'socket',
-        get: function get() {
-            return this._socket;
-        },
-        set: function set(value) {
-            this._socket = value;
         }
     }]);
 

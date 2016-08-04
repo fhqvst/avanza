@@ -29,12 +29,12 @@ var Socket = function () {
         }, options);
 
         var _socket = options.socket ? new options.socket() : new _ws2.default(options.url);
-        var _subscriptionId = options.subscriptionId;
+        var subscriptionId = options.subscriptionId;
         var _events = options.events;
 
         this._socket = _socket;
         this._events = _events;
-        this._subscriptionId = _subscriptionId;
+        this.subscriptionId = subscriptionId;
         this._id = 1;
         this._subscriptions = [];
 
@@ -117,7 +117,7 @@ var Socket = function () {
         value: function initialize() {
             var _this2 = this;
 
-            if (typeof this._subscriptionId === 'undefined') {
+            if (typeof this.subscriptionId === 'undefined') {
                 throw new Error('The socket requires a subscription ID to work.');
             }
 
@@ -129,7 +129,7 @@ var Socket = function () {
                     },
                     channel: '/meta/handshake',
                     ext: {
-                        subscriptionId: this._subscriptionId
+                        subscriptionId: this.subscriptionId
                     },
                     id: this._id++,
                     minimumVersion: '1.0',
@@ -174,19 +174,6 @@ var Socket = function () {
                     subscription: '/' + channel + '/' + id
                 }]));
             });
-        }
-    }, {
-        key: 'subscriptionId',
-        get: function get() {
-            return this._subscriptionId;
-        },
-        set: function set(value) {
-            return this._subscriptionId = value;
-        }
-    }, {
-        key: 'clientId',
-        get: function get() {
-            return this._clientId;
         }
     }]);
 

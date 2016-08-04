@@ -25,47 +25,11 @@ export default class Avanza {
 
     constructor(options) {
         this._events = new EventEmitter();
-        this._socket = (options && options.socket) ? options.socket : new Socket({
+        this.socket = (options && options.socket) ? options.socket : new Socket({
             url: 'wss://www.avanza.se/_push/cometd',
             events: this._events
         });
         this._events.emit('init', this)
-    }
-
-    /**
-     * Getters & Setters
-     */
-
-    get authenticationSession() {
-        return this._authenticationSession;
-    }
-
-    set authenticationSession(value) {
-        this._authenticationSession = value;
-    }
-
-    get securityToken() {
-        return this._securityToken;
-    }
-
-    set securityToken(value) {
-        this._securityToken = value;
-    }
-
-    get subscriptionId() {
-        return this._subscriptionId;
-    }
-
-    set subscriptionId(value) {
-        this._subscriptionId = value
-    }
-
-    get socket() {
-        return this._socket;
-    }
-
-    set socket(value) {
-        this._socket = value;
     }
 
     /**
@@ -104,8 +68,8 @@ export default class Avanza {
             path: '/_mobile/account/overview',
             method: 'GET',
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -118,8 +82,8 @@ export default class Avanza {
             path: '/_mobile/account/dealsandorders',
             method: 'GET',
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -132,8 +96,8 @@ export default class Avanza {
             path: '/_mobile/usercontent/watchlist',
             method: 'GET',
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -149,8 +113,8 @@ export default class Avanza {
             path: '/_api/usercontent/watchlist/' + watchlistId + '/orderbooks/' + instrumentId,
             method: 'PUT',
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -166,8 +130,8 @@ export default class Avanza {
             return new Request({
                 path: '/_mobile/market/stock/' + id,
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             }).then(instrument => {
                 resolve(new Instrument(instrument));
@@ -186,8 +150,8 @@ export default class Avanza {
         return new Request({
             path: '/_mobile/market/fund/' + id,
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -206,8 +170,8 @@ export default class Avanza {
                     orderbookId: id
                 }),
                 headers: {
-                    'X-AuthenticationSession': this._authenticationSession,
-                    'X-SecurityToken': this._securityToken
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
                 }
             }).then(orderbook => {
                 resolve(new Orderbook(orderbook));
@@ -227,8 +191,8 @@ export default class Avanza {
                 sort: 'name'
             }),
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -244,8 +208,8 @@ export default class Avanza {
             path: '/_api/order',
             data: options,
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -264,8 +228,8 @@ export default class Avanza {
             }),
             method: 'GET',
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -284,8 +248,8 @@ export default class Avanza {
             }),
             method: 'DELETE',
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -314,8 +278,8 @@ export default class Avanza {
             path: path,
             method: 'GET',
             headers: {
-                'X-AuthenticationSession': this._authenticationSession,
-                'X-SecurityToken': this._securityToken
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
             }
         });
     }
@@ -342,9 +306,9 @@ export default class Avanza {
             if(that.isAuthenticated && !force) {
 
                 resolve({
-                    securityToken: that._securityToken,
-                    authenticationSession: that._authenticationSession,
-                    subscriptionId: that._subscriptionId
+                    securityToken: that.securityToken,
+                    authenticationSession: that.authenticationSession,
+                    subscriptionId: that.subscriptionId
                 })
                 
             } else {
@@ -376,17 +340,17 @@ export default class Avanza {
                 authenticate.then(response => {
 
                     that.isAuthenticated = true;
-                    that._securityToken = securityToken;
-                    that._authenticationSession = response.authenticationSession;
-                    that._subscriptionId = response.pushSubscriptionId;
-                    that._customerId = response.customerId;
+                    that.securityToken = securityToken;
+                    that.authenticationSession = response.authenticationSession;
+                    that.subscriptionId = response.pushSubscriptionId;
+                    that.customerId = response.customerId;
 
-                    that._socket.subscriptionId = response.pushSubscriptionId;
+                    that.socket.subscriptionId = response.pushSubscriptionId;
 
                     resolve({
-                        securityToken: that._securityToken,
-                        authenticationSession: that._authenticationSession,
-                        subscriptionId: that._subscriptionId
+                        securityToken: that.securityToken,
+                        authenticationSession: that.authenticationSession,
+                        subscriptionId: that.subscriptionId
                     });
 
                     this._events.emit('authenticate')

@@ -12,12 +12,12 @@ export default class Socket {
         }, options);
 
         let _socket = options.socket ? new options.socket : new WebSocket(options.url);
-        let _subscriptionId = options.subscriptionId;
+        let subscriptionId = options.subscriptionId;
         let _events = options.events;
 
         this._socket = _socket;
         this._events = _events;
-        this._subscriptionId = _subscriptionId;
+        this.subscriptionId = subscriptionId;
         this._id = 1;
         this._subscriptions = [];
 
@@ -84,19 +84,7 @@ export default class Socket {
         });
 
     }
-
-    get subscriptionId() {
-        return this._subscriptionId;
-    }
-
-    set subscriptionId(value) {
-        return this._subscriptionId = value;
-    }
-
-    get clientId() {
-        return this._clientId;
-    }
-
+    
     on(event, callback) {
         return this._events.on(event, callback);
     };
@@ -116,7 +104,7 @@ export default class Socket {
      */
     initialize() {
 
-        if(typeof this._subscriptionId === 'undefined') {
+        if(typeof this.subscriptionId === 'undefined') {
             throw new Error('The socket requires a subscription ID to work.')
         }
 
@@ -129,7 +117,7 @@ export default class Socket {
                     },
                     channel: '/meta/handshake',
                     ext: {
-                        subscriptionId: this._subscriptionId
+                        subscriptionId: this.subscriptionId
                     },
                     id: this._id++,
                     minimumVersion: '1.0',
