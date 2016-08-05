@@ -16,6 +16,14 @@ export default class Instrument {
         this.ticker        = instrument.tickerSymbol || ''
         this.totalVolumeTraded = instrument.totalVolumeTraded || 0
         this.totalValueTraded = instrument.totalValueTraded || 0
+        this.numberOfOwners = instrument.numberOfOwners || 0
+        this.company = instrument.company ? {
+            marketCapital: instrument.company.marketCapital,
+            chairman: instrument.company.chairman,
+            description: instrument.company.description,
+            name: instrument.company.name,
+            ceo: instrument.company.CEO
+        } : null;
 
         if(instrument.keyRatios) {
             this.volatility    = instrument.keyRatios.volatility ? instrument.keyRatios.volatility : 0

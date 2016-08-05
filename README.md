@@ -33,7 +33,7 @@ Create a `.env` file to run the tests.
 USERNAME=my_username
 PASSWORD=my_password
 ACCOUNT=12345       # your valid account id
-ORDER=12345         # the id of an order belonging to the specified account
+ORDER=12345         # the id of an order *from today* belonging to the specified account
 ```
 
 ## Example

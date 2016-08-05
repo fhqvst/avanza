@@ -21,6 +21,14 @@ export const SUBSCRIPTION_OPTION = 'subscription_option'
 export const EQUITY_LINKED_BOND = 'equity_linked_bond';
 export const CONVERTIBLE = 'convertible';
 
+export const TODAY = 'today';
+export const ONE_MONTH = 'one_month';
+export const THREE_MONTHS = 'three_months';
+export const ONE_WEEK = 'one_week';
+export const THIS_YEAR = 'this_year';
+export const ONE_YEAR = 'one_year';
+export const FIVE_YEARS = 'five_years';
+
 export default class Avanza {
 
     constructor(options) {
@@ -189,6 +197,24 @@ export default class Avanza {
         return new Request({
             path: '/_mobile/market/orderbooklist' + ids.join(',') + '?' + querystring.stringify({
                 sort: 'name'
+            }),
+            headers: {
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
+            }
+        });
+    }
+
+    /**
+     * Fetch data points for a given orderbook id. 
+     * 
+     * @param id
+     * @param period
+     */
+    getChartdata(id, period) {
+        return new Request({
+            path: '/_mobile/chart/orderbook/' + id + '?' + querystring.stringify({
+                timePeriod: period
             }),
             headers: {
                 'X-AuthenticationSession': this.authenticationSession,
