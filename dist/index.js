@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.FIVE_YEARS = exports.ONE_YEAR = exports.THIS_YEAR = exports.ONE_WEEK = exports.THREE_MONTHS = exports.ONE_MONTH = exports.TODAY = exports.CONVERTIBLE = exports.EQUITY_LINKED_BOND = exports.SUBSCRIPTION_OPTION = exports.PREMIUM_BOND = exports.INDEX = exports.ETF = exports.WARRANT = exports.CERTIFICATE = exports.FUTURE_FORWARD = exports.OPTION = exports.BOND = exports.FUND = exports.STOCK = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -36,28 +35,6 @@ var _Socket2 = _interopRequireDefault(_Socket);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var STOCK = exports.STOCK = 'stock';
-var FUND = exports.FUND = 'fund';
-var BOND = exports.BOND = 'bond';
-var OPTION = exports.OPTION = 'option';
-var FUTURE_FORWARD = exports.FUTURE_FORWARD = 'future_forward';
-var CERTIFICATE = exports.CERTIFICATE = 'certificate';
-var WARRANT = exports.WARRANT = 'warrant';
-var ETF = exports.ETF = 'exchange_traded_fund';
-var INDEX = exports.INDEX = 'index';
-var PREMIUM_BOND = exports.PREMIUM_BOND = 'premium_bond';
-var SUBSCRIPTION_OPTION = exports.SUBSCRIPTION_OPTION = 'subscription_option';
-var EQUITY_LINKED_BOND = exports.EQUITY_LINKED_BOND = 'equity_linked_bond';
-var CONVERTIBLE = exports.CONVERTIBLE = 'convertible';
-
-var TODAY = exports.TODAY = 'today';
-var ONE_MONTH = exports.ONE_MONTH = 'one_month';
-var THREE_MONTHS = exports.THREE_MONTHS = 'three_months';
-var ONE_WEEK = exports.ONE_WEEK = 'one_week';
-var THIS_YEAR = exports.THIS_YEAR = 'this_year';
-var ONE_YEAR = exports.ONE_YEAR = 'one_year';
-var FIVE_YEARS = exports.FIVE_YEARS = 'five_years';
 
 var Avanza = function () {
     function Avanza(options) {

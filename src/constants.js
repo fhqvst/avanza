@@ -1,0 +1,21 @@
+export const STOCK = 'stock'
+export const FUND = 'fund'
+export const BOND = 'bond'
+export const OPTION = 'option'
+export const FUTURE_FORWARD = 'future_forward'
+export const CERTIFICATE = 'certificate'
+export const WARRANT = 'warrant'
+export const ETF = 'exchange_traded_fund'
+export const INDEX = 'index';
+export const PREMIUM_BOND = 'premium_bond'
+export const SUBSCRIPTION_OPTION = 'subscription_option'
+export const EQUITY_LINKED_BOND = 'equity_linked_bond';
+export const CONVERTIBLE = 'convertible';
+
+export const TODAY = 'today';
+export const ONE_MONTH = 'one_month';
+export const THREE_MONTHS = 'three_months';
+export const ONE_WEEK = 'one_week';
+export const THIS_YEAR = 'this_year';
+export const ONE_YEAR = 'one_year';
+export const FIVE_YEARS = 'five_years';
