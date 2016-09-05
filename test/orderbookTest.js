@@ -3,7 +3,6 @@ dotenv.config()
 
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import Position from '../dist/Position';
 import Avanza from '../dist';
 
 chai.use(chaiAsPromised);

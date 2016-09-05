@@ -16,18 +16,6 @@ var _Request = require('./Request');
 
 var _Request2 = _interopRequireDefault(_Request);
 
-var _Position = require('./Position');
-
-var _Position2 = _interopRequireDefault(_Position);
-
-var _Instrument = require('./Instrument');
-
-var _Instrument2 = _interopRequireDefault(_Instrument);
-
-var _Orderbook = require('./Orderbook');
-
-var _Orderbook2 = _interopRequireDefault(_Orderbook);
-
 var _Socket = require('./Socket');
 
 var _Socket2 = _interopRequireDefault(_Socket);
@@ -71,7 +59,20 @@ var Avanza = function () {
                     var temp = [];
                     for (var i = 0; i < positions.instrumentPositions.length; i++) {
                         for (var j = 0; j < positions.instrumentPositions[i].positions.length; j++) {
-                            temp.push(new _Position2.default(positions.instrumentPositions[i].positions[j]));
+
+                            var object = {},
+                                position = positions.instrumentPositions[i].positions[j];
+
+                            object.accountId = position.accountId || null;
+                            object.acquiredValue = position.acquiredValue || null;
+                            object.averageAcquiredPrice = position.averageAcquiredPrice || null;
+                            object.profit = position.profit || null;
+                            object.profitPercent = position.profitPercent || null;
+                            object.value = position.value || null;
+                            object.volume = position.volume || null;
+                            object.instrumentId = position.orderbookId || null;
+
+                            temp.push(object);
                         }
                     }
                     resolve(temp);
@@ -171,7 +172,46 @@ var Avanza = function () {
                         'X-SecurityToken': _this.securityToken
                     }
                 }).then(function (instrument) {
-                    resolve(new _Instrument2.default(instrument));
+
+                    var object = {};
+
+                    object.id = instrument.id || null;
+                    object.marketPlace = instrument.marketPlace || null;
+                    object.marketList = instrument.marketList || null;
+                    object.currency = instrument.currency || null;
+                    object.name = instrument.name || null;
+                    object.country = instrument.country || null;
+                    object.lastPrice = instrument.lastPrice || null;
+                    object.totalValueTraded = instrument.totalValueTraded || null;
+                    object.numberOfOwners = instrument.numberOfOwners || null;
+
+                    object.shortSellable = !!instrument.shortSellable;
+                    object.tradable = !!instrument.tradable;
+
+                    object.lastPriceUpdated = instrument.lastPriceUpdated ? new Date(instrument.lastPriceUpdated).getTime() : new Date('1970-01-01').getTime();
+
+                    object.changePercent = instrument.changePercent;
+                    object.change = instrument.change;
+                    object.ticker = instrument.tickerSymbol || null;
+                    object.totalVolumeTraded = instrument.totalVolumeTraded || null;
+
+                    object.company = instrument.company ? {
+                        marketCapital: instrument.company.marketCapital,
+                        chairman: instrument.company.chairman,
+                        description: instrument.company.description,
+                        name: instrument.company.name,
+                        ceo: instrument.company.CEO
+                    } : null;
+
+                    if (instrument.keyRatios) {
+                        object.volatility = instrument.keyRatios.volatility ? instrument.keyRatios.volatility : 0;
+                        object.pe = instrument.keyRatios.priceEarningsRatio || null;
+                        object.yield = instrument.keyRatios.directYield || null;
+                    } else {
+                        object.volatility = _this.pe = _this.yield = 0;
+                    }
+
+                    resolve(object);
                 }).catch(function (error) {
                     return reject(error);
                 });
@@ -219,7 +259,25 @@ var Avanza = function () {
                         'X-SecurityToken': _this2.securityToken
                     }
                 }).then(function (orderbook) {
-                    resolve(new _Orderbook2.default(orderbook));
+
+                    var object = {};
+
+                    object.instrumentId = orderbook.id;
+                    object.orders = [];
+                    object.trades = [];
+
+                    for (var i = 0; i < orderbook.latestTrades.length; i++) {
+                        var trade = orderbook.latestTrades[i];
+                        object.trades.push({
+                            price: trade.price,
+                            volume: trade.volume,
+                            time: new Date(trade.dealTime).getTime(),
+                            seller: trade.seller || '-',
+                            buyer: trade.buyer || '-'
+                        });
+                    }
+
+                    resolve(object);
                 }).catch(function (error) {
                     return reject(error);
                 });
@@ -247,8 +305,8 @@ var Avanza = function () {
         }
 
         /**
-         * Fetch data points for a given orderbook id. 
-         * 
+         * Fetch data points for a given orderbook id.
+         *
          * @param id
          * @param period
          */

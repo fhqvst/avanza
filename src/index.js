@@ -2,9 +2,6 @@ import querystring from 'querystring';
 import {EventEmitter} from 'events';
 
 import Request from './Request';
-import Position from './Position';
-import Instrument from './Instrument';
-import Orderbook from './Orderbook';
 import Socket from './Socket';
 
 export default class Avanza {
@@ -37,7 +34,20 @@ export default class Avanza {
                 let temp = [];
                 for(let i = 0; i < positions.instrumentPositions.length; i++) {
                     for(let j = 0; j < positions.instrumentPositions[i].positions.length; j++) {
-                        temp.push(new Position(positions.instrumentPositions[i].positions[j]));
+
+                        let object = {},
+                            position = positions.instrumentPositions[i].positions[j]
+
+                        object.accountId = position.accountId || null;
+                        object.acquiredValue = position.acquiredValue || null;
+                        object.averageAcquiredPrice = position.averageAcquiredPrice || null;
+                        object.profit = position.profit || null;
+                        object.profitPercent = position.profitPercent || null;
+                        object.value = position.value || null;
+                        object.volume = position.volume || null;
+                        object.instrumentId = position.orderbookId || null;
+
+                        temp.push(object)
                     }
                 }
                 resolve(temp);
@@ -120,8 +130,50 @@ export default class Avanza {
                     'X-SecurityToken': this.securityToken
                 }
             }).then(instrument => {
-                resolve(new Instrument(instrument));
-            }).catch(error => reject(error));
+
+                let object = {}
+
+                object.id            = instrument.id || null
+                object.marketPlace   = instrument.marketPlace || null
+                object.marketList    = instrument.marketList || null
+                object.currency      = instrument.currency || null
+                object.name          = instrument.name || null
+                object.country       = instrument.country || null
+                object.lastPrice     = instrument.lastPrice || null
+                object.totalValueTraded = instrument.totalValueTraded || null
+                object.numberOfOwners = instrument.numberOfOwners || null
+
+                object.shortSellable = !!instrument.shortSellable
+                object.tradable      = !!instrument.tradable
+
+                object.lastPriceUpdated = instrument.lastPriceUpdated ?
+                    new Date(instrument.lastPriceUpdated).getTime() :
+                    new Date('1970-01-01').getTime();
+
+                object.changePercent = instrument.changePercent
+                object.change        = instrument.change
+                object.ticker        = instrument.tickerSymbol || null
+                object.totalVolumeTraded = instrument.totalVolumeTraded || null
+
+                object.company = instrument.company ? {
+                    marketCapital: instrument.company.marketCapital,
+                    chairman: instrument.company.chairman,
+                    description: instrument.company.description,
+                    name: instrument.company.name,
+                    ceo: instrument.company.CEO
+                } : null;
+
+                if(instrument.keyRatios) {
+                    object.volatility    = instrument.keyRatios.volatility ? instrument.keyRatios.volatility : 0
+                    object.pe    = instrument.keyRatios.priceEarningsRatio || null
+                    object.yield = instrument.keyRatios.directYield || null
+                } else {
+                    object.volatility = this.pe = this.yield = 0
+                }
+
+                resolve(object)
+
+            }).catch(error => reject(error))
         })
 
 
@@ -160,7 +212,26 @@ export default class Avanza {
                     'X-SecurityToken': this.securityToken
                 }
             }).then(orderbook => {
-                resolve(new Orderbook(orderbook));
+
+                let object = {}
+
+                object.instrumentId = orderbook.id
+                object.orders = []
+                object.trades = []
+
+                for(let i = 0; i < orderbook.latestTrades.length; i++) {
+                    const trade = orderbook.latestTrades[i]
+                    object.trades.push({
+                        price: trade.price,
+                        volume: trade.volume,
+                        time: new Date(trade.dealTime).getTime(),
+                        seller: trade.seller || '-',
+                        buyer: trade.buyer || '-'
+                    })
+                }
+
+                resolve(object)
+
             }).catch(error => reject(error));
 
         })
@@ -184,8 +255,8 @@ export default class Avanza {
     }
 
     /**
-     * Fetch data points for a given orderbook id. 
-     * 
+     * Fetch data points for a given orderbook id.
+     *
      * @param id
      * @param period
      */
@@ -314,7 +385,7 @@ export default class Avanza {
                     authenticationSession: that.authenticationSession,
                     subscriptionId: that.subscriptionId
                 })
-                
+
             } else {
 
                 let securityToken;
