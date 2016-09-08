@@ -2,7 +2,7 @@ import WebSocket from 'ws';
 import {EventEmitter} from 'events';
 
 export default class Socket {
-    
+
     constructor(options) {
 
         options = Object.assign({}, {
@@ -11,17 +11,42 @@ export default class Socket {
             events: new EventEmitter()
         }, options);
 
-        let _socket = options.socket ? new options.socket : new WebSocket(options.url);
-        let subscriptionId = options.subscriptionId;
-        let _events = options.events;
+        /**
+         * Contains the WebSocket instance.
+         * @type {WebSocket}
+         * @private
+         */
+        this._socket = options.socket ? new options.socket : new WebSocket(options.url);
 
-        this._socket = _socket;
-        this._events = _events;
-        this.subscriptionId = subscriptionId;
+        /**
+         * Contains the EventEmitter instance.
+         * @type {EventEmitter}
+         * @private
+         */
+        this._events = options.events;
+
+        /**
+         * The id of the current message.
+         * @type {number}
+         * @private
+         */
         this._id = 1;
+
+        /**
+         * The subscriptionId received when authenticating.
+         * @type {string}
+         */
+        this.subscriptionId = options.subscriptionId;
+
+        /**
+         * Might be used in the future to make sure we don't subscribe to the same resource more than once.
+         * @type {Array}
+         * @private
+         */
         this._subscriptions = [];
 
-        _socket.on('message', (data, flags) => {
+        this._socket.on('message', (data, flags) => {
+
             let response = JSON.parse(String.fromCharCode.apply(null, flags.buffer));
             if (response.length && response[0]) {
 
@@ -42,7 +67,7 @@ export default class Socket {
                         this._events.emit('handshake', message);
                         this._clientId = message.clientId;
 
-                        _socket.send(JSON.stringify(
+                        this._socket.send(JSON.stringify(
                             [{
                                 advice: {
                                     timeout: 0
@@ -70,17 +95,17 @@ export default class Socket {
 
                 }
 
-                _events.emit('message', message);
+                this._events.emit('message', message);
 
             }
         });
 
-        _socket.on('open', () => {
-            _events.emit('open');
+        this._socket.on('open', () => {
+            this._events.emit('open');
         });
 
-        _socket.on('error', e => {
-            _events.emit('error', e);
+        this._socket.on('error', e => {
+            this._events.emit('error', e);
         });
 
     }
@@ -144,8 +169,6 @@ export default class Socket {
         if(!this.isOpened()) {
             throw new Error('The socket is not yet initialized. You must initialize() before subscribing to channels.');
         }
-
-        // channels = ['quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals']
 
         let that = this;
         channels.forEach((channel) => {

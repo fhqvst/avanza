@@ -10,7 +10,7 @@ var _ws = require('ws');
 
 var _ws2 = _interopRequireDefault(_ws);
 
-var _events2 = require('events');
+var _events = require('events');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25,20 +25,45 @@ var Socket = function () {
         options = Object.assign({}, {
             url: '',
             subscriptionId: '',
-            events: new _events2.EventEmitter()
+            events: new _events.EventEmitter()
         }, options);
 
-        var _socket = options.socket ? new options.socket() : new _ws2.default(options.url);
-        var subscriptionId = options.subscriptionId;
-        var _events = options.events;
+        /**
+         * Contains the WebSocket instance.
+         * @type {WebSocket}
+         * @private
+         */
+        this._socket = options.socket ? new options.socket() : new _ws2.default(options.url);
 
-        this._socket = _socket;
-        this._events = _events;
-        this.subscriptionId = subscriptionId;
+        /**
+         * Contains the EventEmitter instance.
+         * @type {EventEmitter}
+         * @private
+         */
+        this._events = options.events;
+
+        /**
+         * The id of the current message.
+         * @type {number}
+         * @private
+         */
         this._id = 1;
+
+        /**
+         * The subscriptionId received when authenticating.
+         * @type {string}
+         */
+        this.subscriptionId = options.subscriptionId;
+
+        /**
+         * Might be used in the future to make sure we don't subscribe to the same resource more than once.
+         * @type {Array}
+         * @private
+         */
         this._subscriptions = [];
 
-        _socket.on('message', function (data, flags) {
+        this._socket.on('message', function (data, flags) {
+
             var response = JSON.parse(String.fromCharCode.apply(null, flags.buffer));
             if (response.length && response[0]) {
 
@@ -58,7 +83,7 @@ var Socket = function () {
                         _this._events.emit('handshake', message);
                         _this._clientId = message.clientId;
 
-                        _socket.send(JSON.stringify([{
+                        _this._socket.send(JSON.stringify([{
                             advice: {
                                 timeout: 0
                             },
@@ -76,16 +101,16 @@ var Socket = function () {
                     }
                 }
 
-                _events.emit('message', message);
+                _this._events.emit('message', message);
             }
         });
 
-        _socket.on('open', function () {
-            _events.emit('open');
+        this._socket.on('open', function () {
+            _this._events.emit('open');
         });
 
-        _socket.on('error', function (e) {
-            _events.emit('error', e);
+        this._socket.on('error', function (e) {
+            _this._events.emit('error', e);
         });
     }
 
@@ -161,8 +186,6 @@ var Socket = function () {
             if (!this.isOpened()) {
                 throw new Error('The socket is not yet initialized. You must initialize() before subscribing to channels.');
             }
-
-            // channels = ['quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals']
 
             var that = this;
             channels.forEach(function (channel) {
