@@ -3,7 +3,7 @@ export default class Request {
 
     constructor(options) {
         return new Promise((resolve, reject) => {
-
+            const payload = JSON.stringify(options.data)
             const request = https.request({
                 host: options.host || 'www.avanza.se',
                 port: options.port || 443,
@@ -12,6 +12,7 @@ export default class Request {
                 headers: Object.assign({}, {
                     'Accept': '*/*',
                     'Content-Type': 'application/json',
+                    'Content-Length': payload.length,
                     'User-Agent': 'Avanza/se.avanza.iphone (2.6.2 - (#165); iOS 9.3.1)'
                 }, options.headers)
             }, response => {
@@ -32,7 +33,7 @@ export default class Request {
             });
 
             if(options.data) {
-                request.write(JSON.stringify(options.data));
+                request.write(payload);
             }
 
             request.end();

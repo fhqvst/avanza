@@ -395,9 +395,6 @@ export default class Avanza {
                  */
                 const authenticate = new Request({
                     path: '/_api/authentication/sessions/username',
-                    headers: {
-                        'Content-Length': '80'
-                    },
                     data: {
                         'maxInactiveMinutes':'1440',
                         'password': credentials.password,
