@@ -244,7 +244,7 @@ export default class Avanza {
      */
     getOrderbooks(ids) {
         return new Request({
-            path: '/_mobile/market/orderbooklist' + ids.join(',') + '?' + querystring.stringify({
+            path: '/_mobile/market/orderbooklist/' + ids.join(',') + '?' + querystring.stringify({
                 sort: 'name'
             }),
             headers: {
