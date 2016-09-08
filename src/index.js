@@ -390,16 +390,20 @@ export default class Avanza {
 
                 let securityToken;
 
+                const data = {
+                    'maxInactiveMinutes':'1440',
+                    'password': credentials.password,
+                    'username': credentials.username
+                }
                 /**
                  * Create the authentication request
                  */
                 const authenticate = new Request({
                     path: '/_api/authentication/sessions/username',
-                    data: {
-                        'maxInactiveMinutes':'1440',
-                        'password': credentials.password,
-                        'username': credentials.username
+                    headers: {
+                        'Content-Length': JSON.stringify(data).length
                     },
+                    data: data,
                     onEnd: response => {
 
                         /**

@@ -455,16 +455,20 @@ var Avanza = function () {
 
                         var securityToken = void 0;
 
+                        var data = {
+                            'maxInactiveMinutes': '1440',
+                            'password': credentials.password,
+                            'username': credentials.username
+                        };
                         /**
                          * Create the authentication request
                          */
                         var authenticate = new _Request2.default({
                             path: '/_api/authentication/sessions/username',
-                            data: {
-                                'maxInactiveMinutes': '1440',
-                                'password': credentials.password,
-                                'username': credentials.username
+                            headers: {
+                                'Content-Length': JSON.stringify(data).length
                             },
+                            data: data,
                             onEnd: function onEnd(response) {
 
                                 /**

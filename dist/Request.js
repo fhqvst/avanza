@@ -16,7 +16,7 @@ var Request = function Request(options) {
     _classCallCheck(this, Request);
 
     return new Promise(function (resolve, reject) {
-        var payload = JSON.stringify(options.data);
+
         var request = _https2.default.request({
             host: options.host || 'www.avanza.se',
             port: options.port || 443,
@@ -25,7 +25,6 @@ var Request = function Request(options) {
             headers: Object.assign({}, {
                 'Accept': '*/*',
                 'Content-Type': 'application/json',
-                'Content-Length': payload.length,
                 'User-Agent': 'Avanza/se.avanza.iphone (2.6.2 - (#165); iOS 9.3.1)'
             }, options.headers)
         }, function (response) {
@@ -47,7 +46,7 @@ var Request = function Request(options) {
         });
 
         if (options.data) {
-            request.write(payload);
+            request.write(JSON.stringify(options.data));
         }
 
         request.end();
