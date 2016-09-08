@@ -1,8 +1,8 @@
 # Avanza
 
-A Node.js wrapper for the unofficial Avanza API. Please note that this is only a proof of concept, hence not meant to be used by anyone. New features will be added as soon as the crude breaks $50 so I can pay my electric bills.
+A Node.js wrapper for the unofficial Avanza API. Please note that this is only a proof of concept, hence not meant to be used by anyone. 
 
-#### Contributions are more than welcome.
+New features will be added as soon as the crude breaks $50 so I can pay my electric bills. Contributions are more than welcome.
 
 ## Installation
 
