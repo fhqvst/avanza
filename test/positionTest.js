@@ -9,11 +9,11 @@ chai.use(chaiAsPromised);
 chai.should();
 
 
-describe('positions', () => {
+describe('positions', function() {
 
     let client;
 
-    before(() => {
+    before(function() {
         client = new Avanza();
         return client.authenticate({
             username: process.env.USERNAME,
@@ -21,7 +21,7 @@ describe('positions', () => {
         })
     });
 
-    it('should successfully perform a POST request to /_mobile/account/positions/', () => {
+    it('should successfully perform a POST request to /_mobile/account/positions/', function() {
         return client.getPositions().should.not.be.rejected;
     });
     

@@ -9,11 +9,11 @@ chai.use(chaiAsPromised);
 chai.should();
 
 
-describe('chartdata', () => {
+describe('chartdata', function() {
 
     let client;
 
-    before(() => {
+    before(function() {
         client = new Avanza();
         return client.authenticate({
             username: process.env.USERNAME,
@@ -21,7 +21,7 @@ describe('chartdata', () => {
         })
     });
 
-    it('should successfully fetch chart data', () => {
+    it('should successfully fetch chart data', function() {
        return client.getChartdata('106733', TODAY).should.not.be.rejected;
     });
     

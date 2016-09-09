@@ -5,15 +5,19 @@ import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import Avanza from '../dist';
 
+import {
+    STOCK
+} from '../dist/constants'
+
 chai.use(chaiAsPromised);
 chai.should();
 
 
-describe('orderbooks', () => {
+describe.only('orderbooks', function() {
 
     let client;
 
-    before(() => {
+    before(function() {
         client = new Avanza();
         return client.authenticate({
             username: process.env.USERNAME,
@@ -21,8 +25,12 @@ describe('orderbooks', () => {
         })
     });
 
-    it('should successfully perform a request to /_mobile/order/', () => {
-        return client.getOrderbook('5479', 'stock').should.not.be.rejected;
+    it('should successfully fetch an orderbook', function() {
+        return client.getOrderbook('5479', STOCK).should.not.be.rejected;
+    });
+
+    it('should successfully fetch list of orderbooks', function() {
+        return client.getOrderbooks(['5479', '106733']).should.not.be.rejected;
     });
     
 });

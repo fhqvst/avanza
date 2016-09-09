@@ -3,11 +3,11 @@ dotenv.config()
 
 import Avanza from '../dist';
 
-describe.only('socket', () => {
+describe('socket', function() {
 
     let client;
 
-    beforeEach(() => {
+    beforeEach(function() {
         client = new Avanza();
         return client.authenticate({
             username: process.env.USERNAME,
@@ -35,7 +35,7 @@ describe.only('socket', () => {
 
     it('should successfully subscribe to channels', done => {
 
-        client.socket.on('connect', () => {
+        client.socket.on('connect', function() {
             client.socket.subscribe('5479', [
                 'quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals'
             ]);

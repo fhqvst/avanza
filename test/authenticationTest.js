@@ -7,15 +7,15 @@ import Avanza from '../dist';
 
 chai.use(chaiAsPromised);
 
-describe('authentication', () => {
+describe('authentication', function() {
 
     let client;
 
-    before(() => {
+    before(function() {
         client = new Avanza();
     });
 
-    it('should return a security token, subscription id and an authentication session when given correct credentials', () => {
+    it('should return a security token, subscription id and an authentication session when given correct credentials', function() {
 
         chai.should()
 

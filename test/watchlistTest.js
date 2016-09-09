@@ -9,11 +9,11 @@ chai.use(chaiAsPromised);
 chai.should();
 
 
-describe('watchlist', () => {
+describe('watchlist', function() {
 
     let client;
 
-    before(() => {
+    before(function() {
         client = new Avanza();
         return client.authenticate({
             username: process.env.USERNAME,
@@ -21,7 +21,7 @@ describe('watchlist', () => {
         })
     });
 
-    it('should successfully perform a GET request to /_mobile/usercontent/watchlist/', () => {
+    it('should successfully perform a GET request to /_mobile/usercontent/watchlist/', function() {
         return client.getWatchlists().should.not.be.rejected;
     });
     

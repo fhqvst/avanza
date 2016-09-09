@@ -9,11 +9,11 @@ chai.use(chaiAsPromised);
 chai.should();
 
 
-describe('instruments', () => {
+describe('instruments', function() {
 
     let client;
 
-    before(() => {
+    before(function() {
         client = new Avanza();
         return client.authenticate({
             username: process.env.USERNAME,
@@ -21,7 +21,7 @@ describe('instruments', () => {
         })
     });
 
-    it('should successfully fetch instrument details when given a valid instrument id', () => {
+    it('should successfully fetch instrument details when given a valid instrument id', function() {
         return client.getStock('5479').should.not.be.rejected;
     });
 

@@ -9,11 +9,11 @@ chai.use(chaiAsPromised);
 chai.should();
 
 
-describe('order', () => {
+describe('order', function() {
 
     let client;
 
-    before(() => {
+    before(function() {
         client = new Avanza();
         return client.authenticate({
             username: process.env.USERNAME,
@@ -21,11 +21,11 @@ describe('order', () => {
         })
     });
 
-    it('should successfully check the current status of an order', () => {
+    it('should successfully check the current status of an order', function() {
        return client.checkOrder(process.env.ACCOUNT, process.env.ORDER).should.not.be.rejected;
     });
 
-    it('should successfully place an order', () => {
+    it('should successfully place an order', function() {
        return client.placeOrder({
            'price': '90.5',
            'validUntil': '2017-09-25',

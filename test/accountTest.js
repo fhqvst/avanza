@@ -8,11 +8,11 @@ import Avanza from '../dist';
 chai.use(chaiAsPromised);
 chai.should();
 
-describe('account', () => {
+describe('account', function() {
 
     let client;
 
-    before(() => {
+    before(function() {
         client = new Avanza();
         return client.authenticate({
             username: process.env.USERNAME,
@@ -20,20 +20,12 @@ describe('account', () => {
         })
     });
 
-    it('should successfully perform a POST request to /_mobile/account/overview/', () => {
+    it('should successfully perform a POST request to /_mobile/account/overview/', function() {
         return client.getOverview().should.not.be.rejected;
     });
 
-    it('should successfully perform a POST request to /_mobile/account/dealsandorders/', () => {
+    it('should successfully perform a POST request to /_mobile/account/dealsandorders/', function() {
         return client.getDealsAndOrders().should.not.be.rejected;
-    });
-
-    it('should successfully perform a GET request to /_mobile/market/search/', () => {
-        return client.search('telia').should.not.be.rejected;
-    });
-
-    it('should successfully perform a GET request with type to /_mobile/market/search/', () => {
-        return client.search('omx', 'equity_linked_bond').should.not.be.rejected;
     });
     
 });
