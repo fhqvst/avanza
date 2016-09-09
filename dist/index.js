@@ -294,7 +294,7 @@ var Avanza = function () {
         key: 'getOrderbooks',
         value: function getOrderbooks(ids) {
             return new _Request2.default({
-                path: '/_mobile/market/orderbooklist' + ids.join(',') + '?' + _querystring2.default.stringify({
+                path: '/_mobile/market/orderbooklist/' + ids.join(',') + '?' + _querystring2.default.stringify({
                     sort: 'name'
                 }),
                 headers: {
