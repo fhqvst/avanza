@@ -20,6 +20,12 @@ var _Socket = require('./Socket');
 
 var _Socket2 = _interopRequireDefault(_Socket);
 
+var _constants = require('./constants');
+
+var constants = _interopRequireWildcard(_constants);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -30,7 +36,7 @@ var Avanza = function () {
 
         this._events = new _events.EventEmitter();
         this.socket = options && options.socket ? options.socket : new _Socket2.default({
-            url: 'wss://www.avanza.se/_push/cometd',
+            url: constants.SOCKET_URL,
             events: this._events
         });
         this._events.emit('init', this);
@@ -48,7 +54,7 @@ var Avanza = function () {
             var that = this;
             return new Promise(function (resolve, reject) {
                 new _Request2.default({
-                    path: '/_mobile/account/positions?sort=changeAsc',
+                    path: constants.POSITIONS_PATH + '?sort=changeAsc',
                     method: 'GET',
                     headers: {
                         'X-AuthenticationSession': that.authenticationSession,
@@ -90,7 +96,7 @@ var Avanza = function () {
         key: 'getOverview',
         value: function getOverview() {
             return new _Request2.default({
-                path: '/_mobile/account/overview',
+                path: constants.OVERVIEW_PATH,
                 method: 'GET',
                 headers: {
                     'X-AuthenticationSession': this.authenticationSession,
@@ -107,7 +113,7 @@ var Avanza = function () {
         key: 'getDealsAndOrders',
         value: function getDealsAndOrders() {
             return new _Request2.default({
-                path: '/_mobile/account/dealsandorders',
+                path: constants.DEALS_AND_ORDERS_PATH,
                 method: 'GET',
                 headers: {
                     'X-AuthenticationSession': this.authenticationSession,
@@ -124,7 +130,7 @@ var Avanza = function () {
         key: 'getWatchlists',
         value: function getWatchlists() {
             return new _Request2.default({
-                path: '/_mobile/usercontent/watchlist',
+                path: constants.WATCHLISTS_PATH,
                 method: 'GET',
                 headers: {
                     'X-AuthenticationSession': this.authenticationSession,
@@ -144,7 +150,7 @@ var Avanza = function () {
         key: 'addToWatchlist',
         value: function addToWatchlist(instrumentId, watchlistId) {
             return new _Request2.default({
-                path: '/_api/usercontent/watchlist/' + watchlistId + '/orderbooks/' + instrumentId,
+                path: constants.WATCHLISTS_ADD_PATH.replace('{0}', watchlistId).replace('{1}', instrumentId),
                 method: 'PUT',
                 headers: {
                     'X-AuthenticationSession': this.authenticationSession,
@@ -166,7 +172,7 @@ var Avanza = function () {
 
             return new Promise(function (resolve, reject) {
                 return new _Request2.default({
-                    path: '/_mobile/market/stock/' + id,
+                    path: constants.STOCK_PATH.replace('{0}', id),
                     headers: {
                         'X-AuthenticationSession': _this.authenticationSession,
                         'X-SecurityToken': _this.securityToken
@@ -228,7 +234,7 @@ var Avanza = function () {
         key: 'getFund',
         value: function getFund(id) {
             return new _Request2.default({
-                path: '/_mobile/market/fund/' + id,
+                path: constants.FUND_PATH.replace('{0}', id),
                 headers: {
                     'X-AuthenticationSession': this.authenticationSession,
                     'X-SecurityToken': this.securityToken
@@ -251,7 +257,7 @@ var Avanza = function () {
             return new Promise(function (resolve, reject) {
 
                 return new _Request2.default({
-                    path: '/_mobile/order/' + type.toLowerCase() + '?' + _querystring2.default.stringify({
+                    path: constants.ORDERBOOK_PATH.replace('{0}', type.toLowerCase()) + '?' + _querystring2.default.stringify({
                         orderbookId: id
                     }),
                     headers: {
@@ -294,7 +300,7 @@ var Avanza = function () {
         key: 'getOrderbooks',
         value: function getOrderbooks(ids) {
             return new _Request2.default({
-                path: '/_mobile/market/orderbooklist/' + ids.join(',') + '?' + _querystring2.default.stringify({
+                path: constants.ORDERBOOK_LIST_PATH.replace('{0}', ids.join(',')) + '?' + _querystring2.default.stringify({
                     sort: 'name'
                 }),
                 headers: {
@@ -313,9 +319,11 @@ var Avanza = function () {
 
     }, {
         key: 'getChartdata',
-        value: function getChartdata(id, period) {
+        value: function getChartdata(id) {
+            var period = arguments.length <= 1 || arguments[1] === undefined ? constants.ONE_YEAR : arguments[1];
+
             return new _Request2.default({
-                path: '/_mobile/chart/orderbook/' + id + '?' + _querystring2.default.stringify({
+                path: constants.CHARTDATA_PATH.replace('{0}', id) + '?' + _querystring2.default.stringify({
                     timePeriod: period
                 }),
                 headers: {
@@ -336,7 +344,7 @@ var Avanza = function () {
         key: 'placeOrder',
         value: function placeOrder(options) {
             return new _Request2.default({
-                path: '/_api/order',
+                path: constants.ORDER_PATH,
                 data: options,
                 headers: {
                     'X-AuthenticationSession': this.authenticationSession,
@@ -356,7 +364,7 @@ var Avanza = function () {
         key: 'checkOrder',
         value: function checkOrder(accountId, requestId) {
             return new _Request2.default({
-                path: '/_api/order?' + _querystring2.default.stringify({
+                path: constants.ORDER_PATH + '?' + _querystring2.default.stringify({
                     accountId: accountId,
                     requestId: requestId
                 }),
@@ -379,7 +387,7 @@ var Avanza = function () {
         key: 'deleteOrder',
         value: function deleteOrder(accountId, orderId) {
             return new _Request2.default({
-                path: '/_api/order?' + _querystring2.default.stringify({
+                path: constants.ORDER_PATH + '?' + _querystring2.default.stringify({
                     accountId: accountId,
                     orderId: orderId
                 }),
@@ -404,12 +412,13 @@ var Avanza = function () {
 
             var path = void 0;
             if (type) {
-                path = '/_mobile/market/search/' + type.toUpperCase() + '?' + _querystring2.default.stringify({
+                // path = '/_mobile/market/search/' + type.toUpperCase() + '?' + querystring.stringify({
+                path = constants.SEARCH_PATH.replace('{0}', type.toUpperCase()) + '?' + _querystring2.default.stringify({
                     limit: 100,
                     query: query
                 });
             } else {
-                path = '/_mobile/market/search?' + _querystring2.default.stringify({
+                path = constants.SEARCH_PATH.replace('/{0}', '') + '?' + _querystring2.default.stringify({
                     query: query
                 });
             }
@@ -456,15 +465,16 @@ var Avanza = function () {
                         var securityToken = void 0;
 
                         var data = {
-                            'maxInactiveMinutes': '1440',
+                            'maxInactiveMinutes': constants.MAX_INACTIVE_MINUTES,
                             'password': credentials.password,
                             'username': credentials.username
                         };
+
                         /**
                          * Create the authentication request
                          */
                         var authenticate = new _Request2.default({
-                            path: '/_api/authentication/sessions/username',
+                            path: constants.AUTHENTICATION_PATH,
                             headers: {
                                 'Content-Length': JSON.stringify(data).length
                             },

@@ -109,15 +109,19 @@ export default class Socket {
                     else if(message.channel.indexOf('/trades/') !== -1) {
                         const data = message.data
                         this._events.emit('trades', {
-                            buyer: data.buyer,
-                            buyerName: data.buyerName,
+                            buyer: {
+                                ticker: data.buyer,
+                                name: data.buyerName
+                            },
+                            seller: {
+                                ticker: data.seller,
+                                name: data.sellerName
+                            },
                             cancelled: data.cancelled,
                             dealTime: data.dealTime,
                             matchedOnMarket: data.matchedOnMarket,
                             instrumentId: data.orderbookId,
                             price: data.price,
-                            seller: data.seller,
-                            sellerName: data.sellerName,
                             volume: data.volume,
                             volumeWeightedAveragePrice: data.volumeWeightedAveragePrice
                         })
@@ -140,8 +144,10 @@ export default class Socket {
                     else if(message.channel.indexOf('/brokertradesummary/') !== -1) {
                         const data = message.data
                         this._events.emit('brokertradesummary', data.brokerTradeSummaries.map(broker => ({
-                                broker: broker.brokerCode,
-                                brokerName: broker.brokerName,
+                                broker: {
+                                    ticker: broker.brokerCode,
+                                    name: broker.brokerName
+                                },
                                 buyVolume: broker.buyVolume,
                                 buyVolumeWeightedAveragePrice: broker.buyVolumeWeightedAveragePrice,
                                 netVolume: broker.netBuyVolume,

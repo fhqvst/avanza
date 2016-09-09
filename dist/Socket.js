@@ -114,15 +114,19 @@ var Socket = function () {
                     } else if (message.channel.indexOf('/trades/') !== -1) {
                         var _data2 = message.data;
                         _this._events.emit('trades', {
-                            buyer: _data2.buyer,
-                            buyerName: _data2.buyerName,
+                            buyer: {
+                                ticker: _data2.buyer,
+                                name: _data2.buyerName
+                            },
+                            seller: {
+                                ticker: _data2.seller,
+                                name: _data2.sellerName
+                            },
                             cancelled: _data2.cancelled,
                             dealTime: _data2.dealTime,
                             matchedOnMarket: _data2.matchedOnMarket,
                             instrumentId: _data2.orderbookId,
                             price: _data2.price,
-                            seller: _data2.seller,
-                            sellerName: _data2.sellerName,
                             volume: _data2.volume,
                             volumeWeightedAveragePrice: _data2.volumeWeightedAveragePrice
                         });
@@ -144,8 +148,10 @@ var Socket = function () {
                         var _data4 = message.data;
                         _this._events.emit('brokertradesummary', _data4.brokerTradeSummaries.map(function (broker) {
                             return {
-                                broker: broker.brokerCode,
-                                brokerName: broker.brokerName,
+                                broker: {
+                                    ticker: broker.brokerCode,
+                                    name: broker.brokerName
+                                },
                                 buyVolume: broker.buyVolume,
                                 buyVolumeWeightedAveragePrice: broker.buyVolumeWeightedAveragePrice,
                                 netVolume: broker.netBuyVolume,

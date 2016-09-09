@@ -8,6 +8,8 @@ var _https = require('https');
 
 var _https2 = _interopRequireDefault(_https);
 
+var _constants = require('./constants');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18,14 +20,14 @@ var Request = function Request(options) {
     return new Promise(function (resolve, reject) {
 
         var request = _https2.default.request({
-            host: options.host || 'www.avanza.se',
-            port: options.port || 443,
-            path: options.path || '/_mobile/account/positions?sort=changeAsc',
+            host: options.host || _constants.BASE_URL,
+            port: options.port || _constants.PORT,
+            path: options.path || '',
             method: options.method || 'POST',
             headers: Object.assign({}, {
                 'Accept': '*/*',
                 'Content-Type': 'application/json',
-                'User-Agent': 'Avanza/se.avanza.iphone (2.6.2 - (#165); iOS 9.3.1)'
+                'User-Agent': _constants.USER_AGENT
             }, options.headers)
         }, function (response) {
 

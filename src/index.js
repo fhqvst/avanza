@@ -4,12 +4,14 @@ import {EventEmitter} from 'events';
 import Request from './Request';
 import Socket from './Socket';
 
+import * as constants from './constants'
+
 export default class Avanza {
 
     constructor(options) {
         this._events = new EventEmitter();
         this.socket = (options && options.socket) ? options.socket : new Socket({
-            url: 'wss://www.avanza.se/_push/cometd',
+            url: constants.SOCKET_URL,
             events: this._events
         });
         this._events.emit('init', this)
@@ -23,7 +25,7 @@ export default class Avanza {
         let that = this;
         return new Promise((resolve, reject) => {
             new Request({
-                path: '/_mobile/account/positions?sort=changeAsc',
+                path: constants.POSITIONS_PATH + '?sort=changeAsc',
                 method: 'GET',
                 headers: {
                     'X-AuthenticationSession': that.authenticationSession,
@@ -61,7 +63,7 @@ export default class Avanza {
      */
     getOverview() {
         return new Request({
-            path: '/_mobile/account/overview',
+            path: constants.OVERVIEW_PATH,
             method: 'GET',
             headers: {
                 'X-AuthenticationSession': this.authenticationSession,
@@ -75,7 +77,7 @@ export default class Avanza {
      */
     getDealsAndOrders() {
         return new Request({
-            path: '/_mobile/account/dealsandorders',
+            path: constants.DEALS_AND_ORDERS_PATH,
             method: 'GET',
             headers: {
                 'X-AuthenticationSession': this.authenticationSession,
@@ -89,7 +91,7 @@ export default class Avanza {
      */
     getWatchlists() {
         return new Request({
-            path: '/_mobile/usercontent/watchlist',
+            path: constants.WATCHLISTS_PATH,
             method: 'GET',
             headers: {
                 'X-AuthenticationSession': this.authenticationSession,
@@ -106,7 +108,9 @@ export default class Avanza {
      */
     addToWatchlist(instrumentId, watchlistId) {
         return new Request({
-            path: '/_api/usercontent/watchlist/' + watchlistId + '/orderbooks/' + instrumentId,
+            path: constants.WATCHLISTS_ADD_PATH
+                .replace('{0}', watchlistId)
+                .replace('{1}', instrumentId),
             method: 'PUT',
             headers: {
                 'X-AuthenticationSession': this.authenticationSession,
@@ -124,7 +128,7 @@ export default class Avanza {
 
         return new Promise((resolve, reject) => {
             return new Request({
-                path: '/_mobile/market/stock/' + id,
+                path: constants.STOCK_PATH.replace('{0}', id),
                 headers: {
                     'X-AuthenticationSession': this.authenticationSession,
                     'X-SecurityToken': this.securityToken
@@ -186,7 +190,7 @@ export default class Avanza {
      */
     getFund(id) {
         return new Request({
-            path: '/_mobile/market/fund/' + id,
+            path: constants.FUND_PATH.replace('{0}', id),
             headers: {
                 'X-AuthenticationSession': this.authenticationSession,
                 'X-SecurityToken': this.securityToken
@@ -204,7 +208,7 @@ export default class Avanza {
         return new Promise((resolve, reject) => {
 
             return new Request({
-                path: '/_mobile/order/' + type.toLowerCase() + '?' + querystring.stringify({
+                path: constants.ORDERBOOK_PATH.replace('{0}', type.toLowerCase()) + '?' + querystring.stringify({
                     orderbookId: id
                 }),
                 headers: {
@@ -244,7 +248,7 @@ export default class Avanza {
      */
     getOrderbooks(ids) {
         return new Request({
-            path: '/_mobile/market/orderbooklist/' + ids.join(',') + '?' + querystring.stringify({
+            path: constants.ORDERBOOK_LIST_PATH.replace('{0}', ids.join(',')) + '?' + querystring.stringify({
                 sort: 'name'
             }),
             headers: {
@@ -260,9 +264,9 @@ export default class Avanza {
      * @param id
      * @param period
      */
-    getChartdata(id, period) {
+    getChartdata(id, period = constants.ONE_YEAR) {
         return new Request({
-            path: '/_mobile/chart/orderbook/' + id + '?' + querystring.stringify({
+            path: constants.CHARTDATA_PATH.replace('{0}', id) + '?' + querystring.stringify({
                 timePeriod: period
             }),
             headers: {
@@ -280,7 +284,7 @@ export default class Avanza {
      */
     placeOrder(options) {
         return new Request({
-            path: '/_api/order',
+            path: constants.ORDER_PATH,
             data: options,
             headers: {
                 'X-AuthenticationSession': this.authenticationSession,
@@ -297,7 +301,7 @@ export default class Avanza {
      */
     checkOrder(accountId, requestId) {
         return new Request({
-            path: '/_api/order?' + querystring.stringify({
+            path: constants.ORDER_PATH + '?' + querystring.stringify({
                 accountId: accountId,
                 requestId: requestId
             }),
@@ -317,7 +321,7 @@ export default class Avanza {
      */
     deleteOrder(accountId, orderId) {
         return new Request({
-            path: '/_api/order?' + querystring.stringify({
+            path: constants.ORDER_PATH + '?' + querystring.stringify({
                 accountId: accountId,
                 orderId: orderId
             }),
@@ -339,12 +343,13 @@ export default class Avanza {
 
         let path;
         if(type) {
-            path = '/_mobile/market/search/' + type.toUpperCase() + '?' + querystring.stringify({
+            // path = '/_mobile/market/search/' + type.toUpperCase() + '?' + querystring.stringify({
+            path = constants.SEARCH_PATH.replace('{0}', type.toUpperCase()) + '?' + querystring.stringify({
                 limit: 100,
                 query: query
             })
         } else {
-            path = '/_mobile/market/search?' + querystring.stringify({
+            path = constants.SEARCH_PATH.replace('/{0}', '') + '?' + querystring.stringify({
                 query: query
             })
         }
@@ -391,15 +396,16 @@ export default class Avanza {
                 let securityToken;
 
                 const data = {
-                    'maxInactiveMinutes':'1440',
+                    'maxInactiveMinutes': constants.MAX_INACTIVE_MINUTES,
                     'password': credentials.password,
                     'username': credentials.username
                 }
+
                 /**
                  * Create the authentication request
                  */
                 const authenticate = new Request({
-                    path: '/_api/authentication/sessions/username',
+                    path: constants.AUTHENTICATION_PATH,
                     headers: {
                         'Content-Length': JSON.stringify(data).length
                     },

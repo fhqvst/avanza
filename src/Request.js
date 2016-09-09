@@ -1,18 +1,25 @@
 import https from 'https';
+
+import {
+    BASE_URL,
+    PORT,
+    USER_AGENT
+} from './constants'
+
 export default class Request {
 
     constructor(options) {
         return new Promise((resolve, reject) => {
 
             const request = https.request({
-                host: options.host || 'www.avanza.se',
-                port: options.port || 443,
-                path: options.path || '/_mobile/account/positions?sort=changeAsc',
+                host: options.host || BASE_URL,
+                port: options.port || PORT,
+                path: options.path || '',
                 method: options.method || 'POST',
                 headers: Object.assign({}, {
                     'Accept': '*/*',
                     'Content-Type': 'application/json',
-                    'User-Agent': 'Avanza/se.avanza.iphone (2.6.2 - (#165); iOS 9.3.1)'
+                    'User-Agent': USER_AGENT
                 }, options.headers)
             }, response => {
 
