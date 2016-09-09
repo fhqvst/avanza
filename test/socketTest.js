@@ -3,7 +3,7 @@ dotenv.config()
 
 import Avanza from '../dist';
 
-describe('socket', () => {
+describe.only('socket', () => {
 
     let client;
 
@@ -33,14 +33,24 @@ describe('socket', () => {
 
     });
 
-    it('should successfully subscribe to a channel', done => {
+    it('should successfully subscribe to channels', done => {
 
         client.socket.on('connect', () => {
-            client.socket.subscribe('5479');
+            client.socket.subscribe('5479', [
+                'quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals'
+            ]);
         });
 
+        let subscriptions = 0;
         client.socket.on('subscribe', data => {
-            done();
+            if(data.successful) {
+                subscriptions++;
+            }
+
+            if(subscriptions === 6) {
+                done()
+            }
+
         });
         
         client.socket.initialize();

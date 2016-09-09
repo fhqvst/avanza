@@ -90,8 +90,68 @@ export default class Socket {
                     }
 
                     else if(message.channel.indexOf('/quotes/') !== -1) {
-                        this._events.emit('quote', message);
+                        const data = message.data
+                        this._events.emit('quote', {
+                            change: data.change,
+                            changePercent: data.changePercent,
+                            closingPrice: data.closingPrice,
+                            highestPrice: data.highestPrice,
+                            lastPrice: data.lastPrice,
+                            lastUpdated: data.lastUpdated,
+                            lowestPrice: data.lowestPrice,
+                            instrumentId: data.orderbookId,
+                            totalValueTraded: data.totalValueTraded,
+                            totalVolumeTraded: data.totalVolumeTraded,
+                            updated: data.updated
+                        });
                     }
+
+                    else if(message.channel.indexOf('/trades/') !== -1) {
+                        const data = message.data
+                        this._events.emit('trades', {
+                            buyer: data.buyer,
+                            buyerName: data.buyerName,
+                            cancelled: data.cancelled,
+                            dealTime: data.dealTime,
+                            matchedOnMarket: data.matchedOnMarket,
+                            instrumentId: data.orderbookId,
+                            price: data.price,
+                            seller: data.seller,
+                            sellerName: data.sellerName,
+                            volume: data.volume,
+                            volumeWeightedAveragePrice: data.volumeWeightedAveragePrice
+                        })
+                    }
+
+                    else if(message.channel.indexOf('/orderdepths/') !== -1) {
+                        const data = message.data
+                        this._events.emit('orderdepths', {
+                            levels: data.levels.map(level => ({
+                                buy: level.buySide,
+                                sell: level.sellSide
+                            })),
+                            total: {
+                                buy: data.totalLevel.buySide,
+                                sell: data.totalLevel.sellSide,
+                            }
+                        });
+                    }
+
+                    else if(message.channel.indexOf('/brokertradesummary/') !== -1) {
+                        const data = message.data
+                        this._events.emit('brokertradesummary', data.brokerTradeSummaries.map(broker => ({
+                                broker: broker.brokerCode,
+                                brokerName: broker.brokerName,
+                                buyVolume: broker.buyVolume,
+                                buyVolumeWeightedAveragePrice: broker.buyVolumeWeightedAveragePrice,
+                                netVolume: broker.netBuyVolume,
+                                sellVolume: broker.sellVolume,
+                                sellVolumeWeightedAveragePrice: broker.sellVolumeWeightedAveragePrice
+                            })
+                        ));
+                    }
+
+
 
                 }
 

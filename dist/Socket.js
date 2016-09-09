@@ -97,7 +97,62 @@ var Socket = function () {
                     } else if (message.channel === '/meta/subscribe') {
                         _this._events.emit('subscribe', message);
                     } else if (message.channel.indexOf('/quotes/') !== -1) {
-                        _this._events.emit('quote', message);
+                        var _data = message.data;
+                        _this._events.emit('quote', {
+                            change: _data.change,
+                            changePercent: _data.changePercent,
+                            closingPrice: _data.closingPrice,
+                            highestPrice: _data.highestPrice,
+                            lastPrice: _data.lastPrice,
+                            lastUpdated: _data.lastUpdated,
+                            lowestPrice: _data.lowestPrice,
+                            instrumentId: _data.orderbookId,
+                            totalValueTraded: _data.totalValueTraded,
+                            totalVolumeTraded: _data.totalVolumeTraded,
+                            updated: _data.updated
+                        });
+                    } else if (message.channel.indexOf('/trades/') !== -1) {
+                        var _data2 = message.data;
+                        _this._events.emit('trades', {
+                            buyer: _data2.buyer,
+                            buyerName: _data2.buyerName,
+                            cancelled: _data2.cancelled,
+                            dealTime: _data2.dealTime,
+                            matchedOnMarket: _data2.matchedOnMarket,
+                            instrumentId: _data2.orderbookId,
+                            price: _data2.price,
+                            seller: _data2.seller,
+                            sellerName: _data2.sellerName,
+                            volume: _data2.volume,
+                            volumeWeightedAveragePrice: _data2.volumeWeightedAveragePrice
+                        });
+                    } else if (message.channel.indexOf('/orderdepths/') !== -1) {
+                        var _data3 = message.data;
+                        _this._events.emit('orderdepths', {
+                            levels: _data3.levels.map(function (level) {
+                                return {
+                                    buy: level.buySide,
+                                    sell: level.sellSide
+                                };
+                            }),
+                            total: {
+                                buy: _data3.totalLevel.buySide,
+                                sell: _data3.totalLevel.sellSide
+                            }
+                        });
+                    } else if (message.channel.indexOf('/brokertradesummary/') !== -1) {
+                        var _data4 = message.data;
+                        _this._events.emit('brokertradesummary', _data4.brokerTradeSummaries.map(function (broker) {
+                            return {
+                                broker: broker.brokerCode,
+                                brokerName: broker.brokerName,
+                                buyVolume: broker.buyVolume,
+                                buyVolumeWeightedAveragePrice: broker.buyVolumeWeightedAveragePrice,
+                                netVolume: broker.netBuyVolume,
+                                sellVolume: broker.sellVolume,
+                                sellVolumeWeightedAveragePrice: broker.sellVolumeWeightedAveragePrice
+                            };
+                        }));
                     }
                 }
 
