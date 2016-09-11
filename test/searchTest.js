@@ -13,7 +13,7 @@ chai.use(chaiAsPromised);
 chai.should();
 
 
-describe.only('search', function() {
+describe('search', function() {
 
     let client;
 

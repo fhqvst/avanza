@@ -343,7 +343,6 @@ export default class Avanza {
 
         let path;
         if(type) {
-            // path = '/_mobile/market/search/' + type.toUpperCase() + '?' + querystring.stringify({
             path = constants.SEARCH_PATH.replace('{0}', type.toUpperCase()) + '?' + querystring.stringify({
                 limit: 100,
                 query: query
@@ -443,6 +442,61 @@ export default class Avanza {
 
         });
 
+    }
+
+    /**
+     *
+     * @param options
+     * @param {string}  options.accountId If SMS-notification is set, use this account when paying for it.
+     * @param {string}  options.expirationDate A string on the form YYYY-MM-DD describing the expiration date of the
+     *                  notification.
+     * @param {Array}   options.messageTypes An array of channels to use: {@link PUSH_NOTIFICATION}, {@link EMAIL}
+     *                  and/or {@link SMS}.
+     * @param {string}  options.instrumentId The instrument to notify on.
+     * @param {string}  options.price The price level to use as trigger.
+     * @param {string}  options.logic The logic to use when triggering. Can be either {@link ABOVE_OR_EQUAL} or
+     *                  {@linke BELOW_OR_EQUAL}.
+     * @returns {Request}
+     */
+    createNotification(options) {
+
+        const data = {
+            accountId: options.accountId,
+            expirationDate: options.expirationDate,
+            messageTypes: options.messageTypes,
+            orderbookId: options.instrumentId,
+            price: options.price,
+            priceAim: options.logic
+        }
+
+        return new Request({
+            path: constants.NOTIFICATION_CREATE_PATH,
+            method: 'POST',
+            headers: {
+                'AZA-loggedin': true,
+                'AZA-usertoken': this.securityToken,
+                'Cookie': 'AZAHLI=userCredentials; aza-usertoken:' + this.securityToken,
+                'Content-Length': JSON.stringify(data).length
+            },
+            data: data
+        })
+    }
+
+    /**
+     *
+     * @param {string} id   A URL-encoded notification id. The only way of getting the notification id is by scraping
+     *                      the HTML-markup which {@link createNotification} returns.
+     * @returns {Request}
+     */
+    deleteNotification(id) {
+        return new Request({
+            path: constants.NOTIFICATION_DELETE_PATH.replace('{0}', id),
+            method: 'POST',
+            headers: {
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
+            }
+        })
     }
 
     on(event, callback) {
