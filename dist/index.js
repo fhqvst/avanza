@@ -269,11 +269,17 @@ var Avanza = function () {
                     var object = {};
 
                     object.instrumentId = orderbook.id;
-                    object.orders = [];
+                    object.levels = [];
                     object.trades = [];
 
-                    for (var i = 0; i < orderbook.latestTrades.length; i++) {
-                        var trade = orderbook.latestTrades[i];
+                    orderbook.orderDepthLevels.map(function (level) {
+                        object.levels.push({
+                            buy: level.buySide,
+                            sell: level.sellSide
+                        });
+                    });
+
+                    orderbook.latestTrades.map(function (trade) {
                         object.trades.push({
                             price: trade.price,
                             volume: trade.volume,
@@ -281,7 +287,7 @@ var Avanza = function () {
                             seller: trade.seller || '-',
                             buyer: trade.buyer || '-'
                         });
-                    }
+                    });
 
                     resolve(object);
                 }).catch(function (error) {

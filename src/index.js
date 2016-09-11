@@ -220,11 +220,17 @@ export default class Avanza {
                 let object = {}
 
                 object.instrumentId = orderbook.id
-                object.orders = []
+                object.levels = []
                 object.trades = []
 
-                for(let i = 0; i < orderbook.latestTrades.length; i++) {
-                    const trade = orderbook.latestTrades[i]
+                orderbook.orderDepthLevels.map(level => {
+                    object.levels.push({
+                        buy: level.buySide,
+                        sell: level.sellSide
+                    })
+                })
+
+                orderbook.latestTrades.map(trade => {
                     object.trades.push({
                         price: trade.price,
                         volume: trade.volume,
@@ -232,7 +238,7 @@ export default class Avanza {
                         seller: trade.seller || '-',
                         buyer: trade.buyer || '-'
                     })
-                }
+                })
 
                 resolve(object)
 
