@@ -17,6 +17,7 @@ var MAX_INACTIVE_MINUTES = exports.MAX_INACTIVE_MINUTES = '1440';
 var SOCKET_URL = exports.SOCKET_URL = 'wss://www.avanza.se/_push/cometd';
 var POSITIONS_PATH = exports.POSITIONS_PATH = '/_mobile/account/positions';
 var OVERVIEW_PATH = exports.OVERVIEW_PATH = '/_mobile/account/overview';
+var ACCOUNT_OVERVIEW_PATH = exports.ACCOUNT_OVERVIEW_PATH = '/_mobile/account/{0}/overview';
 var DEALS_AND_ORDERS_PATH = exports.DEALS_AND_ORDERS_PATH = '/_mobile/account/dealsandorders';
 var WATCHLISTS_PATH = exports.WATCHLISTS_PATH = '/_mobile/usercontent/watchlist';
 var WATCHLISTS_ADD_PATH = exports.WATCHLISTS_ADD_PATH = '/_api/usercontent/watchlist/{0}/orderbooks/{1}';

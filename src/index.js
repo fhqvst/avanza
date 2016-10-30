@@ -73,6 +73,22 @@ export default class Avanza {
     }
 
     /**
+    * Fetch an overview for a given accountId of the current user
+     *
+     * @param accountId
+     */
+    getAccountOverview(accountId) {
+        return new Request({
+            path: constants.ACCOUNT_OVERVIEW_PATH.replace('{0}', accountId),
+            method: 'GET',
+            headers: {
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
+            }
+        });
+    }
+
+    /**
      * Fetch recent transactions and orders by the current user
      */
     getDealsAndOrders() {
