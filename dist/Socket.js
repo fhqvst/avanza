@@ -241,7 +241,7 @@ var Socket = function () {
         value: function subscribe(id) {
             var _this3 = this;
 
-            var channels = arguments.length <= 1 || arguments[1] === undefined ? ['quotes'] : arguments[1];
+            var channels = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ['quotes'];
 
 
             if (!this.isOpened()) {

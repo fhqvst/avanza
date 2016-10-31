@@ -106,6 +106,25 @@ var Avanza = function () {
         }
 
         /**
+        * Fetch an overview for a given accountId of the current user
+         *
+         * @param accountId
+         */
+
+    }, {
+        key: 'getAccountOverview',
+        value: function getAccountOverview(accountId) {
+            return new _Request2.default({
+                path: constants.ACCOUNT_OVERVIEW_PATH.replace('{0}', accountId),
+                method: 'GET',
+                headers: {
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
+                }
+            });
+        }
+
+        /**
          * Fetch recent transactions and orders by the current user
          */
 
@@ -326,7 +345,7 @@ var Avanza = function () {
     }, {
         key: 'getChartdata',
         value: function getChartdata(id) {
-            var period = arguments.length <= 1 || arguments[1] === undefined ? constants.ONE_YEAR : arguments[1];
+            var period = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : constants.ONE_YEAR;
 
             return new _Request2.default({
                 path: constants.CHARTDATA_PATH.replace('{0}', id) + '?' + _querystring2.default.stringify({
