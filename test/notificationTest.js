@@ -34,7 +34,7 @@ describe('notifications', function() {
 
         const payload = {
             accountId: process.env.ACCOUNT,
-            expirationDate: '2075-01-02',
+            expirationDate: '2025-01-02',
             messageTypes: [EMAIL, PUSH_NOTIFICATION],
             instrumentId: '5534', // AQ Group
             price: '192.50',
