@@ -525,4 +525,19 @@ export default class Avanza {
         return this._events.on(event, callback);
     }
 
+    /**
+     * Fetch an inspiration list
+     *
+     * @param type
+     */
+    getInspirationList(type) {
+        return new Request({
+            path: constants.INSPIRATION_LIST_PATH.replace('{0}', type),
+            headers: {
+                'X-AuthenticationSession': this.authenticationSession,
+                'X-SecurityToken': this.securityToken
+            }
+        });
+    }
+
 }

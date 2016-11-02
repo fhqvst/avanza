@@ -26,6 +26,7 @@ export const SEARCH_PATH =              '/_mobile/market/search/{0}'
 export const AUTHENTICATION_PATH =      '/_api/authentication/sessions/username'
 export const NOTIFICATION_DELETE_PATH = '/ab/larm/kurslarm/delete/{0}'
 export const NOTIFICATION_CREATE_PATH = '/ab/larm/kurslarm/save'
+export const INSPIRATION_LIST_PATH =    '/_mobile/marketing/inspirationlist/{0}'
 
 /**
  * Search
@@ -63,3 +64,11 @@ export const EMAIL = 'EMAIL'
 export const SMS = 'SMS'
 export const ABOVE_OR_EQUAL = 'ABOVE'
 export const BELOW_OR_EQUAL = 'BELOW'
+
+/**
+ * Marketing
+ */
+export const HIGHEST_RATED_FUNDS = 'HIGHEST_RATED_FUNDS'
+export const LOWEST_FEE_INDEX_FUNDS = 'LOWEST_FEE_INDEX_FUNDS'
+export const BEST_DEVELOPMENT_FUNDS_LAST_THREE_MONTHS = 'BEST_DEVELOPMENT_FUNDS_LAST_THREE_MONTHS'
+export const MOST_OWNED_FUNDS = 'MOST_OWNED_FUNDS'

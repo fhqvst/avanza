@@ -31,6 +31,7 @@ var SEARCH_PATH = exports.SEARCH_PATH = '/_mobile/market/search/{0}';
 var AUTHENTICATION_PATH = exports.AUTHENTICATION_PATH = '/_api/authentication/sessions/username';
 var NOTIFICATION_DELETE_PATH = exports.NOTIFICATION_DELETE_PATH = '/ab/larm/kurslarm/delete/{0}';
 var NOTIFICATION_CREATE_PATH = exports.NOTIFICATION_CREATE_PATH = '/ab/larm/kurslarm/save';
+var INSPIRATION_LIST_PATH = exports.INSPIRATION_LIST_PATH = '/_mobile/marketing/inspirationlist/{0}';
 
 /**
  * Search
@@ -68,3 +69,11 @@ var EMAIL = exports.EMAIL = 'EMAIL';
 var SMS = exports.SMS = 'SMS';
 var ABOVE_OR_EQUAL = exports.ABOVE_OR_EQUAL = 'ABOVE';
 var BELOW_OR_EQUAL = exports.BELOW_OR_EQUAL = 'BELOW';
+
+/**
+ * Marketing
+ */
+var HIGHEST_RATED_FUNDS = exports.HIGHEST_RATED_FUNDS = 'HIGHEST_RATED_FUNDS';
+var LOWEST_FEE_INDEX_FUNDS = exports.LOWEST_FEE_INDEX_FUNDS = 'LOWEST_FEE_INDEX_FUNDS';
+var BEST_DEVELOPMENT_FUNDS_LAST_THREE_MONTHS = exports.BEST_DEVELOPMENT_FUNDS_LAST_THREE_MONTHS = 'BEST_DEVELOPMENT_FUNDS_LAST_THREE_MONTHS';
+var MOST_OWNED_FUNDS = exports.MOST_OWNED_FUNDS = 'MOST_OWNED_FUNDS';

@@ -345,7 +345,7 @@ var Avanza = function () {
     }, {
         key: 'getChartdata',
         value: function getChartdata(id) {
-            var period = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : constants.ONE_YEAR;
+            var period = arguments.length <= 1 || arguments[1] === undefined ? constants.ONE_YEAR : arguments[1];
 
             return new _Request2.default({
                 path: constants.CHARTDATA_PATH.replace('{0}', id) + '?' + _querystring2.default.stringify({
@@ -601,6 +601,24 @@ var Avanza = function () {
         key: 'on',
         value: function on(event, callback) {
             return this._events.on(event, callback);
+        }
+
+        /**
+         * Fetch an inspiration list
+         *
+         * @param type
+         */
+
+    }, {
+        key: 'getInspirationList',
+        value: function getInspirationList(type) {
+            return new _Request2.default({
+                path: constants.INSPIRATION_LIST_PATH.replace('{0}', type),
+                headers: {
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
+                }
+            });
         }
     }]);
 
