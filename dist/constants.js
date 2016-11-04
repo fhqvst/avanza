@@ -32,6 +32,7 @@ var AUTHENTICATION_PATH = exports.AUTHENTICATION_PATH = '/_api/authentication/se
 var NOTIFICATION_DELETE_PATH = exports.NOTIFICATION_DELETE_PATH = '/ab/larm/kurslarm/delete/{0}';
 var NOTIFICATION_CREATE_PATH = exports.NOTIFICATION_CREATE_PATH = '/ab/larm/kurslarm/save';
 var INSPIRATION_LIST_PATH = exports.INSPIRATION_LIST_PATH = '/_mobile/marketing/inspirationlist/{0}';
+var TRANSACTIONS_PATH = exports.TRANSACTIONS_PATH = '/_mobile/account/transactions/{0}';
 
 /**
  * Search

@@ -27,6 +27,7 @@ export const AUTHENTICATION_PATH =      '/_api/authentication/sessions/username'
 export const NOTIFICATION_DELETE_PATH = '/ab/larm/kurslarm/delete/{0}'
 export const NOTIFICATION_CREATE_PATH = '/ab/larm/kurslarm/save'
 export const INSPIRATION_LIST_PATH =    '/_mobile/marketing/inspirationlist/{0}'
+export const TRANSACTIONS_PATH =        '/_mobile/account/transactions/{0}'
 
 /**
  * Search

@@ -142,6 +142,32 @@ var Avanza = function () {
         }
 
         /**
+         * Fetch specific transaction details for a given account
+         * @param accountId {String}
+         * @param options {Object} Take a look at the example below:
+         *      from: 2014-09-15
+         *      to: 2016-10-19
+         *      maxAmount: 150000
+         *      minAmount: 10
+         *      orderbookId: 106733,5276,5422
+         */
+
+    }, {
+        key: 'getTransactions',
+        value: function getTransactions(accountId) {
+            var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+            return new _Request2.default({
+                path: constants.TRANSACTIONS_PATH.replace('{0}', accountId) + '?' + _querystring2.default.stringify(options),
+                method: 'GET',
+                headers: {
+                    'X-AuthenticationSession': this.authenticationSession,
+                    'X-SecurityToken': this.securityToken
+                }
+            });
+        }
+
+        /**
          * Fetch the current user's watchlists
          */
 
