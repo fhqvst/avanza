@@ -16,7 +16,7 @@ chai.use(chaiAsPromised);
 chai.should();
 
 
-describe.only('transactions', function() {
+describe('transactions', function() {
 
     let client;
 

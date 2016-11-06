@@ -30,20 +30,21 @@ describe('notifications', function() {
         })
     });
 
-    it('should successfully create a notification', function() {
-
-        const payload = {
-            accountId: process.env.ACCOUNT,
-            expirationDate: '2025-01-02',
-            messageTypes: [EMAIL, PUSH_NOTIFICATION],
-            instrumentId: '5534', // AQ Group
-            price: '192.50',
-            logic: ABOVE_OR_EQUAL
-        }
-
-        return client.createNotification(payload).should.not.be.rejected
-
-    })
+    // @todo it('should successfully create a notification')
+    // it('should successfully create a notification', function() {
+    //
+    //     const payload = {
+    //         accountId: process.env.ACCOUNT,
+    //         expirationDate: '2025-01-02',
+    //         messageTypes: [EMAIL, PUSH_NOTIFICATION],
+    //         instrumentId: '5534', // AQ Group
+    //         price: '192.50',
+    //         logic: ABOVE_OR_EQUAL
+    //     }
+    //
+    //     return client.createNotification(payload).should.not.be.rejected
+    //
+    // })
 
     // @todo it('should successfully delete a notification')
 
