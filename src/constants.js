@@ -3,7 +3,7 @@
  */
 export const BASE_URL = 'www.avanza.se'
 export const PORT = 443
-export const USER_AGENT = 'Avanza/se.avanza.iphone (2.6.2 - (#165); iOS 9.3.1)'
+export const USER_AGENT = 'Avanza/se.avanza.iphone (2.12.0 - (#64); iOS 10.0.2)'
 export const MAX_INACTIVE_MINUTES = '1440'
 
 /**

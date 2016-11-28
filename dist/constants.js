@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", {
  */
 var BASE_URL = exports.BASE_URL = 'www.avanza.se';
 var PORT = exports.PORT = 443;
-var USER_AGENT = exports.USER_AGENT = 'Avanza/se.avanza.iphone (2.6.2 - (#165); iOS 9.3.1)';
+var USER_AGENT = exports.USER_AGENT = 'Avanza/se.avanza.iphone (2.12.0 - (#64); iOS 10.0.2)';
 var MAX_INACTIVE_MINUTES = exports.MAX_INACTIVE_MINUTES = '1440';
 
 /**
