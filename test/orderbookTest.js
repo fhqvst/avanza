@@ -13,7 +13,7 @@ chai.use(chaiAsPromised);
 chai.should();
 
 
-describe('orderbooks', function() {
+describe.only('orderbooks', function() {
 
     let client;
 
@@ -32,5 +32,5 @@ describe('orderbooks', function() {
     it('should successfully fetch list of orderbooks', function() {
         return client.getOrderbooks(['5479', '106733']).should.not.be.rejected;
     });
-    
+
 });

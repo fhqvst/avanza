@@ -256,14 +256,14 @@ export default class Avanza {
 
                 let object = {}
 
-                object.instrumentId = orderbook.id
+                object.instrumentId = orderbook.orderbook.id
                 object.levels = []
                 object.trades = []
 
                 orderbook.orderDepthLevels.map(level => {
                     object.levels.push({
-                        buy: level.buySide,
-                        sell: level.sellSide
+                        buy: level.buy,
+                        sell: level.sell
                     })
                 })
 
