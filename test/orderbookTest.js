@@ -13,7 +13,7 @@ chai.use(chaiAsPromised);
 chai.should();
 
 
-describe.only('orderbooks', function() {
+describe('orderbooks', function() {
 
     let client;
 

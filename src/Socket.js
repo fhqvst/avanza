@@ -83,6 +83,17 @@ export default class Socket {
 
                     else if(message.channel === '/meta/connect') {
                         this._events.emit('connect', message);
+                        const that = this
+                        setTimeout(() => {
+                          that._socket.send(JSON.stringify(
+                              [{
+                                  channel: '/meta/connect',
+                                  clientId: that._clientId,
+                                  connectionType: 'websocket',
+                                  id: that._id++
+                              }]
+                          ));
+                        }, 100)
                     }
 
                     else if(message.channel === '/meta/subscribe') {
@@ -91,7 +102,7 @@ export default class Socket {
 
                     else if(message.channel.indexOf('/quotes/') !== -1) {
                         const data = message.data
-                        this._events.emit('quote', {
+                        this._events.emit('quotes', {
                             change: data.change,
                             changePercent: data.changePercent,
                             closingPrice: data.closingPrice,
@@ -175,9 +186,13 @@ export default class Socket {
         });
 
     }
-    
+
     on(event, callback) {
         return this._events.on(event, callback);
+    };
+
+    once(event, callback) {
+        return this._events.once(event, callback);
     };
 
     /**

@@ -5,6 +5,7 @@ import Avanza from '../dist';
 
 describe('socket', function() {
 
+    this.timeout(120000);
     let client;
 
     beforeEach(function() {
@@ -26,8 +27,27 @@ describe('socket', function() {
 
     it('should successfully connect', done => {
 
+        client.socket.on('quote', data => {
+          console.log((new Date).toISOString(), 'Received quote: ', data.lastPrice);
+        });
+
+        let successes = 0
         client.socket.on('connect', data => {
+
+          if (data.successful) {
+            successes++;
+          } else {
+            throw new Error('Connection was not successful');
+          }
+
+          if (successes === 2) {
             done();
+          }
+
+        })
+
+        client.socket.once('connect', data => {
+            client.socket.subscribe('5479', ['quotes', 'brokertradesummary']);
         });
         client.socket.initialize();
 
@@ -35,7 +55,7 @@ describe('socket', function() {
 
     it('should successfully subscribe to channels', done => {
 
-        client.socket.on('connect', function() {
+        client.socket.once('connect', function() {
             client.socket.subscribe('5479', [
                 'quotes', 'orderdepths', 'trades', 'brokertradesummary', 'orders', 'deals'
             ]);
@@ -52,9 +72,9 @@ describe('socket', function() {
             }
 
         });
-        
+
         client.socket.initialize();
 
     });
-    
+
 });

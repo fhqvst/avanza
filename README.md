@@ -1,6 +1,6 @@
 # Avanza
 
-A Node.js wrapper for the unofficial Avanza API. Please note that this is only a proof of concept, hence not meant to be used by anyone. 
+A Node.js wrapper for the unofficial Avanza API. Please note that this is only a proof of concept, hence not meant to be used by anyone.
 
 New features will be added as soon as the crude breaks $50 so I can pay my electric bills. Contributions are more than welcome.
 
@@ -53,7 +53,7 @@ avanza.authenticate({
    avanza.getPositions().then(positions => {
       console.log(positions);
    });
-   
+
 })
 ```
 
@@ -62,11 +62,12 @@ Subscribe to real-time quotes for a given instrument
 import Avanza from 'avanza'
 const avanza = new Avanza()
 
-avanza.socket.on('connect', () => {
+// NOTE: use .once and not .on
+avanza.socket.once('connect', () => {
   avanza.socket.subscribe('5479', ['quotes']); // Telia
 });
 
-avanza.socket.on('subscribe', data => {
+avanza.socket.on('quotes', data => {
   console.info('Received quote: ', data);
 });
 
@@ -94,7 +95,7 @@ Run all tests
 ```bash
 $ npm test
 ```
-NOTE: No tests will run without an `.env` file and, as surprising as it may seem, the values in it must be valid. 
+NOTE: No tests will run without an `.env` file and, as surprising as it may seem, the values in it must be valid.
 
 ## LICENSE
 

@@ -93,12 +93,23 @@ var Socket = function () {
                             id: _this._id++
                         }]));
                     } else if (message.channel === '/meta/connect') {
-                        _this._events.emit('connect', message);
+                        (function () {
+                            _this._events.emit('connect', message);
+                            var that = _this;
+                            setTimeout(function () {
+                                that._socket.send(JSON.stringify([{
+                                    channel: '/meta/connect',
+                                    clientId: that._clientId,
+                                    connectionType: 'websocket',
+                                    id: that._id++
+                                }]));
+                            }, 100);
+                        })();
                     } else if (message.channel === '/meta/subscribe') {
                         _this._events.emit('subscribe', message);
                     } else if (message.channel.indexOf('/quotes/') !== -1) {
                         var _data = message.data;
-                        _this._events.emit('quote', {
+                        _this._events.emit('quotes', {
                             change: _data.change,
                             changePercent: _data.changePercent,
                             closingPrice: _data.closingPrice,
@@ -179,6 +190,11 @@ var Socket = function () {
         key: 'on',
         value: function on(event, callback) {
             return this._events.on(event, callback);
+        }
+    }, {
+        key: 'once',
+        value: function once(event, callback) {
+            return this._events.once(event, callback);
         }
     }, {
         key: 'isOpened',
