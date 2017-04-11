@@ -81,6 +81,16 @@ avanza.authenticate({
 })
 ```
 
+## Using CommonJS
+
+The easy workaround to get going if you're using CommonJS is to call `default` when importing. See example below.
+```javascript
+const Avanza = require('avanza')
+const avanza = new Avanza.default() // This does the trick
+```
+The rest should work out just the same as it does for ES6 imports.
+Still having trouble? Create an [issue](https://github.com/fhqvst/avanza/issues)!
+
 ## Authentication
 
 Logging in returns three important credentials: An authentication session, a subscription id and a security token. The first two are found in the body of the response, and the security token is found in a header: `X-SecurityToken`.
