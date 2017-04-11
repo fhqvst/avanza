@@ -6,7 +6,7 @@ New features will be added as soon as the crude breaks $50 so I can pay my elect
 
 ## Installation
 
-Install via [npm](https://www.npmjs.com/package/github)
+Install via [npm](https://www.npmjs.com/package/avanza)
 
 ```bash
 $ npm install avanza
