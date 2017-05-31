@@ -235,6 +235,8 @@ var Avanza = function () {
                     object.lastPrice = instrument.lastPrice || null;
                     object.totalValueTraded = instrument.totalValueTraded || null;
                     object.numberOfOwners = instrument.numberOfOwners || null;
+                    object.buyPrice = instrument.buyPrice || null;
+                    object.sellPrice = instrument.sellPrice || null;
 
                     object.shortSellable = !!instrument.shortSellable;
                     object.tradable = !!instrument.tradable;
@@ -314,6 +316,7 @@ var Avanza = function () {
                     var object = {};
 
                     object.instrumentId = orderbook.orderbook.id;
+                    object.orderbook = orderbook.orderbook;
                     object.levels = [];
                     object.trades = [];
 
