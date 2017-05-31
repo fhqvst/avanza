@@ -257,6 +257,7 @@ export default class Avanza {
                 let object = {}
 
                 object.instrumentId = orderbook.orderbook.id
+                object.orderbook = orderbook.orderbook
                 object.levels = []
                 object.trades = []
 
