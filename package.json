@@ -4,8 +4,7 @@
   "description": "A wrapper for the unofficial Avanza API",
   "main": "lib/index.js",
   "scripts": {
-    "test": "NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js",
-    "build": "babel src --out-dir dist"
+    "test": "NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js"
   },
   "repository": {
     "type": "git",
