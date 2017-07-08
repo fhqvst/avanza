@@ -4,7 +4,8 @@
   "description": "A wrapper for the unofficial Avanza API",
   "main": "lib/index.js",
   "scripts": {
-    "test": "NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js"
+    "test": "NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js",
+    "docs": "documentation readme lib/index.js --section=API --shallow"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "ava": "^0.20.0",
+    "documentation": "^4.0.0-rc.1",
     "dotenv": "^2.0.0",
     "eslint": "^3.9.1"
   }
