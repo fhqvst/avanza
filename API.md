@@ -56,12 +56,6 @@ Get all `positions` held by this user.
 | `changePercent`        | Number  |      |
 | `flagCode`             | String  |      |
 
-**Parameters**
-
--   `hej` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** testing hej
-
-Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** jaha
-
 ### getOverview
 
 Get an overview of the users holdings at Avanza Bank.

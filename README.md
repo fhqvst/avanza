@@ -10,7 +10,7 @@ $ npm install avanza
 ```
 ## Documentation
 
-Please see [API.md](API.md).
+Refer to [API.md](./API.md).
 
 ## Example
 
