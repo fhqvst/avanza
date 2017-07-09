@@ -12,7 +12,7 @@ test.beforeEach((t) => {
   t.context.call = sinon.stub(t.context.avanza, 'call')
 })
 
-test.skip.serial('authenticate()', async (t) => {
+test.serial('authenticate()', async (t) => {
   const res = await t.context.avanza.authenticate({
     username: process.env.USERNAME,
     password: process.env.PASSWORD
@@ -27,7 +27,7 @@ test('getAccountOverview()', async (t) => {
   await t.context.avanza.getAccountOverview('12345')
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', constants.ACCOUNT_OVERVIEW_PATH.replace('{0}', '12345') ]
+  const expected = [ 'GET', constants.paths.ACCOUNT_OVERVIEW_PATH.replace('{0}', '12345') ]
   t.deepEqual(actual, expected)
 })
 
@@ -35,7 +35,7 @@ test('getTransactions() without options', async (t) => {
   await t.context.avanza.getTransactions('12345')
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', constants.TRANSACTIONS_PATH.replace('{0}', '12345') ]
+  const expected = [ 'GET', constants.paths.TRANSACTIONS_PATH.replace('{0}', '12345') ]
   t.deepEqual(actual, expected)
 })
 
@@ -48,7 +48,7 @@ test('getTransactions() with options', async (t) => {
     orderbookId: ['A', 'B', 'C']
   })
 
-  const expectedPath = constants.TRANSACTIONS_PATH.replace('{0}', '12345')
+  const expectedPath = constants.paths.TRANSACTIONS_PATH.replace('{0}', '12345')
   const expectedQuery = '?from=2017-01-01&to=2018-01-01&maxAmount=12345&minAmount=54321&orderbookId=A%2CB%2CC'
 
   const actual = t.context.call.args[0]
@@ -59,7 +59,7 @@ test('getTransactions() with options', async (t) => {
 test('addToWatchlist()', async (t) => {
   await t.context.avanza.addToWatchlist('12345', '54321')
 
-  const expectedPath = constants.WATCHLISTS_ADD_PATH
+  const expectedPath = constants.paths.WATCHLISTS_ADD_PATH
     .replace('{1}', '12345')
     .replace('{0}', '54321')
 
@@ -72,7 +72,7 @@ test('getStock()', async (t) => {
   await t.context.avanza.getStock('12345')
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', constants.STOCK_PATH.replace('{0}', '12345') ]
+  const expected = [ 'GET', constants.paths.STOCK_PATH.replace('{0}', '12345') ]
   t.deepEqual(actual, expected)
 })
 
@@ -80,14 +80,14 @@ test('getFund()', async (t) => {
   await t.context.avanza.getFund('12345')
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', constants.FUND_PATH.replace('{0}', '12345') ]
+  const expected = [ 'GET', constants.paths.FUND_PATH.replace('{0}', '12345') ]
   t.deepEqual(actual, expected)
 })
 
 test('getOrderbook()', async (t) => {
   await t.context.avanza.getOrderbook('12345', 'STOCK')
 
-  const expectedPath = constants.ORDERBOOK_PATH.replace('{0}', 'stock')
+  const expectedPath = constants.paths.ORDERBOOK_PATH.replace('{0}', 'stock')
   const expectedQuery = '?orderbookId=12345'
   const actual = t.context.call.args[0]
   const expected = [ 'GET', expectedPath + expectedQuery ]
@@ -97,7 +97,7 @@ test('getOrderbook()', async (t) => {
 test('getOrderbooks()', async (t) => {
   await t.context.avanza.getOrderbooks(['123', '456', '789'])
 
-  const expectedPath = constants.ORDERBOOK_LIST_PATH.replace('{0}', '123,456,789')
+  const expectedPath = constants.paths.ORDERBOOK_LIST_PATH.replace('{0}', '123,456,789')
   const expectedQuery = '?sort=name'
   const actual = t.context.call.args[0]
   const expected = [ 'GET', expectedPath + expectedQuery ]
@@ -107,7 +107,7 @@ test('getOrderbooks()', async (t) => {
 test('getChartdata()', async (t) => {
   await t.context.avanza.getChartdata('12345', 'test')
 
-  const expectedPath = constants.CHARTDATA_PATH.replace('{0}', '12345')
+  const expectedPath = constants.paths.CHARTDATA_PATH.replace('{0}', '12345')
   const expectedQuery = '?timePeriod=test'
   const actual = t.context.call.args[0]
   const expected = [ 'GET', expectedPath + expectedQuery ]
@@ -126,14 +126,14 @@ test('placeOrder()', async (t) => {
   await t.context.avanza.placeOrder(options)
 
   const actual = t.context.call.args[0]
-  const expected = ['POST', constants.ORDER_PATH, options]
+  const expected = ['POST', constants.paths.ORDER_PATH, options]
   t.deepEqual(actual, expected)
 })
 
 test('checkOrder()', async (t) => {
   await t.context.avanza.checkOrder('12345', '54321')
 
-  const expectedPath = constants.ORDER_PATH
+  const expectedPath = constants.paths.ORDER_PATH
   const expectedQuery = '?accountId=12345&requestId=54321'
   const actual = t.context.call.args[0]
   const expected = [ 'GET', expectedPath + expectedQuery ]
@@ -143,7 +143,7 @@ test('checkOrder()', async (t) => {
 test('deleteOrder()', async (t) => {
   await t.context.avanza.deleteOrder('12345', '54321')
 
-  const expectedPath = constants.ORDER_PATH
+  const expectedPath = constants.paths.ORDER_PATH
   const expectedQuery = '?accountId=12345&orderId=54321'
   const actual = t.context.call.args[0]
   const expected = [ 'DELETE', expectedPath + expectedQuery ]

@@ -1,3 +1,5 @@
+'use strict'
+
 let documentation = require('documentation')
 let path = require('path')
 let fs = require('fs')
@@ -39,6 +41,21 @@ async function buildMarkdown() {
 
       const res = await calls[fn.name]()
       const tables = buildReturnTables(res, `${fn.name}()`)
+
+      fn.description.children.push({
+        type: 'paragraph',
+        children: [
+          {
+            type: 'strong',
+            children: [
+              {
+                type: 'text',
+                value: 'Returns'
+              }
+            ]
+          }
+        ]
+      })
 
       for (let table of tables) {
 
