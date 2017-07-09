@@ -24,6 +24,7 @@
     "ava": "^0.20.0",
     "documentation": "^4.0.0-rc.1",
     "dotenv": "^2.0.0",
-    "eslint": "^3.9.1"
+    "eslint": "^3.9.1",
+    "sinon": "^2.3.6"
   }
 }
