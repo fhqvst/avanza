@@ -257,16 +257,29 @@ Get all transactions of an account.
 
 ### getWatchlists
 
-Get all watchlists created by this user.
+Get all watchlists created by this user. Note that the second table was
+created from a specific watchlist, and so the response from the API will be
+different for you.
 
-`getWatchlists()`
+`getWatchlists()[i]`
+
+| Property     | Type    | Note |
+| :----------- | :------ | ---- |
+| `orderbooks` | Array   |      |
+| `name`       | String  |      |
+| `id`         | String  |      |
+| `editable`   | Boolean |      |
+
+`getWatchlists()[i].orderbooks[i]`
 
 | Property | Type   | Note |
 | :------- | :----- | ---- |
-| `0`      | Object |      |
-| `1`      | Object |      |
-| `2`      | Object |      |
-| `3`      | Object |      |
+| `0`      | String |      |
+| `1`      | String |      |
+| `2`      | String |      |
+| `3`      | String |      |
+| `4`      | String |      |
+| `5`      | String |      |
 
 ### addToWatchlist
 
@@ -505,12 +518,24 @@ Get orderbook information.
 
 Get information about multiple orderbooks.
 
-`getOrderbooks()`
+`getOrderbooks()[i]`
 
-| Property | Type   | Note |
-| :------- | :----- | ---- |
-| `0`      | Object |      |
-| `1`      | Object |      |
+| Property              | Type    | Note |
+| :-------------------- | :------ | ---- |
+| `currency`            | String  |      |
+| `flagCode`            | String  |      |
+| `priceThreeMonthsAgo` | Number  |      |
+| `highestPrice`        | Number  |      |
+| `lowestPrice`         | Number  |      |
+| `lastPrice`           | Number  |      |
+| `change`              | Number  |      |
+| `changePercent`       | Number  |      |
+| `updated`             | String  |      |
+| `totalVolumeTraded`   | Number  |      |
+| `name`                | String  |      |
+| `id`                  | String  |      |
+| `tradable`            | Boolean |      |
+| `instrumentType`      | String  |      |
 
 **Parameters**
 
@@ -644,10 +669,38 @@ Delete and cancel an order.
 
 Free text search for an instrument.
 
+`search()`
+
+| Property            | Type   | Note |
+| :------------------ | :----- | ---- |
+| `totalNumberOfHits` | Number |      |
+| `hits`              | Array  |      |
+
+`search().hits[i]`
+
+| Property         | Type   | Note |
+| :--------------- | :----- | ---- |
+| `instrumentType` | String |      |
+| `numberOfHits`   | Number |      |
+| `topHits`        | Array  |      |
+
+`search().hits[i].topHits[i]`
+
+| Property        | Type    | Note |
+| :-------------- | :------ | ---- |
+| `currency`      | String  |      |
+| `lastPrice`     | Number  |      |
+| `changePercent` | Number  |      |
+| `name`          | String  |      |
+| `id`            | String  |      |
+| `tickerSymbol`  | String  |      |
+| `flagCode`      | String  |      |
+| `tradable`      | Boolean |      |
+
 **Parameters**
 
 -   `query` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Search query.
--   `type` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Instrument type.
+-   `type` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** Instrument type.
 
 ### call
 

@@ -19,7 +19,8 @@ const calls = {
   getOrderbook: () => avanza.getOrderbook(process.env.STOCK, 'STOCK'),
   getOrderbooks: () => avanza.getOrderbooks([process.env.STOCK, process.env.STOCK2]),
   getChartdata: () => avanza.getChartdata(process.env.STOCK, 'ONE_MONTH'),
-  getInspirationList: () => avanza.getInspirationList('HIGHEST_RATED_FUNDS')
+  getInspirationList: () => avanza.getInspirationList('HIGHEST_RATED_FUNDS'),
+  search: () => avanza.search('om')
 }
 const notes = {}
 
@@ -128,22 +129,29 @@ async function buildMarkdown() {
  * @return {Array} An array of information about the endpoint return value.
  */
 function buildReturnTables(res, name) {
-  const keys = Object.keys(res).map(k => ({
-    name: k,
-    type: res[k].constructor.name
-  }))
   let tables = []
 
-  tables.push({ name, keys })
-
-  keys.filter(key => Array.isArray(res[key.name])).forEach(key => {
-    if (res[key.name].length) {
-      tables = [...tables, ...buildReturnTables(
-        res[key.name][0],
-        `${name}.${key.name}[i]`
-      )]
+  if (Array.isArray(res)) {
+    if (res.length && res[0]) {
+      tables = buildReturnTables(res[0], `${name}[i]`)
     }
-  })
+  } else {
+    const keys = Object.keys(res).map(k => ({
+      name: k,
+      type: res[k].constructor.name
+    }))
+
+    tables.push({ name, keys })
+
+    keys.filter(key => Array.isArray(res[key.name])).forEach(key => {
+      if (res[key.name].length) {
+        tables = [...tables, ...buildReturnTables(
+          res[key.name][0],
+          `${name}.${key.name}[i]`
+        )]
+      }
+    })
+  }
 
   return tables
 }
