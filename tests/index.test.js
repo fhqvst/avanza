@@ -149,3 +149,21 @@ test('deleteOrder()', async (t) => {
   const expected = [ 'DELETE', expectedPath + expectedQuery ]
   t.deepEqual(actual, expected)
 })
+
+test.cb('subscribe()', (t) => {
+  const { avanza } = t.context
+  avanza.authenticate({
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD
+  }).then(() => {
+    setTimeout(() => {
+      if (avanza._socketClientId) {
+        t.pass()
+      } else {
+        t.fail()
+      }
+      t.end()
+    }, 500)
+    avanza.subscribe('quotes', '19002', () => {})
+  })
+})

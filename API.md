@@ -6,6 +6,26 @@
 
 An Avanza API wrapper.
 
+### subscribe
+
+Subscribe to real-time data.
+
+| Channel              | Description                                                                             |
+| :------------------- | :-------------------------------------------------------------------------------------- |
+| `quotes`             | Minute-wise data containing current price, change, total volume traded etc.             |
+| `orderdepths`        | Best five offers and current total volume on each side.                                 |
+| `trades`             | Updates whenever a new trade is made. Data contains volume, price, broker etc.          |
+| `brokertradesummary` | Pushes data about which brokers are long/short and how big their current net volume is. |
+| `positions`          | Data about your own positions.                                                          |
+| `orders`             | Data about current orders.                                                              |
+| `deals`              | Data about recent trades you have made.                                                 |
+
+**Parameters**
+
+-   `channel` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The channel on which to listen.
+-   `ids` **([String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array))** One or many IDs to subscribe to.
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
+
 ### getPositions
 
 Get all `positions` held by this user.
@@ -15,11 +35,11 @@ Get all `positions` held by this user.
 | Property              | Type   | Note |
 | :-------------------- | :----- | ---- |
 | `instrumentPositions` | Array  |      |
-| `totalBalance`        | Number |      |
-| `totalProfitPercent`  | Number |      |
 | `totalProfit`         | Number |      |
 | `totalBuyingPower`    | Number |      |
 | `totalOwnCapital`     | Number |      |
+| `totalBalance`        | Number |      |
+| `totalProfitPercent`  | Number |      |
 
 `getPositions().instrumentPositions[i]`
 
@@ -28,9 +48,9 @@ Get all `positions` held by this user.
 | `instrumentType`      | String |      |
 | `positions`           | Array  |      |
 | `totalValue`          | Number |      |
+| `todaysProfitPercent` | Number |      |
 | `totalProfitValue`    | Number |      |
 | `totalProfitPercent`  | Number |      |
-| `todaysProfitPercent` | Number |      |
 
 `getPositions().instrumentPositions[i].positions[i]`
 
@@ -41,20 +61,20 @@ Get all `positions` held by this user.
 | `depositable`          | Boolean |      |
 | `accountId`            | String  |      |
 | `value`                | Number  |      |
-| `volume`               | Number  |      |
 | `averageAcquiredPrice` | Number  |      |
 | `profitPercent`        | Number  |      |
 | `acquiredValue`        | Number  |      |
 | `profit`               | Number  |      |
+| `volume`               | Number  |      |
 | `currency`             | String  |      |
 | `name`                 | String  |      |
+| `flagCode`             | String  |      |
 | `orderbookId`          | String  |      |
-| `tradable`             | Boolean |      |
 | `lastPrice`            | Number  |      |
 | `lastPriceUpdated`     | String  |      |
 | `change`               | Number  |      |
 | `changePercent`        | Number  |      |
-| `flagCode`             | String  |      |
+| `tradable`             | Boolean |      |
 
 ### getOverview
 
@@ -67,13 +87,13 @@ Get an overview of the users holdings at Avanza Bank.
 | `accounts`                  | Array  |      |
 | `numberOfOrders`            | Number |      |
 | `numberOfDeals`             | Number |      |
-| `totalBalance`              | Number |      |
+| `numberOfTransfers`         | Number |      |
+| `numberOfIntradayTransfers` | Number |      |
 | `totalBuyingPower`          | Number |      |
 | `totalOwnCapital`           | Number |      |
 | `totalPerformancePercent`   | Number |      |
 | `totalPerformance`          | Number |      |
-| `numberOfTransfers`         | Number |      |
-| `numberOfIntradayTransfers` | Number |      |
+| `totalBalance`              | Number |      |
 
 `getOverview().accounts[i]`
 
@@ -82,8 +102,11 @@ Get an overview of the users holdings at Avanza Bank.
 | `accountType`        | String  |      |
 | `interestRate`       | Number  |      |
 | `depositable`        | Boolean |      |
-| `active`             | Boolean |      |
 | `name`               | String  |      |
+| `active`             | Boolean |      |
+| `totalProfit`        | Number  |      |
+| `attorney`           | Boolean |      |
+| `performancePercent` | Number  |      |
 | `accountId`          | String  |      |
 | `performance`        | Number  |      |
 | `accountPartlyOwned` | Boolean |      |
@@ -93,9 +116,6 @@ Get an overview of the users holdings at Avanza Bank.
 | `ownCapital`         | Number  |      |
 | `buyingPower`        | Number  |      |
 | `totalProfitPercent` | Number  |      |
-| `totalProfit`        | Number  |      |
-| `performancePercent` | Number  |      |
-| `attorney`           | Boolean |      |
 
 ### getAccountOverview
 
@@ -117,6 +137,11 @@ Get all transactions of an account.
 
 -   `accountId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** A valid account ID.
 -   `options` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)?** Configuring which transactions to fetch.
+    -   `options.from` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** On the form YYYY-MM-DD.
+    -   `options.to` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** On the form YYYY-MM-DD.
+    -   `options.maxAmount` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)?** Only fetch transactions of at most this value.
+    -   `options.minAmount` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)?** Only fetch transactions of at least this value.
+    -   `options.orderbookId` **([String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array))?** Only fetch transactions involving this/these orderbooks.
 
 ### getWatchlists
 
@@ -146,3 +171,101 @@ Get information about a fund.
 **Parameters**
 
 -   `instrumentId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The ID of the func to fetch information about.
+
+### getOrderbook
+
+Get orderbook information.
+
+**Parameters**
+
+-   `orderbookId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Likely the same as the instrumentId.
+-   `type` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The type of the instrument.
+
+### getOrderbooks
+
+Get information about multiple orderbooks.
+
+**Parameters**
+
+-   `orderbookIds` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** A list of orderbook IDs.
+
+### getChartdata
+
+Get an array of OHLC price data for a period of time.
+
+**Parameters**
+
+-   `orderbookId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The orderbook to fetch price data about.
+-   `period` **Period** One of: 'today', 'one_week', 'one_month',
+                           'three_months', 'this_year', 'one_year', 'five_years'
+
+### placeOrder
+
+Place a limit order.
+
+**Parameters**
+
+-   `options` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Order options.
+    -   `options.accountId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** ID of the account to trade on.
+    -   `options.orderbookId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** ID of the instrument to trade.
+    -   `options.orderType` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** One of "BUY" or "SELL".
+    -   `options.price` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** The price limit of the order.
+    -   `options.validUntil` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** A date on the form YYYY-MM-DD. Cancels the order if this date is passed.
+    -   `options.volume` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** How many securities to order.
+
+### checkOrder
+
+Check the state of an order.
+
+**Parameters**
+
+-   `accountId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** ID of the account on which this order was placed.
+-   `requestId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Request ID received when the order was placed.
+
+### deleteOrder
+
+Delete and cancel an order.
+
+**Parameters**
+
+-   `accountId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** ID of the account on which this order was placed.
+-   `orderId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Order ID received when the order was placed.
+
+### search
+
+Free text search for an instrument.
+
+**Parameters**
+
+-   `query` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Search query.
+-   `type` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Instrument type.
+
+### getInspirationList
+
+Get an inspiration list.
+
+**Parameters**
+
+-   `type` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Instrument type.
+
+### authenticate
+
+Authenticate the client.
+
+**Parameters**
+
+-   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+    -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### call
+
+Make a call to the API.
+
+**Parameters**
+
+-   `method` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** HTTP method to use. (optional, default `'GET'`)
+-   `path` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The URL to send the request to. (optional, default `''`)
+-   `data` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** JSON data to send with the request. (optional, default `{}`)
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 

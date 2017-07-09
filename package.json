@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js",
-    "docs": "documentation readme lib/index.js --section=API --shallow"
+    "docs": "node scripts/generate-documentation.js"
   },
   "repository": {
     "type": "git",
