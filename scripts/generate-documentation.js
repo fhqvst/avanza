@@ -16,13 +16,12 @@ const calls = {
   getDealsAndOrders: () => avanza.getDealsAndOrders(),
   getTransactions: () => avanza.getTransactions(process.env.ACCOUNT),
   getWatchlists: () => avanza.getWatchlists(),
-  getStock: () => avanza.getStock(process.env.STOCK),
-  getFund: () => avanza.getFund(process.env.FUND),
-  getOrderbook: () => avanza.getOrderbook(process.env.STOCK, 'STOCK'),
+  getInstrument: () => avanza.getInstrument(Avanza.STOCK, process.env.STOCK),
+  getOrderbook: () => avanza.getOrderbook(Avanza.STOCK, process.env.STOCK),
   getOrderbooks: () => avanza.getOrderbooks([process.env.STOCK, process.env.STOCK2]),
-  getChartdata: () => avanza.getChartdata(process.env.STOCK, 'ONE_MONTH'),
+  getChartdata: () => avanza.getChartdata(process.env.STOCK, Avanza.ONE_MONTH),
   getInspirationLists: () => avanza.getInspirationLists(),
-  getInspirationList: () => avanza.getInspirationList('HIGHEST_RATED_FUNDS'),
+  getInspirationList: () => avanza.getInspirationList(Avanza.HIGHEST_RATED_FUNDS),
   search: () => avanza.search('om')
 }
 const notes = {}

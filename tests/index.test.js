@@ -68,24 +68,19 @@ test('addToWatchlist()', async (t) => {
   t.deepEqual(actual, expected)
 })
 
-test('getStock()', async (t) => {
-  await t.context.avanza.getStock('12345')
+test('getInstrument()', async (t) => {
+  await t.context.avanza.getInstrument('STOCK', '12345')
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', constants.paths.STOCK_PATH.replace('{0}', '12345') ]
-  t.deepEqual(actual, expected)
-})
-
-test('getFund()', async (t) => {
-  await t.context.avanza.getFund('12345')
-
-  const actual = t.context.call.args[0]
-  const expected = [ 'GET', constants.paths.FUND_PATH.replace('{0}', '12345') ]
+  const expected = [ 'GET', constants.paths.INSTRUMENT_PATH
+    .replace('{0}', 'stock')
+    .replace('{1}', '12345')
+  ]
   t.deepEqual(actual, expected)
 })
 
 test('getOrderbook()', async (t) => {
-  await t.context.avanza.getOrderbook('12345', 'STOCK')
+  await t.context.avanza.getOrderbook('STOCK', '12345')
 
   const expectedPath = constants.paths.ORDERBOOK_PATH.replace('{0}', 'stock')
   const expectedQuery = '?orderbookId=12345'
@@ -126,15 +121,15 @@ test('placeOrder()', async (t) => {
   await t.context.avanza.placeOrder(options)
 
   const actual = t.context.call.args[0]
-  const expected = ['POST', constants.paths.ORDER_PATH, options]
+  const expected = ['POST', constants.paths.ORDER_PLACE_DELETE_PATH, Object.assign({}, options)]
   t.deepEqual(actual, expected)
 })
 
-test('checkOrder()', async (t) => {
-  await t.context.avanza.checkOrder('12345', '54321')
+test('getOrder()', async (t) => {
+  await t.context.avanza.getOrder('STOCK', '12345', '54321')
 
-  const expectedPath = constants.paths.ORDER_PATH
-  const expectedQuery = '?accountId=12345&requestId=54321'
+  const expectedPath = constants.paths.ORDER_GET_PATH.replace('{0}', 'stock')
+  const expectedQuery = '?accountId=12345&orderId=54321'
   const actual = t.context.call.args[0]
   const expected = [ 'GET', expectedPath + expectedQuery ]
   t.deepEqual(actual, expected)
@@ -143,14 +138,14 @@ test('checkOrder()', async (t) => {
 test('deleteOrder()', async (t) => {
   await t.context.avanza.deleteOrder('12345', '54321')
 
-  const expectedPath = constants.paths.ORDER_PATH
+  const expectedPath = constants.paths.ORDER_PLACE_DELETE_PATH
   const expectedQuery = '?accountId=12345&orderId=54321'
   const actual = t.context.call.args[0]
   const expected = [ 'DELETE', expectedPath + expectedQuery ]
   t.deepEqual(actual, expected)
 })
 
-test.cb('subscribe()', (t) => {
+test.skip.cb('subscribe()', (t) => {
   const { avanza } = t.context
   avanza.authenticate({
     username: process.env.USERNAME,
