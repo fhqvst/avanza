@@ -9,7 +9,17 @@ const avanza = new Avanza()
 const filename = path.join(process.cwd(), 'lib', 'index.js')
 const calls = {
   getPositions: () => avanza.getPositions(),
-  getOverview: () => avanza.getOverview()
+  getOverview: () => avanza.getOverview(),
+  getAccountOverview: () => avanza.getAccountOverview(process.env.ACCOUNT),
+  getDealsAndOrders: () => avanza.getDealsAndOrders(),
+  getTransactions: () => avanza.getTransactions(process.env.ACCOUNT),
+  getWatchlists: () => avanza.getWatchlists(),
+  getStock: () => avanza.getStock(process.env.STOCK),
+  getFund: () => avanza.getFund(process.env.FUND),
+  getOrderbook: () => avanza.getOrderbook(process.env.STOCK, 'STOCK'),
+  getOrderbooks: () => avanza.getOrderbooks([process.env.STOCK, process.env.STOCK2]),
+  getChartdata: () => avanza.getChartdata(process.env.STOCK, 'ONE_MONTH'),
+  getInspirationList: () => avanza.getInspirationList('HIGHEST_RATED_FUNDS')
 }
 const notes = {}
 
@@ -104,7 +114,7 @@ async function buildMarkdown() {
 
   }
 
-  const markdown = await documentation.formats.md(docs, {})
+  const markdown = await documentation.formats.md(docs, { markdownToc: true })
   fs.writeFileSync(path.join(process.cwd(), 'API.md'), markdown)
   process.exit()
 }
