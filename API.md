@@ -21,6 +21,7 @@
     -   [getOrderbook](#getorderbook)
     -   [getOrderbooks](#getorderbooks)
     -   [getChartdata](#getchartdata)
+    -   [getInspirationLists](#getinspirationlists)
     -   [getInspirationList](#getinspirationlist)
     -   [subscribe](#subscribe)
     -   [placeOrder](#placeorder)
@@ -664,9 +665,46 @@ Get an array of OHLC price data for a period of time.
 -   `orderbookId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The orderbook to fetch price data about.
 -   `period` **Period** The period from which to fetch data. See [Periods](#periods).
 
+### getInspirationLists
+
+List all inspiration lists.
+
+**Returns**
+
+`getInspirationLists()[i]`
+
+| Property                        | Type   | Note |
+| :------------------------------ | :----- | ---- |
+| `orderbooks`                    | Array  |      |
+| `averageChange`                 | Number |      |
+| `name`                          | String |      |
+| `id`                            | String |      |
+| `instrumentType`                | String |      |
+| `statistics`                    | Object |      |
+| `imageUrl`                      | String |      |
+| `highlightField`                | Object |      |
+| `information`                   | String |      |
+| `averageChangeSinceThreeMonths` | Number |      |
+
+`getInspirationLists()[i].orderbooks[i]`
+
+| Property              | Type   | Note |
+| :-------------------- | :----- | ---- |
+| `currency`            | String |      |
+| `priceThreeMonthsAgo` | Number |      |
+| `priceOneYearAgo`     | Number |      |
+| `lastPrice`           | Number |      |
+| `change`              | Number |      |
+| `changePercent`       | Number |      |
+| `updated`             | String |      |
+| `name`                | String |      |
+| `id`                  | String |      |
+| `flagCode`            | String |      |
+| `highlightValue`      | Number |      |
+
 ### getInspirationList
 
-Get an inspiration list.
+Get information about a single inspiration list.
 
 **Returns**
 

@@ -21,6 +21,7 @@ const calls = {
   getOrderbook: () => avanza.getOrderbook(process.env.STOCK, 'STOCK'),
   getOrderbooks: () => avanza.getOrderbooks([process.env.STOCK, process.env.STOCK2]),
   getChartdata: () => avanza.getChartdata(process.env.STOCK, 'ONE_MONTH'),
+  getInspirationLists: () => avanza.getInspirationLists(),
   getInspirationList: () => avanza.getInspirationList('HIGHEST_RATED_FUNDS'),
   search: () => avanza.search('om')
 }
