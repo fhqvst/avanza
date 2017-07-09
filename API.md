@@ -8,6 +8,7 @@
         -   [Periods](#periods)
         -   [Lists](#lists)
         -   [Channels](#channels)
+        -   [Transaction Types](#transaction-types)
     -   [authenticate](#authenticate)
     -   [getPositions](#getpositions)
     -   [getOverview](#getoverview)
@@ -91,15 +92,27 @@ Some methods require certain constants as parameters. These are described below.
 | `Avanza.ORDERS`             | Data about current orders.                                                              |
 | `Avanza.DEALS`              | Data about recent trades you have made.                                                 |
 
+#### Transaction Types
+
+| Transaction type          | Note |
+| :------------------------ | :--- |
+| `Avanza.OPTIONS`          |      |
+| `Avanza.FOREX`            |      |
+| `Avanza.DEPOSIT_WITHDRAW` |      |
+| `Avanza.BUY_SELL`         |      |
+| `Avanza.DIVIDEND`         |      |
+| `Avanza.INTEREST`         |      |
+| `Avanza.FOREIGN_TAX`      |      |
+
 ### authenticate
 
 Authenticate the client.
 
 **Parameters**
 
--   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-    -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-    -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)**
+    -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
+    -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
 ### getPositions
 
@@ -322,8 +335,8 @@ Get all transactions of an account.
 
 **Parameters**
 
--   `accountId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** A valid account ID.
--   `options` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)?** Configuring which transactions to fetch.
+-   `accountOrTransactionType` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** A valid account ID or a [Transaction Type](#transaction-type).
+-   `options` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Configuring which transactions to fetch.
     -   `options.from` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** On the form YYYY-MM-DD.
     -   `options.to` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** On the form YYYY-MM-DD.
     -   `options.maxAmount` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)?** Only fetch transactions of at most this value.
@@ -747,7 +760,7 @@ Subscribe to real-time data.
 
 -   `channel` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The channel on which to listen. See [Channels](#channels).
 -   `ids` **([String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array))** One or many IDs to subscribe to.
--   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
 
 ### placeOrder
 
@@ -830,4 +843,4 @@ Make a call to the API.
 -   `path` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The URL to send the request to. (optional, default `''`)
 -   `data` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** JSON data to send with the request. (optional, default `{}`)
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)**
