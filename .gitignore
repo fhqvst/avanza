@@ -58,4 +58,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# old code used as reference material only
 old/
+
+# dist folder only deployed on npm
+dist/

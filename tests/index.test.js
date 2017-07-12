@@ -2,8 +2,8 @@ const test = require('ava')
 const sinon = require('sinon')
 const path = require('path')
 
-const Avanza = require('index.js')
-const constants = require('constants.js')
+const Avanza = require('../dist/index.js')
+const constants = require('../dist/constants.js')
 
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') })
 
@@ -27,7 +27,7 @@ test('getAccountOverview()', async (t) => {
   await t.context.avanza.getAccountOverview('12345')
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', constants.paths.ACCOUNT_OVERVIEW_PATH.replace('{0}', '12345') ]
+  const expected = ['GET', constants.paths.ACCOUNT_OVERVIEW_PATH.replace('{0}', '12345')]
   t.deepEqual(actual, expected)
 })
 
@@ -35,7 +35,7 @@ test('getTransactions() without options', async (t) => {
   await t.context.avanza.getTransactions('12345')
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', constants.paths.TRANSACTIONS_PATH.replace('{0}', '12345') ]
+  const expected = ['GET', constants.paths.TRANSACTIONS_PATH.replace('{0}', '12345')]
   t.deepEqual(actual, expected)
 })
 
@@ -52,7 +52,7 @@ test('getTransactions() with options', async (t) => {
   const expectedQuery = '?from=2017-01-01&to=2018-01-01&maxAmount=12345&minAmount=54321&orderbookId=A%2CB%2CC'
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', expectedPath + expectedQuery ]
+  const expected = ['GET', expectedPath + expectedQuery]
   t.deepEqual(actual, expected)
 })
 
@@ -64,7 +64,7 @@ test('addToWatchlist()', async (t) => {
     .replace('{0}', '54321')
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', expectedPath ]
+  const expected = ['GET', expectedPath]
   t.deepEqual(actual, expected)
 })
 
@@ -72,7 +72,7 @@ test('getInstrument()', async (t) => {
   await t.context.avanza.getInstrument('STOCK', '12345')
 
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', constants.paths.INSTRUMENT_PATH
+  const expected = ['GET', constants.paths.INSTRUMENT_PATH
     .replace('{0}', 'stock')
     .replace('{1}', '12345')
   ]
@@ -85,7 +85,7 @@ test('getOrderbook()', async (t) => {
   const expectedPath = constants.paths.ORDERBOOK_PATH.replace('{0}', 'stock')
   const expectedQuery = '?orderbookId=12345'
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', expectedPath + expectedQuery ]
+  const expected = ['GET', expectedPath + expectedQuery]
   t.deepEqual(actual, expected)
 })
 
@@ -95,7 +95,7 @@ test('getOrderbooks()', async (t) => {
   const expectedPath = constants.paths.ORDERBOOK_LIST_PATH.replace('{0}', '123,456,789')
   const expectedQuery = '?sort=name'
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', expectedPath + expectedQuery ]
+  const expected = ['GET', expectedPath + expectedQuery]
   t.deepEqual(actual, expected)
 })
 
@@ -105,7 +105,7 @@ test('getChartdata()', async (t) => {
   const expectedPath = constants.paths.CHARTDATA_PATH.replace('{0}', '12345')
   const expectedQuery = '?timePeriod=test'
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', expectedPath + expectedQuery ]
+  const expected = ['GET', expectedPath + expectedQuery]
   t.deepEqual(actual, expected)
 })
 
@@ -131,7 +131,7 @@ test('getOrder()', async (t) => {
   const expectedPath = constants.paths.ORDER_GET_PATH.replace('{0}', 'stock')
   const expectedQuery = '?accountId=12345&orderId=54321'
   const actual = t.context.call.args[0]
-  const expected = [ 'GET', expectedPath + expectedQuery ]
+  const expected = ['GET', expectedPath + expectedQuery]
   t.deepEqual(actual, expected)
 })
 
@@ -141,11 +141,11 @@ test('deleteOrder()', async (t) => {
   const expectedPath = constants.paths.ORDER_PLACE_DELETE_PATH
   const expectedQuery = '?accountId=12345&orderId=54321'
   const actual = t.context.call.args[0]
-  const expected = [ 'DELETE', expectedPath + expectedQuery ]
+  const expected = ['DELETE', expectedPath + expectedQuery]
   t.deepEqual(actual, expected)
 })
 
-test.skip.cb('subscribe()', (t) => {
+test.cb('subscribe()', (t) => {
   const { avanza } = t.context
   avanza.authenticate({
     username: process.env.USERNAME,

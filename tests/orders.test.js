@@ -1,7 +1,7 @@
 const test = require('ava')
 const path = require('path')
 
-const Avanza = require('index.js')
+const Avanza = require('../dist/index.js')
 
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') })
 
@@ -14,8 +14,10 @@ test.before(async () => {
   })
 })
 
-test.skip('place valid order, edit it and delete it', async (t) => {
-  let actual, expected, orderId
+test('place valid order, edit it and delete it', async (t) => {
+  let actual
+  let expected
+  let orderId
 
   const date = new Date(Date.now() + (1000 * 60 * 60 * 24)) // Tomorrow
   const dateString = date.toLocaleDateString('us', {
@@ -60,7 +62,7 @@ test.skip('place valid order, edit it and delete it', async (t) => {
    */
   await new Promise(r => setTimeout(r, 1000))
   try {
-    await avanza.getOrder(Avanza.STOCK, orderId, process.env.ACCOUNT)
+    await avanza.getOrder(Avanza.STOCK, process.env.ACCOUNT, orderId)
   } catch (e) {
     console.log(e)
     t.fail(e.statusMessage)
@@ -74,10 +76,10 @@ test.skip('place valid order, edit it and delete it', async (t) => {
   await new Promise(r => setTimeout(r, 1000))
   try {
     actual = await avanza.editOrder(Avanza.STOCK, orderId, {
-    	accountId: process.env.ACCOUNT,
-    	volume: 11,
-    	price: 35,
-    	validUntil: dateString
+      accountId: process.env.ACCOUNT,
+      volume: 11,
+      price: 35,
+      validUntil: dateString
     })
     expected = {
       messages: [''],
@@ -116,5 +118,4 @@ test.skip('place valid order, edit it and delete it', async (t) => {
     console.log(e)
     t.fail(e.statusMessage)
   }
-
 })

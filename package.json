@@ -2,10 +2,13 @@
   "name": "avanza",
   "version": "1.0.0",
   "description": "A wrapper for the unofficial Avanza API",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js",
-    "docs": "node scripts/generate-documentation.js"
+    "start": "NODE_ENV=production babel lib -d dist",
+    "test": "npm start && NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js",
+    "lint": "eslint lib/**/*",
+    "docs": "node scripts/generate-documentation.js",
+    "prepublishOnly": "npm run lint && npm run test"
   },
   "repository": {
     "type": "git",
@@ -22,9 +25,26 @@
   },
   "devDependencies": {
     "ava": "^0.20.0",
+    "babel-cli": "^6.24.0",
+    "babel-preset-env": "^1.6.0",
     "documentation": "^4.0.0-rc.1",
     "dotenv": "^2.0.0",
     "eslint": "^3.9.1",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.7.0",
     "sinon": "^2.3.6"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": "last 2 versions",
+            "node": "6.11"
+          }
+        }
+      ]
+    ]
   }
 }
