@@ -41,7 +41,7 @@ avanza.authenticate({
   username: 'USERNAME',
   password: 'PASSWORD'
 }).then(() => {
-  avanza.subscribe('quotes', '19002', (quote) => {
+  avanza.subscribe(Avanza.QUOTES, '5479', (quote) => {
     console.log('Received quote:', quote)
   })
 })

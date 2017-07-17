@@ -1,9 +1,7 @@
-'use strict'
-
-let documentation = require('documentation')
-let path = require('path')
-let fs = require('fs')
-let Avanza = require('../lib/index.js')
+const documentation = require('documentation')
+const path = require('path')
+const fs = require('fs')
+const Avanza = require('../lib/index.js')
 
 require('dotenv').config({ path: path.join(process.cwd(), '.env') })
 
@@ -14,7 +12,7 @@ const calls = {
   getOverview: () => avanza.getOverview(),
   getAccountOverview: () => avanza.getAccountOverview(process.env.ACCOUNT),
   getDealsAndOrders: () => avanza.getDealsAndOrders(),
-  getTransactions: () => avanza.getTransactions(process.env.ACCOUNT),
+  getTransactions: () => avanza.getTransactions(process.env.ACCOUNT, { from: '2017-01-01', to: '2019-01-01' }),
   getWatchlists: () => avanza.getWatchlists(),
   getInstrument: () => avanza.getInstrument(Avanza.STOCK, process.env.STOCK),
   getOrderbook: () => avanza.getOrderbook(Avanza.STOCK, process.env.STOCK),
@@ -27,18 +25,51 @@ const calls = {
 const notes = {}
 
 /**
+ * Recursive function which builds an array of data about the endpoint return value.
+ * The information is then used to build Markdown tables.
+ *
+ * @param {Object|Array} res The value returned from the API endpoint.
+ * @param {String} name The name/header of the table to be built.
+ * @return {Array} An array of information about the endpoint return value.
+ */
+function buildReturnTables(res, name) {
+  let tables = []
+
+  if (Array.isArray(res)) {
+    if (res.length && res[0]) {
+      tables = buildReturnTables(res[0], `${name}[i]`)
+    }
+  } else {
+    const keys = Object.keys(res).map(k => ({
+      name: k,
+      type: res[k].constructor.name
+    }))
+
+    tables.push({ name, keys })
+
+    keys.filter(key => Array.isArray(res[key.name])).forEach((key) => {
+      if (res[key.name].length) {
+        tables = [...tables, ...buildReturnTables(
+          res[key.name][0],
+          `${name}.${key.name}[i]`
+        )]
+      }
+    })
+  }
+
+  return tables
+}
+
+/**
  * Traverse through all functions inside in the wrapper and build Markdown tables
  * describing each endpoint return value.
  */
 async function buildMarkdown() {
-
   const docs = await documentation.build([filename], { shallow: true })
   const functions = docs[0].members.instance.filter(x => x.kind === 'function')
 
-  for (let fn of functions) {
-
+  for (const fn of functions) {
     if (typeof calls[fn.name] === 'function') {
-
       const res = await calls[fn.name]()
       const tables = buildReturnTables(res, `${fn.name}()`)
 
@@ -57,8 +88,7 @@ async function buildMarkdown() {
         ]
       })
 
-      for (let table of tables) {
-
+      for (const table of tables) {
         // Add table title
         fn.description.children.push({
           type: 'paragraph',
@@ -127,50 +157,12 @@ async function buildMarkdown() {
           }))]
         })
       }
-
     }
-
   }
 
   const markdown = await documentation.formats.md(docs, { markdownToc: true })
   fs.writeFileSync(path.join(process.cwd(), 'API.md'), markdown)
   process.exit()
-}
-
-/**
- * Recursive function which builds an array of data about the endpoint return value.
- * The information is then used to build Markdown tables.
- *
- * @param {Object|Array} res The value returned from the API endpoint.
- * @param {String} name The name/header of the table to be built.
- * @return {Array} An array of information about the endpoint return value.
- */
-function buildReturnTables(res, name) {
-  let tables = []
-
-  if (Array.isArray(res)) {
-    if (res.length && res[0]) {
-      tables = buildReturnTables(res[0], `${name}[i]`)
-    }
-  } else {
-    const keys = Object.keys(res).map(k => ({
-      name: k,
-      type: res[k].constructor.name
-    }))
-
-    tables.push({ name, keys })
-
-    keys.filter(key => Array.isArray(res[key.name])).forEach(key => {
-      if (res[key.name].length) {
-        tables = [...tables, ...buildReturnTables(
-          res[key.name][0],
-          `${name}.${key.name}[i]`
-        )]
-      }
-    })
-  }
-
-  return tables
 }
 
 /**

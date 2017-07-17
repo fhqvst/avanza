@@ -7,6 +7,11 @@
     "comma-dangle": 0,
     "no-param-reassign": 0,
     "max-len": 0,
-    "quote-props": 0
+    "quote-props": 0,
+    "no-restricted-syntax": ["off", "BinaryExpression[operator='of']"],
+    "no-await-in-loop": 0,
+    "import/no-extraneous-dependencies": ["error", {
+      "devDependencies": ["**/tests/**/*", "**/scripts/**/*"]
+    }]
   }
 }

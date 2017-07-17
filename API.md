@@ -83,15 +83,15 @@ Some methods require certain constants as parameters. These are described below.
 
 #### Channels
 
-| Channel                     | Note                                                                                    |
-| :-------------------------- | :-------------------------------------------------------------------------------------- |
-| `Avanza.QUOTES`             | Minute-wise data containing current price, change, total volume traded etc.             |
-| `Avanza.ORDERDEPTHS`        | Best five offers and current total volume on each side.                                 |
-| `Avanza.TRADES`             | Updates whenever a new trade is made. Data contains volume, price, broker etc.          |
-| `Avanza.BROKERTRADESUMMARY` | Pushes data about which brokers are long/short and how big their current net volume is. |
-| `Avanza.POSITIONS`          | Data about your own positions.                                                          |
-| `Avanza.ORDERS`             | Data about current orders.                                                              |
-| `Avanza.DEALS`              | Data about recent trades you have made.                                                 |
+| Channel                     | Note                                                                                                                |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------ |
+| `Avanza.QUOTES`             | Minute-wise data containing current price, change, total volume traded etc. Expects an **orderbookId**.             |
+| `Avanza.ORDERDEPTHS`        | Best five offers and current total volume on each side. Expects an orderbookId.                                     |
+| `Avanza.TRADES`             | Updates whenever a new trade is made. Data contains volume, price, broker etc. Expects an **orderbookId**.          |
+| `Avanza.BROKERTRADESUMMARY` | Pushes data about which brokers are long/short and how big their current net volume is. Expects an **orderbookId**. |
+| `Avanza.POSITIONS`          | Data about your own positions. Expects an accountId or a combination of <orderbookId>\_<accountId>.                 |
+| `Avanza.ORDERS`             | Data about your current orders. Expects an accountId or a combination of <orderbookId>\_<accountId>.                |
+| `Avanza.DEALS`              | Data about recent trades you have made. Expects an accountId or a combination of <orderbookId>\_<accountId>.        |
 
 #### Transaction Types
 
@@ -417,6 +417,8 @@ Get instrument information.
 | `country`                 | String  |      |
 | `shortSellable`           | Boolean |      |
 | `tradable`                | Boolean |      |
+| `buyPrice`                | Number  |      |
+| `sellPrice`               | Number  |      |
 | `highestPrice`            | Number  |      |
 | `lowestPrice`             | Number  |      |
 | `lastPrice`               | Number  |      |
@@ -463,6 +465,13 @@ Get instrument information.
 | `lastPrice`       | Number |      |
 | `flagCode`        | String |      |
 
+`getInstrument().orderDepthLevels[i]`
+
+| Property | Type   | Note |
+| :------- | :----- | ---- |
+| `buy`    | Object |      |
+| `sell`   | Object |      |
+
 `getInstrument().latestTrades[i]`
 
 | Property          | Type    | Note |
@@ -472,7 +481,7 @@ Get instrument information.
 | `volume`          | Number  |      |
 | `dealTime`        | String  |      |
 | `matchedOnMarket` | Boolean |      |
-| `seller`          | String  |      |
+| `buyer`           | String  |      |
 
 `getInstrument().positions[i]`
 
@@ -518,6 +527,13 @@ Get orderbook information.
 | `hasInstrumentKnowledge` | Boolean |      |
 | `tickSizeRules`          | Array   |      |
 
+`getOrderbook().orderDepthLevels[i]`
+
+| Property | Type   | Note |
+| :------- | :----- | ---- |
+| `buy`    | Object |      |
+| `sell`   | Object |      |
+
 `getOrderbook().latestTrades[i]`
 
 | Property          | Type    | Note |
@@ -527,7 +543,7 @@ Get orderbook information.
 | `volume`          | Number  |      |
 | `dealTime`        | String  |      |
 | `matchedOnMarket` | Boolean |      |
-| `seller`          | String  |      |
+| `buyer`           | String  |      |
 
 `getOrderbook().tickSizeRules[i]`
 
@@ -710,6 +726,8 @@ Place a limit order.
                                            the order if this date is passed.
     -   `options.volume` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** How many securities to order.
 
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Properties are `messages`, `requestId`, `status`, `orderId`.
+
 ### getOrder
 
 Get information about an order.
@@ -726,8 +744,7 @@ contains information you already have (such as order price or volume).
 -   `instrumentType` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Instrument type of the pertaining instrument.
                                    See [Instrument Types](#instrument-types).
 -   `accountId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** ID of the account which this order was placed on.
--   `orderId`  
--   `orderbookId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The orderbookId of the instrument.
+-   `orderId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** ID of the order.
 
 ### editOrder
 

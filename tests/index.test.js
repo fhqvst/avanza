@@ -159,6 +159,6 @@ test.cb('subscribe()', (t) => {
       }
       t.end()
     }, 500)
-    avanza.subscribe('quotes', '19002', () => {})
+    avanza.subscribe(Avanza.QUOTES, '5479', () => {})
   })
 })
