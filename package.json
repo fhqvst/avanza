@@ -19,6 +19,9 @@
   "bugs": {
     "url": "https://github.com/fhqvst/avanza/issues"
   },
+  "files": [
+    "dist"
+  ],
   "homepage": "https://github.com/fhqvst/avanza#readme",
   "dependencies": {
     "ws": "^1.1.1"
