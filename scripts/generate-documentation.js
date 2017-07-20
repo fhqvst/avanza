@@ -43,7 +43,7 @@ function buildReturnTables(res, name) {
     const keys = Object.keys(res).map(k => ({
       name: k,
       type: res[k].constructor.name
-    })).sort()
+    })).sort((a, b) => a.name.localeCompare(b.name))
 
     tables.push({ name, keys })
 
