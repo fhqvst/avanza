@@ -89,9 +89,9 @@ Some methods require certain constants as parameters. These are described below.
 | `Avanza.ORDERDEPTHS`        | Best five offers and current total volume on each side. Expects an orderbookId.                                     |
 | `Avanza.TRADES`             | Updates whenever a new trade is made. Data contains volume, price, broker etc. Expects an **orderbookId**.          |
 | `Avanza.BROKERTRADESUMMARY` | Pushes data about which brokers are long/short and how big their current net volume is. Expects an **orderbookId**. |
-| `Avanza.POSITIONS`          | Data about your own positions. Expects one or many accountIds or combinations of **\<orderbookId\>\_\<accountId\>**.                 |
-| `Avanza.ORDERS`             | Data about your current orders. Expects one or many accountIds or combinations of **\<orderbookId\>\_\<accountId\>**.                |
-| `Avanza.DEALS`              | Data about recent trades you have made. Expects one or many accountIds or combinations of **\<orderbookId\>\_\<accountId\>**.        |
+| `Avanza.POSITIONS`          | Data about your own positions. Expects an accountId or a combination of <orderbookId>\_<accountId>.                 |
+| `Avanza.ORDERS`             | Data about your current orders. Expects an accountId or a combination of <orderbookId>\_<accountId>.                |
+| `Avanza.DEALS`              | Data about recent trades you have made. Expects an accountId or a combination of <orderbookId>\_<accountId>.        |
 
 #### Transaction Types
 
@@ -118,9 +118,9 @@ Authenticate the client.
 
 **Parameters**
 
--   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)**
-    -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
-    -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
+-   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+    -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 ### getPositions
 
@@ -133,11 +133,11 @@ Get all `positions` held by this user.
 | Property              | Type   | Note |
 | :-------------------- | :----- | ---- |
 | `instrumentPositions` | Array  |      |
+| `totalBuyingPower`    | Number |      |
+| `totalProfit`         | Number |      |
+| `totalOwnCapital`     | Number |      |
 | `totalBalance`        | Number |      |
 | `totalProfitPercent`  | Number |      |
-| `totalProfit`         | Number |      |
-| `totalBuyingPower`    | Number |      |
-| `totalOwnCapital`     | Number |      |
 
 `getPositions().instrumentPositions[i]`
 
@@ -146,33 +146,33 @@ Get all `positions` held by this user.
 | `instrumentType`      | String |      |
 | `positions`           | Array  |      |
 | `totalValue`          | Number |      |
+| `todaysProfitPercent` | Number |      |
 | `totalProfitValue`    | Number |      |
 | `totalProfitPercent`  | Number |      |
-| `todaysProfitPercent` | Number |      |
 
 `getPositions().instrumentPositions[i].positions[i]`
 
 | Property               | Type    | Note |
 | :--------------------- | :------ | ---- |
+| `value`                | Number  |      |
 | `accountName`          | String  |      |
-| `accountType`          | String  |      |
 | `depositable`          | Boolean |      |
 | `accountId`            | String  |      |
-| `value`                | Number  |      |
+| `profit`               | Number  |      |
 | `volume`               | Number  |      |
 | `averageAcquiredPrice` | Number  |      |
 | `profitPercent`        | Number  |      |
 | `acquiredValue`        | Number  |      |
-| `profit`               | Number  |      |
+| `accountType`          | String  |      |
 | `currency`             | String  |      |
-| `name`                 | String  |      |
+| `flagCode`             | String  |      |
 | `orderbookId`          | String  |      |
 | `tradable`             | Boolean |      |
 | `lastPrice`            | Number  |      |
 | `lastPriceUpdated`     | String  |      |
 | `change`               | Number  |      |
 | `changePercent`        | Number  |      |
-| `flagCode`             | String  |      |
+| `name`                 | String  |      |
 
 ### getOverview
 
@@ -187,35 +187,35 @@ Get an overview of the users holdings at Avanza Bank.
 | `accounts`                  | Array  |      |
 | `numberOfOrders`            | Number |      |
 | `numberOfDeals`             | Number |      |
-| `totalBalance`              | Number |      |
 | `totalBuyingPower`          | Number |      |
 | `totalOwnCapital`           | Number |      |
 | `totalPerformancePercent`   | Number |      |
 | `totalPerformance`          | Number |      |
 | `numberOfTransfers`         | Number |      |
 | `numberOfIntradayTransfers` | Number |      |
+| `totalBalance`              | Number |      |
 
 `getOverview().accounts[i]`
 
 | Property             | Type    | Note |
 | :------------------- | :------ | ---- |
+| `tradable`           | Boolean |      |
 | `accountType`        | String  |      |
-| `interestRate`       | Number  |      |
 | `depositable`        | Boolean |      |
 | `active`             | Boolean |      |
-| `name`               | String  |      |
+| `performancePercent` | Number  |      |
+| `totalProfit`        | Number  |      |
+| `attorney`           | Boolean |      |
 | `accountId`          | String  |      |
-| `performance`        | Number  |      |
-| `accountPartlyOwned` | Boolean |      |
-| `tradable`           | Boolean |      |
+| `interestRate`       | Number  |      |
 | `totalBalance`       | Number  |      |
 | `totalBalanceDue`    | Number  |      |
 | `ownCapital`         | Number  |      |
+| `accountPartlyOwned` | Boolean |      |
 | `buyingPower`        | Number  |      |
 | `totalProfitPercent` | Number  |      |
-| `totalProfit`        | Number  |      |
-| `performancePercent` | Number  |      |
-| `attorney`           | Boolean |      |
+| `performance`        | Number  |      |
+| `name`               | String  |      |
 
 ### getAccountOverview
 
@@ -227,15 +227,15 @@ Get an overview of the users holdings for a specific account at Avanza Bank.
 
 | Property                             | Type    | Note |
 | :----------------------------------- | :------ | ---- |
+| `performanceSinceThreeYearsPercent`  | Number  |      |
 | `courtageClass`                      | String  |      |
-| `depositable`                        | Boolean |      |
 | `accountType`                        | String  |      |
-| `accountId`                          | String  |      |
-| `accountTypeName`                    | String  |      |
 | `clearingNumber`                     | String  |      |
 | `instrumentTransferPossible`         | Boolean |      |
 | `internalTransferPossible`           | Boolean |      |
 | `jointlyOwned`                       | Boolean |      |
+| `accountId`                          | String  |      |
+| `accountTypeName`                    | String  |      |
 | `interestRate`                       | Number  |      |
 | `numberOfOrders`                     | Number  |      |
 | `numberOfDeals`                      | Number  |      |
@@ -250,8 +250,9 @@ Get an overview of the users holdings for a specific account at Avanza Bank.
 | `performanceSinceThreeMonthsPercent` | Number  |      |
 | `performanceSinceSixMonthsPercent`   | Number  |      |
 | `performanceSinceOneYearPercent`     | Number  |      |
-| `performanceSinceThreeYearsPercent`  | Number  |      |
+| `depositable`                        | Boolean |      |
 | `availableSuperLoanAmount`           | Number  |      |
+| `totalProfit`                        | Number  |      |
 | `creditLimit`                        | Number  |      |
 | `currencyAccounts`                   | Array   |      |
 | `forwardBalance`                     | Number  |      |
@@ -260,19 +261,18 @@ Get an overview of the users holdings for a specific account at Avanza Bank.
 | `totalPositionsValue`                | Number  |      |
 | `buyingPower`                        | Number  |      |
 | `totalProfitPercent`                 | Number  |      |
-| `totalProfit`                        | Number  |      |
-| `performance`                        | Number  |      |
-| `totalBalance`                       | Number  |      |
-| `ownCapital`                         | Number  |      |
 | `performancePercent`                 | Number  |      |
 | `overdrawn`                          | Boolean |      |
+| `overMortgaged`                      | Boolean |      |
 | `accruedInterest`                    | Number  |      |
 | `creditAfterInterest`                | Number  |      |
-| `overMortgaged`                      | Boolean |      |
+| `totalBalance`                       | Number  |      |
+| `ownCapital`                         | Number  |      |
+| `performance`                        | Number  |      |
 | `numberOfTransfers`                  | Number  |      |
 | `numberOfIntradayTransfers`          | Number  |      |
-| `standardDeviation`                  | Number  |      |
 | `sharpeRatio`                        | Number  |      |
+| `standardDeviation`                  | Number  |      |
 
 `getAccountOverview().currencyAccounts[i]`
 
@@ -332,14 +332,10 @@ Get all transactions of an account.
 | `account`          | Object |      |
 | `currency`         | String |      |
 | `description`      | String |      |
-| `id`               | String |      |
-| `amount`           | Number |      |
-| `price`            | Number |      |
-| `volume`           | Number |      |
-| `orderbook`        | Object |      |
-| `sum`              | Number |      |
 | `transactionType`  | String |      |
 | `verificationDate` | String |      |
+| `amount`           | Number |      |
+| `id`               | String |      |
 
 **Parameters**
 
@@ -366,9 +362,9 @@ different for you.
 | Property     | Type    | Note |
 | :----------- | :------ | ---- |
 | `orderbooks` | Array   |      |
+| `editable`   | Boolean |      |
 | `name`       | String  |      |
 | `id`         | String  |      |
-| `editable`   | Boolean |      |
 
 `getWatchlists()[i].orderbooks[i]`
 
@@ -400,8 +396,8 @@ Get instrument information.
 
 | Property                  | Type    | Note |
 | :------------------------ | :------ | ---- |
+| `lastPriceUpdated`        | String  |      |
 | `priceOneWeekAgo`         | Number  |      |
-| `priceOneMonthAgo`        | Number  |      |
 | `priceSixMonthsAgo`       | Number  |      |
 | `priceAtStartOfYear`      | Number  |      |
 | `priceOneYearAgo`         | Number  |      |
@@ -410,27 +406,27 @@ Get instrument information.
 | `priceThreeMonthsAgo`     | Number  |      |
 | `marketPlace`             | String  |      |
 | `marketList`              | String  |      |
-| `morningStarFactSheetUrl` | String  |      |
 | `currency`                | String  |      |
-| `name`                    | String  |      |
-| `id`                      | String  |      |
-| `country`                 | String  |      |
-| `shortSellable`           | Boolean |      |
+| `morningStarFactSheetUrl` | String  |      |
+| `quoteUpdated`            | String  |      |
+| `flagCode`                | String  |      |
+| `loanFactor`              | Number  |      |
 | `tradable`                | Boolean |      |
+| `tickerSymbol`            | String  |      |
 | `buyPrice`                | Number  |      |
 | `sellPrice`               | Number  |      |
 | `highestPrice`            | Number  |      |
 | `lowestPrice`             | Number  |      |
 | `lastPrice`               | Number  |      |
-| `lastPriceUpdated`        | String  |      |
+| `priceOneMonthAgo`        | Number  |      |
 | `change`                  | Number  |      |
 | `changePercent`           | Number  |      |
 | `totalVolumeTraded`       | Number  |      |
 | `totalValueTraded`        | Number  |      |
-| `tickerSymbol`            | String  |      |
-| `flagCode`                | String  |      |
-| `quoteUpdated`            | String  |      |
-| `loanFactor`              | Number  |      |
+| `shortSellable`           | Boolean |      |
+| `name`                    | String  |      |
+| `id`                      | String  |      |
+| `country`                 | String  |      |
 | `keyRatios`               | Object  |      |
 | `numberOfOwners`          | Number  |      |
 | `superLoan`               | Boolean |      |
@@ -451,37 +447,36 @@ Get instrument information.
 | Property         | Type   | Note |
 | :--------------- | :----- | ---- |
 | `currency`       | String |      |
-| `exDate`         | String |      |
 | `amountPerShare` | Number |      |
 | `paymentDate`    | String |      |
+| `exDate`         | String |      |
 
 `getInstrument().relatedStocks[i]`
 
 | Property          | Type   | Note |
 | :---------------- | :----- | ---- |
-| `name`            | String |      |
-| `id`              | String |      |
+| `flagCode`        | String |      |
 | `priceOneYearAgo` | Number |      |
 | `lastPrice`       | Number |      |
-| `flagCode`        | String |      |
+| `name`            | String |      |
+| `id`              | String |      |
 
 `getInstrument().orderDepthLevels[i]`
 
 | Property | Type   | Note |
 | :------- | :----- | ---- |
-| `buy`    | Object |      |
 | `sell`   | Object |      |
+| `buy`    | Object |      |
 
 `getInstrument().latestTrades[i]`
 
 | Property          | Type    | Note |
 | :---------------- | :------ | ---- |
 | `cancelled`       | Boolean |      |
+| `matchedOnMarket` | Boolean |      |
 | `price`           | Number  |      |
 | `volume`          | Number  |      |
 | `dealTime`        | String  |      |
-| `matchedOnMarket` | Boolean |      |
-| `buyer`           | String  |      |
 
 `getInstrument().positions[i]`
 
@@ -489,13 +484,13 @@ Get instrument information.
 | :--------------------- | :----- | ---- |
 | `accountName`          | String |      |
 | `accountType`          | String |      |
-| `value`                | Number |      |
+| `profit`               | Number |      |
 | `accountId`            | String |      |
 | `volume`               | Number |      |
 | `averageAcquiredPrice` | Number |      |
 | `profitPercent`        | Number |      |
 | `acquiredValue`        | Number |      |
-| `profit`               | Number |      |
+| `value`                | Number |      |
 
 **Parameters**
 
@@ -513,13 +508,13 @@ Get orderbook information.
 
 | Property                 | Type    | Note |
 | :----------------------- | :------ | ---- |
+| `orderDepthLevels`       | Array   |      |
 | `customer`               | Object  |      |
-| `account`                | Object  |      |
 | `orderbook`              | Object  |      |
 | `firstTradableDate`      | String  |      |
 | `lastTradableDate`       | String  |      |
 | `untradableDates`        | Array   |      |
-| `orderDepthLevels`       | Array   |      |
+| `account`                | Object  |      |
 | `orderDepthReceivedTime` | String  |      |
 | `latestTrades`           | Array   |      |
 | `marketTrades`           | Boolean |      |
@@ -531,19 +526,18 @@ Get orderbook information.
 
 | Property | Type   | Note |
 | :------- | :----- | ---- |
-| `buy`    | Object |      |
 | `sell`   | Object |      |
+| `buy`    | Object |      |
 
 `getOrderbook().latestTrades[i]`
 
 | Property          | Type    | Note |
 | :---------------- | :------ | ---- |
 | `cancelled`       | Boolean |      |
+| `matchedOnMarket` | Boolean |      |
 | `price`           | Number  |      |
 | `volume`          | Number  |      |
 | `dealTime`        | String  |      |
-| `matchedOnMarket` | Boolean |      |
-| `buyer`           | String  |      |
 
 `getOrderbook().tickSizeRules[i]`
 
@@ -569,20 +563,20 @@ Get information about multiple orderbooks.
 
 | Property              | Type    | Note |
 | :-------------------- | :------ | ---- |
+| `changePercent`       | Number  |      |
 | `currency`            | String  |      |
+| `priceThreeMonthsAgo` | Number  |      |
 | `highestPrice`        | Number  |      |
 | `lowestPrice`         | Number  |      |
 | `lastPrice`           | Number  |      |
 | `change`              | Number  |      |
-| `changePercent`       | Number  |      |
+| `flagCode`            | String  |      |
 | `updated`             | String  |      |
 | `totalVolumeTraded`   | Number  |      |
-| `flagCode`            | String  |      |
-| `priceThreeMonthsAgo` | Number  |      |
-| `name`                | String  |      |
-| `id`                  | String  |      |
 | `instrumentType`      | String  |      |
 | `tradable`            | Boolean |      |
+| `name`                | String  |      |
+| `id`                  | String  |      |
 
 **Parameters**
 
@@ -590,7 +584,7 @@ Get information about multiple orderbooks.
 
 ### getChartdata
 
-Get an array of OHLC price data for a period of time.
+Get an array of prices over a period of time.
 
 **Returns**
 
@@ -639,30 +633,30 @@ List all inspiration lists.
 | :------------------------------ | :----- | ---- |
 | `orderbooks`                    | Array  |      |
 | `averageChange`                 | Number |      |
+| `imageUrl`                      | String |      |
+| `highlightField`                | Object |      |
+| `information`                   | String |      |
+| `instrumentType`                | String |      |
+| `statistics`                    | Object |      |
+| `averageChangeSinceThreeMonths` | Number |      |
 | `name`                          | String |      |
 | `id`                            | String |      |
-| `instrumentType`                | String |      |
-| `imageUrl`                      | String |      |
-| `statistics`                    | Object |      |
-| `information`                   | String |      |
-| `highlightField`                | Object |      |
-| `averageChangeSinceThreeMonths` | Number |      |
 
 `getInspirationLists()[i].orderbooks[i]`
 
 | Property              | Type   | Note |
 | :-------------------- | :----- | ---- |
+| `changePercent`       | Number |      |
 | `currency`            | String |      |
-| `priceOneYearAgo`     | Number |      |
+| `priceThreeMonthsAgo` | Number |      |
 | `lastPrice`           | Number |      |
 | `change`              | Number |      |
-| `changePercent`       | Number |      |
+| `priceOneYearAgo`     | Number |      |
 | `updated`             | String |      |
-| `priceThreeMonthsAgo` | Number |      |
+| `highlightValue`      | Number |      |
+| `flagCode`            | String |      |
 | `name`                | String |      |
 | `id`                  | String |      |
-| `flagCode`            | String |      |
-| `highlightValue`      | Number |      |
 
 ### getInspirationList
 
@@ -675,14 +669,14 @@ Get information about a single inspiration list.
 | Property                        | Type   | Note |
 | :------------------------------ | :----- | ---- |
 | `orderbooks`                    | Array  |      |
+| `imageUrl`                      | String |      |
+| `highlightField`                | Object |      |
+| `information`                   | String |      |
+| `instrumentType`                | String |      |
+| `statistics`                    | Object |      |
+| `averageChangeSinceThreeMonths` | Number |      |
 | `name`                          | String |      |
 | `id`                            | String |      |
-| `instrumentType`                | String |      |
-| `imageUrl`                      | String |      |
-| `statistics`                    | Object |      |
-| `information`                   | String |      |
-| `highlightField`                | Object |      |
-| `averageChangeSinceThreeMonths` | Number |      |
 
 `getInspirationList().orderbooks[i]`
 
@@ -692,9 +686,9 @@ Get information about a single inspiration list.
 | `changeSinceOneDay`      | Number |      |
 | `changeSinceThreeMonths` | Number |      |
 | `changeSinceOneYear`     | Number |      |
+| `highlightValue`         | Number |      |
 | `name`                   | String |      |
 | `id`                     | String |      |
-| `highlightValue`         | Number |      |
 
 **Parameters**
 
@@ -709,7 +703,7 @@ Subscribe to real-time data.
 
 -   `channel` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The channel on which to listen. See [Channels](#channels).
 -   `ids` **([String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array))** One or many IDs to subscribe to.
--   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
 
 ### placeOrder
 
@@ -794,11 +788,11 @@ Free text search for an instrument.
 | `currency`      | String  |      |
 | `lastPrice`     | Number  |      |
 | `changePercent` | Number  |      |
-| `name`          | String  |      |
-| `id`            | String  |      |
+| `flagCode`      | String  |      |
 | `tradable`      | Boolean |      |
 | `tickerSymbol`  | String  |      |
-| `flagCode`      | String  |      |
+| `name`          | String  |      |
+| `id`            | String  |      |
 
 **Parameters**
 
@@ -817,4 +811,4 @@ marks from `path`.
 -   `path` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The URL to send the request to. (optional, default `''`)
 -   `data` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** JSON data to send with the request. (optional, default `{}`)
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)**
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
