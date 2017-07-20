@@ -285,10 +285,6 @@ Get an overview of the users holdings for a specific account at Avanza Bank.
 
 -   `accountId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** A valid account ID.
 
-Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** hejhej
-
-Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** kiss
-
 ### getDealsAndOrders
 
 Get recent deals and orders.
@@ -455,6 +451,7 @@ Get instrument information.
 
 | Property          | Type    | Note |
 | :---------------- | :------ | ---- |
+| `buyer`           | String  |      |
 | `cancelled`       | Boolean |      |
 | `dealTime`        | String  |      |
 | `matchedOnMarket` | Boolean |      |
@@ -526,6 +523,7 @@ Get orderbook information.
 
 | Property          | Type    | Note |
 | :---------------- | :------ | ---- |
+| `buyer`           | String  |      |
 | `cancelled`       | Boolean |      |
 | `dealTime`        | String  |      |
 | `matchedOnMarket` | Boolean |      |
