@@ -43,7 +43,7 @@ function buildReturnTables(res, name) {
     const keys = Object.keys(res).map(k => ({
       name: k,
       type: res[k].constructor.name
-    }))
+    })).sort()
 
     tables.push({ name, keys })
 
