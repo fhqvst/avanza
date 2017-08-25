@@ -162,3 +162,24 @@ test.cb('subscribe()', (t) => {
     avanza.subscribe(Avanza.QUOTES, '5479', () => {})
   })
 })
+
+test.cb('multiple subscribe()', (t) => {
+  t.plan(2)
+  const { avanza } = t.context
+  avanza.authenticate({
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD
+  }).then(() => {
+    let received = false
+    avanza.subscribe(Avanza.QUOTES, '5269', () => {
+      t.pass()
+      if (received) t.end()
+      received = true
+    })
+    avanza.subscribe(Avanza.QUOTES, '5479', () => {
+      t.pass()
+      if (received) t.end()
+      received = true
+    })
+  })
+})
