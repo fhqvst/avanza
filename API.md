@@ -83,15 +83,20 @@ Some methods require certain constants as parameters. These are described below.
 
 #### Channels
 
+Note that for all channels where a _sequence_ of account IDs are expected
+(`<accountId1>,<accountId2>,...`), you must supply all of your account IDs,
+regardless of whether or not you want data for that account.
+
 | Channel                     | Note                                                                                                                |
 | :-------------------------- | :------------------------------------------------------------------------------------------------------------------ |
 | `Avanza.QUOTES`             | Minute-wise data containing current price, change, total volume traded etc. Expects an **orderbookId**.             |
-| `Avanza.ORDERDEPTHS`        | Best five offers and current total volume on each side. Expects an orderbookId.                                     |
+| `Avanza.ORDERDEPTHS`        | Best five offers and current total volume on each side. Expects an **orderbookId**.                                 |
 | `Avanza.TRADES`             | Updates whenever a new trade is made. Data contains volume, price, broker etc. Expects an **orderbookId**.          |
 | `Avanza.BROKERTRADESUMMARY` | Pushes data about which brokers are long/short and how big their current net volume is. Expects an **orderbookId**. |
-| `Avanza.POSITIONS`          | Data about your own positions. Expects an accountId or a combination of <orderbookId>\_<accountId>.                 |
-| `Avanza.ORDERS`             | Data about your current orders. Expects an accountId or a combination of <orderbookId>\_<accountId>.                |
-| `Avanza.DEALS`              | Data about recent trades you have made. Expects an accountId or a combination of <orderbookId>\_<accountId>.        |
+| `Avanza.POSITIONS`          | Your positions in an instrument. Expects a string of `<orderbookId>_<accountId1>,<accountId2,<accountId3>,...`.     |
+| `Avanza.ORDERS`             | Your current orders. Expects a string of `_<accountId1>,<accountId2,<accountId3>,...`.                              |
+| `Avanza.DEALS`              | Recent trades you have made. Expects a string of `_<accountId1>,<accountId2,<accountId3>,...`.                      |
+| `Avanza.ACCOUNTS`           | N/A. Expects a string of `_<accountId>`.                                                                            |
 
 #### Transaction Types
 
@@ -118,9 +123,9 @@ Authenticate the client.
 
 **Parameters**
 
--   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-    -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-    -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)**
+    -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
+    -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
 ### getPositions
 
@@ -308,6 +313,20 @@ Get recent deals and orders.
 | `name`   | String |      |
 | `type`   | String |      |
 
+`getDealsAndOrders().deals[i]`
+
+| Property    | Type   | Note |
+| :---------- | :----- | ---- |
+| `account`   | Object |      |
+| `dealId`    | String |      |
+| `dealTime`  | String |      |
+| `orderbook` | Object |      |
+| `orderId`   | String |      |
+| `price`     | Number |      |
+| `sum`       | Number |      |
+| `type`      | String |      |
+| `volume`    | Number |      |
+
 ### getTransactions
 
 Get all transactions of an account.
@@ -326,12 +345,15 @@ Get all transactions of an account.
 | Property           | Type   | Note |
 | :----------------- | :----- | ---- |
 | `account`          | Object |      |
-| `amount`           | Number |      |
 | `currency`         | String |      |
 | `description`      | String |      |
 | `id`               | String |      |
+| `orderbook`        | Object |      |
+| `price`            | Number |      |
+| `sum`              | Number |      |
 | `transactionType`  | String |      |
 | `verificationDate` | String |      |
+| `volume`           | Number |      |
 
 **Parameters**
 
@@ -449,14 +471,15 @@ Get instrument information.
 
 `getInstrument().latestTrades[i]`
 
-| Property          | Type    | Note |
-| :---------------- | :------ | ---- |
-| `buyer`           | String  |      |
-| `cancelled`       | Boolean |      |
-| `dealTime`        | String  |      |
-| `matchedOnMarket` | Boolean |      |
-| `price`           | Number  |      |
-| `volume`          | Number  |      |
+| Property          | Type    | Note                                        |
+| :---------------- | :------ | ------------------------------------------- |
+| `buyer`           | String  | Only present if this was a buy-side trade.  |
+| `cancelled`       | Boolean |                                             |
+| `dealTime`        | String  |                                             |
+| `matchedOnMarket` | Boolean |                                             |
+| `price`           | Number  |                                             |
+| `seller`          | String  | Only present if this was a sell-side trade. |
+| `volume`          | Number  |                                             |
 
 `getInstrument().orderDepthLevels[i]`
 
@@ -521,14 +544,15 @@ Get orderbook information.
 
 `getOrderbook().latestTrades[i]`
 
-| Property          | Type    | Note |
-| :---------------- | :------ | ---- |
-| `buyer`           | String  |      |
-| `cancelled`       | Boolean |      |
-| `dealTime`        | String  |      |
-| `matchedOnMarket` | Boolean |      |
-| `price`           | Number  |      |
-| `volume`          | Number  |      |
+| Property          | Type    | Note                                         |
+| :---------------- | :------ | -------------------------------------------- |
+| `buyer`           | String  | Only present if this was a buy-side trade.   |
+| `cancelled`       | Boolean |                                              |
+| `dealTime`        | String  |                                              |
+| `matchedOnMarket` | Boolean |                                              |
+| `price`           | Number  |                                              |
+| `buyer`           | String  | Only present if this was a sell-side trade.  |
+| `volume`          | Number  |                                              |
 
 `getOrderbook().orderDepthLevels[i]`
 
@@ -701,7 +725,7 @@ Subscribe to real-time data.
 
 -   `channel` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The channel on which to listen. See [Channels](#channels).
 -   `ids` **([String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array))** One or many IDs to subscribe to.
--   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
 
 ### placeOrder
 
@@ -809,4 +833,4 @@ marks from `path`.
 -   `path` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The URL to send the request to. (optional, default `''`)
 -   `data` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** JSON data to send with the request. (optional, default `{}`)
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)**
