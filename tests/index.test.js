@@ -59,12 +59,24 @@ test('getTransactions() with options', async (t) => {
 test('addToWatchlist()', async (t) => {
   await t.context.avanza.addToWatchlist('12345', '54321')
 
-  const expectedPath = constants.paths.WATCHLISTS_ADD_PATH
+  const expectedPath = constants.paths.WATCHLISTS_ADD_DELETE_PATH
     .replace('{1}', '12345')
     .replace('{0}', '54321')
 
   const actual = t.context.call.args[0]
   const expected = ['PUT', expectedPath]
+  t.deepEqual(actual, expected)
+})
+
+test('removeFromWatchlist()', async (t) => {
+  await t.context.avanza.removeFromWatchlist('12345', '54321')
+
+  const expectedPath = constants.paths.WATCHLISTS_ADD_DELETE_PATH
+    .replace('{1}', '12345')
+    .replace('{0}', '54321')
+
+  const actual = t.context.call.args[0]
+  const expected = ['DELETE', expectedPath]
   t.deepEqual(actual, expected)
 })
 
