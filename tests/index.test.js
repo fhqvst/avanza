@@ -14,8 +14,8 @@ test.beforeEach((t) => {
 
 test.serial('authenticate()', async (t) => {
   const res = await t.context.avanza.authenticate({
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD
+    username: process.env.AVANZA_USERNAME,
+    password: process.env.AVANZA_PASSWORD
   })
   t.is(typeof res.authenticationSession, 'string', 'authenticationSession is received')
   t.is(typeof res.pushSubscriptionId, 'string', 'pusbSubscriptionId is received')
@@ -148,8 +148,8 @@ test('deleteOrder()', async (t) => {
 test.cb('subscribe()', (t) => {
   const { avanza } = t.context
   avanza.authenticate({
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD
+    username: process.env.AVANZA_USERNAME,
+    password: process.env.AVANZA_PASSWORD
   }).then(() => {
     setTimeout(() => {
       if (avanza._socketClientId) {
@@ -167,8 +167,8 @@ test.cb('multiple subscribe()', (t) => {
   t.plan(2)
   const { avanza } = t.context
   avanza.authenticate({
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD
+    username: process.env.AVANZA_USERNAME,
+    password: process.env.AVANZA_PASSWORD
   }).then(() => {
     let received = false
     avanza.subscribe(Avanza.QUOTES, '5269', () => {

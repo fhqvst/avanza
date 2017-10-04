@@ -9,8 +9,8 @@ const avanza = new Avanza()
 
 test.before(async () => {
   await avanza.authenticate({
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD
+    username: process.env.AVANZA_USERNAME,
+    password: process.env.AVANZA_PASSWORD
   })
 })
 
@@ -31,8 +31,8 @@ test('place valid order, edit it and delete it', async (t) => {
    */
   try {
     actual = await avanza.placeOrder({
-      accountId: process.env.ACCOUNT,
-      orderbookId: process.env.STOCK,
+      accountId: process.env.AVANZA_ACCOUNT,
+      orderbookId: process.env.AVANZA_STOCK,
       orderType: Avanza.BUY,
       price: 35,
       validUntil: dateString,
@@ -62,7 +62,7 @@ test('place valid order, edit it and delete it', async (t) => {
    */
   await new Promise(r => setTimeout(r, 1000))
   try {
-    await avanza.getOrder(Avanza.STOCK, process.env.ACCOUNT, orderId)
+    await avanza.getOrder(Avanza.STOCK, process.env.AVANZA_ACCOUNT, orderId)
   } catch (e) {
     console.log(e)
     t.fail(e.statusMessage)
@@ -76,7 +76,7 @@ test('place valid order, edit it and delete it', async (t) => {
   await new Promise(r => setTimeout(r, 1000))
   try {
     actual = await avanza.editOrder(Avanza.STOCK, orderId, {
-      accountId: process.env.ACCOUNT,
+      accountId: process.env.AVANZA_ACCOUNT,
       volume: 11,
       price: 35,
       validUntil: dateString
@@ -102,7 +102,7 @@ test('place valid order, edit it and delete it', async (t) => {
    */
   await new Promise(r => setTimeout(r, 1000))
   try {
-    actual = await avanza.deleteOrder(process.env.ACCOUNT, orderId)
+    actual = await avanza.deleteOrder(process.env.AVANZA_ACCOUNT, orderId)
     expected = {
       messages: [''],
       orderId,
