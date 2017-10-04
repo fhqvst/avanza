@@ -64,7 +64,7 @@ test('addToWatchlist()', async (t) => {
     .replace('{0}', '54321')
 
   const actual = t.context.call.args[0]
-  const expected = ['GET', expectedPath]
+  const expected = ['PUT', expectedPath]
   t.deepEqual(actual, expected)
 })
 
