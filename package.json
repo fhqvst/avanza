@@ -1,6 +1,6 @@
 {
   "name": "avanza",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A wrapper for the unofficial Avanza API",
   "main": "dist/index.js",
   "scripts": {
@@ -24,10 +24,10 @@
   ],
   "homepage": "https://github.com/fhqvst/avanza#readme",
   "dependencies": {
-    "ws": "^1.1.1"
+    "ws": "3.2.0"
   },
   "devDependencies": {
-    "ava": "^0.20.0",
+    "ava": "^0.22.0",
     "babel-cli": "^6.24.0",
     "babel-preset-env": "^1.6.0",
     "cross-env": "^5.0.5",
