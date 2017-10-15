@@ -18,6 +18,7 @@
     -   [getTransactions](#gettransactions)
     -   [getWatchlists](#getwatchlists)
     -   [addToWatchlist](#addtowatchlist)
+    -   [removeFromWatchlist](#removefromwatchlist)
     -   [getInstrument](#getinstrument)
     -   [getOrderbook](#getorderbook)
     -   [getOrderbooks](#getorderbooks)
@@ -345,6 +346,7 @@ Get all transactions of an account.
 | Property           | Type   | Note |
 | :----------------- | :----- | ---- |
 | `account`          | Object |      |
+| `amount`           | Number |      |
 | `currency`         | String |      |
 | `description`      | String |      |
 | `id`               | String |      |
@@ -403,6 +405,15 @@ Add an instrument to the watchlist.
 
 -   `instrumentId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The ID of the instrument to add.
 -   `watchlistId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The ID of the watchlist to add the instrument to.
+
+### removeFromWatchlist
+
+Remove an instrument from the watchlist.
+
+**Parameters**
+
+-   `instrumentId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The ID of the instrument to remove.
+-   `watchlistId` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The ID of the watchlist to remove the instrument from.
 
 ### getInstrument
 
@@ -539,6 +550,7 @@ Get orderbook information.
 | `orderbook`              | Object  |      |
 | `orderDepthLevels`       | Array   |      |
 | `orderDepthReceivedTime` | String  |      |
+| `suitability`            | Object  |      |
 | `tickSizeRules`          | Array   |      |
 | `untradableDates`        | Array   |      |
 
@@ -568,6 +580,21 @@ Get orderbook information.
 | `maxPrice` | Number |      |
 | `minPrice` | Number |      |
 | `tickSize` | Number |      |
+
+`getOrderbook().untradableDates[i]`
+
+| Property | Type   | Note |
+| :------- | :----- | ---- |
+| `0`      | String |      |
+| `1`      | String |      |
+| `2`      | String |      |
+| `3`      | String |      |
+| `4`      | String |      |
+| `5`      | String |      |
+| `6`      | String |      |
+| `7`      | String |      |
+| `8`      | String |      |
+| `9`      | String |      |
 
 **Parameters**
 

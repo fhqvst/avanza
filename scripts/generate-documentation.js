@@ -10,14 +10,14 @@ const filename = path.join(process.cwd(), 'lib', 'index.js')
 const calls = {
   getPositions: () => avanza.getPositions(),
   getOverview: () => avanza.getOverview(),
-  getAccountOverview: () => avanza.getAccountOverview(process.env.ACCOUNT),
+  getAccountOverview: () => avanza.getAccountOverview(process.env.AVANZA_ACCOUNT),
   getDealsAndOrders: () => avanza.getDealsAndOrders(),
-  getTransactions: () => avanza.getTransactions(process.env.ACCOUNT, { from: '2017-01-01', to: '2019-01-01' }),
+  getTransactions: () => avanza.getTransactions(process.env.AVANZA_ACCOUNT, { from: '2017-01-01', to: '2019-01-01' }),
   getWatchlists: () => avanza.getWatchlists(),
-  getInstrument: () => avanza.getInstrument(Avanza.STOCK, process.env.STOCK),
-  getOrderbook: () => avanza.getOrderbook(Avanza.STOCK, process.env.STOCK),
-  getOrderbooks: () => avanza.getOrderbooks([process.env.STOCK, process.env.STOCK2]),
-  getChartdata: () => avanza.getChartdata(process.env.STOCK, Avanza.ONE_MONTH),
+  getInstrument: () => avanza.getInstrument(Avanza.STOCK, process.env.AVANZA_STOCK),
+  getOrderbook: () => avanza.getOrderbook(Avanza.STOCK, process.env.AVANZA_STOCK),
+  getOrderbooks: () => avanza.getOrderbooks([process.env.AVANZA_STOCK, process.env.AVANZA_STOCK2]),
+  getChartdata: () => avanza.getChartdata(process.env.AVANZA_STOCK, Avanza.ONE_MONTH),
   getInspirationLists: () => avanza.getInspirationLists(),
   getInspirationList: () => avanza.getInspirationList(Avanza.HIGHEST_RATED_FUNDS),
   search: () => avanza.search('om')
@@ -169,6 +169,6 @@ async function buildMarkdown() {
  * Run the generator
  */
 avanza.authenticate({
-  username: process.env.USERNAME,
-  password: process.env.PASSWORD
+  username: process.env.AVANZA_USERNAME,
+  password: process.env.AVANZA_PASSWORD
 }).then(buildMarkdown)
