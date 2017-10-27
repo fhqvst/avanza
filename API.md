@@ -237,6 +237,7 @@ Get an overview of the users holdings for a specific account at Avanza Bank.
 | `accountType`                        | String  |      |
 | `accountTypeName`                    | String  |      |
 | `accruedInterest`                    | Number  |      |
+| `allowMonthlySaving`                 | Boolean |      |
 | `availableSuperLoanAmount`           | Number  |      |
 | `buyingPower`                        | Number  |      |
 | `clearingNumber`                     | String  |      |
@@ -442,6 +443,7 @@ Get instrument information.
 | `loanFactor`              | Number  |      |
 | `lowestPrice`             | Number  |      |
 | `marketList`              | String  |      |
+| `marketMakerExpected`     | Boolean |      |
 | `marketPlace`             | String  |      |
 | `marketTrades`            | Boolean |      |
 | `morningStarFactSheetUrl` | String  |      |
@@ -546,6 +548,7 @@ Get orderbook information.
 | `hasShortSellKnowledge`  | Boolean |      |
 | `lastTradableDate`       | String  |      |
 | `latestTrades`           | Array   |      |
+| `marketMakerExpected`    | Boolean |      |
 | `marketTrades`           | Boolean |      |
 | `orderbook`              | Object  |      |
 | `orderDepthLevels`       | Array   |      |
