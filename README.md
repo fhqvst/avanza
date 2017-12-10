@@ -4,6 +4,10 @@ A Node.js wrapper for the unofficial Avanza API. Please note that this is only a
 
 It might also be valuable to note that I am not affiliated with Avanza Bank AB in any way. The underlying API can be taken down or changed without warning at any point in time.
 
+## Algorithmic Trading
+
+If you're interested in algorithmic trading, you should definitely check out [Vester](https://fhqvst.github.io/vester)!
+
 ## Installation
 
 Install via [npm](https://www.npmjs.com/package/avanza)
