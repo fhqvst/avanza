@@ -6,7 +6,7 @@ It might also be valuable to note that I am not affiliated with Avanza Bank AB i
 
 ## Algorithmic Trading
 
-If you're interested in algorithmic trading, you should definitely check out [Vester](https://fhqvst.github.io/vester)!
+If you're interested in algorithmic trading, you should definitely check out [DevAlpha](https://devalpha.io)!
 
 ## Installation
 
