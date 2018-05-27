@@ -12,6 +12,9 @@
     "no-useless-return": 0,
     "import/no-extraneous-dependencies": ["error", {
       "devDependencies": ["**/tests/**/*", "**/scripts/**/*"]
-    }]
+    }],
+    "no-continue": 0,
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "err" }]
   }
 }
