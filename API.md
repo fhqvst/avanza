@@ -120,13 +120,18 @@ regardless of whether or not you want data for that account.
 
 ### authenticate
 
-Authenticate the client.
+Authenticate the client. 
+
+If second factor authentication is needed, either the one time code can be provided in `totp`, or the secret to
+generate codes can be provided in `totp_secret`. 
 
 **Parameters**
 
 -   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)**
     -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
     -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
+    -   `credentials.totp_secret` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
+    -   `credentials.totp` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
 
 ### getPositions
 
