@@ -11,6 +11,7 @@
         -   [Transaction Types](#transaction-types)
         -   [Order Types](#order-types)
     -   [authenticate](#authenticate)
+    -   [disconnect](#disconnect)
     -   [getPositions](#getpositions)
     -   [getOverview](#getoverview)
     -   [getAccountOverview](#getaccountoverview)
@@ -120,18 +121,19 @@ regardless of whether or not you want data for that account.
 
 ### authenticate
 
-Authenticate the client. 
-
-If second factor authentication is needed, either the one time code can be provided in `totp`, or the secret to
-generate codes can be provided in `totp_secret`. 
+Authenticate the client.
 
 **Parameters**
 
--   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)**
-    -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
-    -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
-    -   `credentials.totp_secret` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
-    -   `credentials.totp` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)**
+-   `credentials` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    -   `credentials.username` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+    -   `credentials.password` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+    -   `credentials.totp` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+    -   `credentials.totpSecret` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### disconnect
+
+Disconnects by simulating a client that just goes away.
 
 ### getPositions
 
@@ -285,6 +287,7 @@ Get an overview of the users holdings for a specific account at Avanza Bank.
 | `totalPositionsValue`                | Number  |      |
 | `totalProfit`                        | Number  |      |
 | `totalProfitPercent`                 | Number  |      |
+| `withdrawable`                       | Boolean |      |
 
 `getAccountOverview().currencyAccounts[i]`
 
@@ -352,7 +355,6 @@ Get all transactions of an account.
 | Property           | Type   | Note |
 | :----------------- | :----- | ---- |
 | `account`          | Object |      |
-| `amount`           | Number |      |
 | `currency`         | String |      |
 | `description`      | String |      |
 | `id`               | String |      |
@@ -429,54 +431,69 @@ Get instrument information.
 
 `getInstrument()`
 
-| Property                  | Type    | Note |
-| :------------------------ | :------ | ---- |
-| `buyPrice`                | Number  |      |
-| `change`                  | Number  |      |
-| `changePercent`           | Number  |      |
-| `company`                 | Object  |      |
-| `country`                 | String  |      |
-| `currency`                | String  |      |
-| `dividends`               | Array   |      |
-| `flagCode`                | String  |      |
-| `highestPrice`            | Number  |      |
-| `id`                      | String  |      |
-| `keyRatios`               | Object  |      |
-| `lastPrice`               | Number  |      |
-| `lastPriceUpdated`        | String  |      |
-| `latestTrades`            | Array   |      |
-| `loanFactor`              | Number  |      |
-| `lowestPrice`             | Number  |      |
-| `marketList`              | String  |      |
-| `marketMakerExpected`     | Boolean |      |
-| `marketPlace`             | String  |      |
-| `marketTrades`            | Boolean |      |
-| `morningStarFactSheetUrl` | String  |      |
-| `name`                    | String  |      |
-| `numberOfOwners`          | Number  |      |
-| `numberOfPriceAlerts`     | Number  |      |
-| `orderDepthLevels`        | Array   |      |
-| `orderDepthReceivedTime`  | String  |      |
-| `positions`               | Array   |      |
-| `positionsTotalValue`     | Number  |      |
-| `priceAtStartOfYear`      | Number  |      |
-| `priceFiveYearsAgo`       | Number  |      |
-| `priceOneMonthAgo`        | Number  |      |
-| `priceOneWeekAgo`         | Number  |      |
-| `priceOneYearAgo`         | Number  |      |
-| `priceSixMonthsAgo`       | Number  |      |
-| `priceThreeMonthsAgo`     | Number  |      |
-| `priceThreeYearsAgo`      | Number  |      |
-| `pushPermitted`           | Boolean |      |
-| `quoteUpdated`            | String  |      |
-| `relatedStocks`           | Array   |      |
-| `sellPrice`               | Number  |      |
-| `shortSellable`           | Boolean |      |
-| `superLoan`               | Boolean |      |
-| `tickerSymbol`            | String  |      |
-| `totalValueTraded`        | Number  |      |
-| `totalVolumeTraded`       | Number  |      |
-| `tradable`                | Boolean |      |
+| Property                 | Type    | Note |
+| :----------------------- | :------ | ---- |
+| `annualMeetings`         | Array   |      |
+| `buyPrice`               | Number  |      |
+| `change`                 | Number  |      |
+| `changePercent`          | Number  |      |
+| `company`                | Object  |      |
+| `companyReports`         | Array   |      |
+| `country`                | String  |      |
+| `currency`               | String  |      |
+| `dividends`              | Array   |      |
+| `flagCode`               | String  |      |
+| `hasInvestmentFees`      | Boolean |      |
+| `highestPrice`           | Number  |      |
+| `id`                     | String  |      |
+| `keyRatios`              | Object  |      |
+| `lastPrice`              | Number  |      |
+| `lastPriceUpdated`       | String  |      |
+| `latestTrades`           | Array   |      |
+| `loanFactor`             | Number  |      |
+| `lowestPrice`            | Number  |      |
+| `marketMakerExpected`    | Boolean |      |
+| `marketPlace`            | String  |      |
+| `marketTrades`           | Boolean |      |
+| `name`                   | String  |      |
+| `numberOfOwners`         | Number  |      |
+| `numberOfPriceAlerts`    | Number  |      |
+| `orderDepthLevels`       | Array   |      |
+| `orderDepthReceivedTime` | String  |      |
+| `positions`              | Array   |      |
+| `positionsTotalValue`    | Number  |      |
+| `priceAtStartOfYear`     | Number  |      |
+| `priceFiveYearsAgo`      | Number  |      |
+| `priceOneMonthAgo`       | Number  |      |
+| `priceOneWeekAgo`        | Number  |      |
+| `priceOneYearAgo`        | Number  |      |
+| `priceSixMonthsAgo`      | Number  |      |
+| `priceThreeMonthsAgo`    | Number  |      |
+| `priceThreeYearsAgo`     | Number  |      |
+| `pushPermitted`          | Boolean |      |
+| `quoteUpdated`           | String  |      |
+| `relatedStocks`          | Array   |      |
+| `sellPrice`              | Number  |      |
+| `shortSellable`          | Boolean |      |
+| `superLoan`              | Boolean |      |
+| `tickerSymbol`           | String  |      |
+| `totalValueTraded`       | Number  |      |
+| `totalVolumeTraded`      | Number  |      |
+| `tradable`               | Boolean |      |
+
+`getInstrument().annualMeetings[i]`
+
+| Property    | Type    | Note |
+| :---------- | :------ | ---- |
+| `eventDate` | String  |      |
+| `extra`     | Boolean |      |
+
+`getInstrument().companyReports[i]`
+
+| Property     | Type   | Note |
+| :----------- | :----- | ---- |
+| `eventDate`  | String |      |
+| `reportType` | String |      |
 
 `getInstrument().dividends[i]`
 
@@ -489,15 +506,15 @@ Get instrument information.
 
 `getInstrument().latestTrades[i]`
 
-| Property          | Type    | Note                                        |
-| :---------------- | :------ | ------------------------------------------- |
-| `buyer`           | String  | Only present if this was a buy-side trade.  |
-| `cancelled`       | Boolean |                                             |
-| `dealTime`        | String  |                                             |
-| `matchedOnMarket` | Boolean |                                             |
-| `price`           | Number  |                                             |
-| `seller`          | String  | Only present if this was a sell-side trade. |
-| `volume`          | Number  |                                             |
+| Property          | Type    | Note |
+| :---------------- | :------ | ---- |
+| `buyer`           | String  |      |
+| `cancelled`       | Boolean |      |
+| `dealTime`        | String  |      |
+| `matchedOnMarket` | Boolean |      |
+| `price`           | Number  |      |
+| `seller`          | String  |      |
+| `volume`          | Number  |      |
 
 `getInstrument().orderDepthLevels[i]`
 
@@ -550,6 +567,7 @@ Get orderbook information.
 | `customer`               | Object  |      |
 | `firstTradableDate`      | String  |      |
 | `hasInstrumentKnowledge` | Boolean |      |
+| `hasInvestmentFees`      | Object  |      |
 | `hasShortSellKnowledge`  | Boolean |      |
 | `lastTradableDate`       | String  |      |
 | `latestTrades`           | Array   |      |
@@ -558,21 +576,20 @@ Get orderbook information.
 | `orderbook`              | Object  |      |
 | `orderDepthLevels`       | Array   |      |
 | `orderDepthReceivedTime` | String  |      |
-| `suitability`            | Object  |      |
 | `tickSizeRules`          | Array   |      |
 | `untradableDates`        | Array   |      |
 
 `getOrderbook().latestTrades[i]`
 
-| Property          | Type    | Note                                         |
-| :---------------- | :------ | -------------------------------------------- |
-| `buyer`           | String  | Only present if this was a buy-side trade.   |
-| `cancelled`       | Boolean |                                              |
-| `dealTime`        | String  |                                              |
-| `matchedOnMarket` | Boolean |                                              |
-| `price`           | Number  |                                              |
-| `buyer`           | String  | Only present if this was a sell-side trade.  |
-| `volume`          | Number  |                                              |
+| Property          | Type    | Note |
+| :---------------- | :------ | ---- |
+| `buyer`           | String  |      |
+| `cancelled`       | Boolean |      |
+| `dealTime`        | String  |      |
+| `matchedOnMarket` | Boolean |      |
+| `price`           | Number  |      |
+| `seller`          | String  |      |
+| `volume`          | Number  |      |
 
 `getOrderbook().orderDepthLevels[i]`
 
@@ -760,7 +777,7 @@ Subscribe to real-time data.
 
 -   `channel` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The channel on which to listen. See [Channels](#channels).
 -   `ids` **([String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) \| [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array))** One or many IDs to subscribe to.
--   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)**
+-   `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** 
 
 ### placeOrder
 
@@ -868,4 +885,4 @@ marks from `path`.
 -   `path` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The URL to send the request to. (optional, default `''`)
 -   `data` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** JSON data to send with the request. (optional, default `{}`)
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)**
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 

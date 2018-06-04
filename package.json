@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=production babel lib -d dist",
     "test": "npm start && cross-env NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js",
     "lint": "eslint lib/**/*",
-    "docs": "node scripts/generate-documentation.js",
+    "docs": "npm start && node scripts/generate-documentation.js",
     "prepublishOnly": "npm run lint"
   },
   "repository": {

@@ -1,7 +1,7 @@
 const documentation = require('documentation')
 const path = require('path')
 const fs = require('fs')
-const Avanza = require('../lib/index.js')
+const Avanza = require('../dist/index.js')
 
 require('dotenv').config({ path: path.join(process.cwd(), '.env') })
 
@@ -170,5 +170,8 @@ async function buildMarkdown() {
  */
 avanza.authenticate({
   username: process.env.AVANZA_USERNAME,
-  password: process.env.AVANZA_PASSWORD
-}).then(buildMarkdown)
+  password: process.env.AVANZA_PASSWORD,
+  totpSecret: process.env.AVANZA_TOTP_SECRET
+})
+  .then(buildMarkdown)
+  .catch((e) => console.error(e))
