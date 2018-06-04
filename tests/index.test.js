@@ -7,191 +7,151 @@ const constants = require('../dist/constants.js')
 
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') })
 
-test.beforeEach((t) => {
-  t.context.avanza = new Avanza()
-  t.context.call = sinon.stub(t.context.avanza, 'call')
-})
+const avanza = new Avanza()
 
-test.serial('authenticate()', async (t) => {
-  const res = await t.context.avanza.authenticate({
+test.before(async () => {
+  await avanza.authenticate({
     username: process.env.AVANZA_USERNAME,
-    password: process.env.AVANZA_PASSWORD
+    password: process.env.AVANZA_PASSWORD,
+    totpSecret: process.env.AVANZA_TOTP_SECRET
   })
-  t.is(typeof res.authenticationSession, 'string', 'authenticationSession is received')
-  t.is(typeof res.pushSubscriptionId, 'string', 'pusbSubscriptionId is received')
-  t.is(typeof res.customerId, 'string', 'customerId is received')
-  t.is(typeof res.securityToken, 'string', 'securityToken is received')
 })
 
-test('getAccountOverview()', async (t) => {
-  await t.context.avanza.getAccountOverview('12345')
-
-  const actual = t.context.call.args[0]
-  const expected = ['GET', constants.paths.ACCOUNT_OVERVIEW_PATH.replace('{0}', '12345')]
-  t.deepEqual(actual, expected)
+test('authenticated', async (t) => {
+  t.is(typeof avanza._authenticationSession, 'string', 'authenticationSession is set')
+  t.is(typeof avanza._pushSubscriptionId, 'string', 'pushSubscriptionId is set')
+  t.is(typeof avanza._customerId, 'string', 'customerId is set')
+  t.is(typeof avanza._securityToken, 'string', 'securityToken is set')
 })
 
-test('getTransactions() without options', async (t) => {
-  await t.context.avanza.getTransactions('12345')
-
-  const actual = t.context.call.args[0]
-  const expected = ['GET', constants.paths.TRANSACTIONS_PATH.replace('{0}', '12345')]
-  t.deepEqual(actual, expected)
+test('make call after being authenticated', async (t) => {
+  t.notThrows(async () => await avanza.getOverview())
 })
 
-test('getTransactions() with options', async (t) => {
-  await t.context.avanza.getTransactions('12345', {
-    from: '2017-01-01',
-    to: '2018-01-01',
-    maxAmount: 12345,
-    minAmount: 54321,
-    orderbookId: ['A', 'B', 'C']
+test.skip('place valid order, edit it and delete it', async (t) => {
+  let actual
+  let expected
+  let orderId
+  let price
+
+  const date = new Date(Date.now() + (1000 * 60 * 60 * 24)) // Tomorrow
+  const dateString = date.toLocaleDateString('sv', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
   })
 
-  const expectedPath = constants.paths.TRANSACTIONS_PATH.replace('{0}', '12345')
-  const expectedQuery = '?from=2017-01-01&to=2018-01-01&maxAmount=12345&minAmount=54321&orderbookId=A%2CB%2CC'
-
-  const actual = t.context.call.args[0]
-  const expected = ['GET', expectedPath + expectedQuery]
-  t.deepEqual(actual, expected)
-})
-
-test('addToWatchlist()', async (t) => {
-  await t.context.avanza.addToWatchlist('12345', '54321')
-
-  const expectedPath = constants.paths.WATCHLISTS_ADD_DELETE_PATH
-    .replace('{1}', '12345')
-    .replace('{0}', '54321')
-
-  const actual = t.context.call.args[0]
-  const expected = ['PUT', expectedPath]
-  t.deepEqual(actual, expected)
-})
-
-test('removeFromWatchlist()', async (t) => {
-  await t.context.avanza.removeFromWatchlist('12345', '54321')
-
-  const expectedPath = constants.paths.WATCHLISTS_ADD_DELETE_PATH
-    .replace('{1}', '12345')
-    .replace('{0}', '54321')
-
-  const actual = t.context.call.args[0]
-  const expected = ['DELETE', expectedPath]
-  t.deepEqual(actual, expected)
-})
-
-test('getInstrument()', async (t) => {
-  await t.context.avanza.getInstrument('STOCK', '12345')
-
-  const actual = t.context.call.args[0]
-  const expected = ['GET', constants.paths.INSTRUMENT_PATH
-    .replace('{0}', 'stock')
-    .replace('{1}', '12345')
-  ]
-  t.deepEqual(actual, expected)
-})
-
-test('getOrderbook()', async (t) => {
-  await t.context.avanza.getOrderbook('STOCK', '12345')
-
-  const expectedPath = constants.paths.ORDERBOOK_PATH.replace('{0}', 'stock')
-  const expectedQuery = '?orderbookId=12345'
-  const actual = t.context.call.args[0]
-  const expected = ['GET', expectedPath + expectedQuery]
-  t.deepEqual(actual, expected)
-})
-
-test('getOrderbooks()', async (t) => {
-  await t.context.avanza.getOrderbooks(['123', '456', '789'])
-
-  const expectedPath = constants.paths.ORDERBOOK_LIST_PATH.replace('{0}', '123,456,789')
-  const expectedQuery = '?sort=name'
-  const actual = t.context.call.args[0]
-  const expected = ['GET', expectedPath + expectedQuery]
-  t.deepEqual(actual, expected)
-})
-
-test('getChartdata()', async (t) => {
-  await t.context.avanza.getChartdata('12345', 'test')
-
-  const expectedPath = constants.paths.CHARTDATA_PATH.replace('{0}', '12345')
-  const expectedQuery = '?timePeriod=test'
-  const actual = t.context.call.args[0]
-  const expected = ['GET', expectedPath + expectedQuery]
-  t.deepEqual(actual, expected)
-})
-
-test('placeOrder()', async (t) => {
-  const options = {
-    accountId: '123',
-    orderbookId: '456',
-    orderType: 'BUY',
-    price: 789,
-    validUntil: '2023-01-01',
-    volume: 100
+  /**
+   * 0. Get orderbook information
+   */
+  try {
+    actual = await avanza.getOrderbook(Avanza.STOCK, process.env.AVANZA_STOCK)
+    price = parseInt(actual.orderbook.buyPrice * 0.9)
+  } catch (e) {
+    t.fail('Could not fetch orderbook information:' + e.statusMessage)
   }
-  await t.context.avanza.placeOrder(options)
 
-  const actual = t.context.call.args[0]
-  const expected = ['POST', constants.paths.ORDER_PLACE_DELETE_PATH, Object.assign({}, options)]
-  t.deepEqual(actual, expected)
-})
+  /**
+   * 1. Place valid order
+   */
+  try {
+    actual = await avanza.placeOrder({
+      accountId: process.env.AVANZA_ACCOUNT,
+      orderbookId: process.env.AVANZA_STOCK,
+      orderType: Avanza.BUY,
+      price,
+      validUntil: dateString,
+      volume: 10
+    })
+    expected = {
+      messages: [''],
+      requestId: '-1',
+      status: 'SUCCESS'
+    }
 
-test('getOrder()', async (t) => {
-  await t.context.avanza.getOrder('STOCK', '12345', '54321')
+    // Save for later
+    orderId = actual.orderId
 
-  const expectedPath = constants.paths.ORDER_GET_PATH.replace('{0}', 'stock')
-  const expectedQuery = '?accountId=12345&orderId=54321'
-  const actual = t.context.call.args[0]
-  const expected = ['GET', expectedPath + expectedQuery]
-  t.deepEqual(actual, expected)
-})
+    t.deepEqual(actual.messages, expected.messages, 'placeOrder().messages')
+    t.is(actual.requestId, '-1', 'placeOrder().requestId')
+    t.is(actual.status, 'SUCCESS', 'placeOrder().status')
+  } catch (e) {
+    t.fail('Could not place buy order:' + e.statusMessage)
+  }
 
-test('deleteOrder()', async (t) => {
-  await t.context.avanza.deleteOrder('12345', '54321')
+  /**
+   * 2. Get order
+   *
+   * Only check that the endpoint returns a non-error status code.
+   */
+  await new Promise(r => setTimeout(r, 1000 + 500 * Math.random()))
+  try {
+    await avanza.getOrder(Avanza.STOCK, process.env.AVANZA_ACCOUNT, orderId)
+  } catch (e) {
+    t.fail('Could not fetch placed order:' + e.statusMessage)
+  }
 
-  const expectedPath = constants.paths.ORDER_PLACE_DELETE_PATH
-  const expectedQuery = '?accountId=12345&orderId=54321'
-  const actual = t.context.call.args[0]
-  const expected = ['DELETE', expectedPath + expectedQuery]
-  t.deepEqual(actual, expected)
+  /**
+   * 3. Edit order
+   *
+   * Increase volume by one unit.
+   */
+  await new Promise(r => setTimeout(r, 1000 + 500 * Math.random()))
+  try {
+    actual = await avanza.editOrder(Avanza.STOCK, orderId, {
+      accountId: process.env.AVANZA_ACCOUNT,
+      volume: 11,
+      price: parseInt(price * 0.95),
+      validUntil: dateString
+    })
+    expected = {
+      messages: [''],
+      orderId,
+      requestId: '-1',
+      status: 'SUCCESS'
+    }
+
+    t.deepEqual(actual.messages, expected.messages, 'editOrder().messages')
+    t.is(actual.orderId, expected.orderId, 'editOrder().orderId')
+    t.is(actual.requestId, '-1', 'editOrder().requestId')
+    t.is(actual.status, 'SUCCESS', 'editOrder().status')
+  } catch (e) {
+    t.fail('Could not edit placed buy order:' + e.statusMessage)
+  }
+
+  /**
+   * 4. Delete order
+   */
+  await new Promise(r => setTimeout(r, 1000 + 500 * Math.random()))
+  try {
+    actual = await avanza.deleteOrder(process.env.AVANZA_ACCOUNT, orderId)
+    expected = {
+      messages: [''],
+      orderId,
+      requestId: '-1',
+      status: 'SUCCESS'
+    }
+
+    t.deepEqual(actual.messages, expected.messages, 'deleteOrder().messages')
+    t.is(actual.orderId, expected.orderId, 'deleteOrder().orderId')
+    t.is(actual.requestId, '-1', 'deleteOrder().requestId')
+    t.is(actual.status, 'SUCCESS', 'deleteOrder().status')
+  } catch (e) {
+    t.fail('Could not delete buy order:' + e.statusMessage)
+  }
 })
 
 test.cb('subscribe()', (t) => {
-  const { avanza } = t.context
-  avanza.authenticate({
-    username: process.env.AVANZA_USERNAME,
-    password: process.env.AVANZA_PASSWORD
-  }).then(() => {
-    setTimeout(() => {
-      if (avanza._socketClientId) {
-        t.pass()
-      } else {
-        t.fail()
-      }
-      t.end()
-    }, 500)
-    avanza.subscribe(Avanza.QUOTES, '5479', () => {})
-  })
-})
-
-test.cb('multiple subscribe()', (t) => {
   t.plan(2)
-  const { avanza } = t.context
-  avanza.authenticate({
-    username: process.env.AVANZA_USERNAME,
-    password: process.env.AVANZA_PASSWORD
-  }).then(() => {
-    let received = false
-    avanza.subscribe(Avanza.QUOTES, '5269', () => {
-      t.pass()
-      if (received) t.end()
-      received = true
-    })
-    avanza.subscribe(Avanza.QUOTES, '5479', () => {
-      t.pass()
-      if (received) t.end()
-      received = true
-    })
+  let received = false
+  avanza.subscribe(Avanza.QUOTES, process.env.AVANZA_STOCK2, () => {
+    t.pass()
+    if (received) t.end()
+    received = true
+  })
+  avanza.subscribe(Avanza.QUOTES, process.env.AVANZA_STOCK3, () => {
+    t.pass()
+    if (received) t.end()
+    received = true
   })
 })
