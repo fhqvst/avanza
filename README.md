@@ -28,7 +28,7 @@ Here are the steps to get your TOTP Secret:
 1. Click "Aktivera" on the next screen.
 2. Select "Annan app för tvåfaktorsinloggning".
 3. Click "Kan du inte scanna QR-koden?" to reveal your TOTP Secret.
-5. Finally, run `node -e "console.log(require('./lib/totp.js')('PASTE_YOUR_TOTP_SECRET_HERE'))"` to generate an initial code.
+5. Finally, run `node -e "console.log(require('avanza/dist/totp')('PASTE_YOUR_TOTP_SECRET_HERE'))"` to generate an initial code.
 6. Done! From now on all you have to do is supply your secret in the `authenticate()` function as in the example below.
 
 ## Example
