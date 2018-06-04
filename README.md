@@ -18,6 +18,19 @@ $ npm install avanza
 
 Refer to [API.md](./API.md).
 
+## Getting a TOTP Secret
+
+**NOTE: Since May 2018 two-factor authentication is used to log in.**
+
+Here are the steps to get your TOTP Secret:
+
+0. Go to Mina Sidor > Profil > Sajtinställningar > Tvåfaktorsinloggning and click "Återaktivera". (*Only do this step if you have already set up two-factor auth.*)
+1. Click "Aktivera" on the next screen.
+2. Select "Annan app för tvåfaktorsinloggning".
+3. Click "Kan du inte scanna QR-koden?" to reveal your TOTP Secret.
+5. Finally, run `node -e "console.log(require('./lib/totp.js')('PASTE_YOUR_TOTP_SECRET_HERE'))"` to generate an initial code.
+6. Done! From now on all you have to do is supply your secret in the `authenticate()` function as in the example below.
+
 ## Example
 
 Authenticate and fetch currently held positions:
@@ -27,8 +40,9 @@ import Avanza from 'avanza'
 const avanza = new Avanza()
 
 avanza.authenticate({
-  username: 'USERNAME',
-  password: 'PASSWORD'
+  username: 'MY_USERNAME',
+  password: 'MY_PASSWORD',
+  totpSecret: 'MY_TOTP_SECRET'
 }).then(async () => {
   const positions = await avanza.getPositions()
   console.log(positions)
@@ -43,7 +57,8 @@ const avanza = new Avanza()
 
 avanza.authenticate({
   username: 'USERNAME',
-  password: 'PASSWORD'
+  password: 'PASSWORD',
+  totpSecret: 'MY_TOTP_SECRET'
 }).then(() => {
   avanza.subscribe(Avanza.QUOTES, '5479', (quote) => {
     console.log('Received quote:', quote)
