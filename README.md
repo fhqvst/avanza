@@ -1,4 +1,4 @@
-# Avanza
+# Avanza [![Build Status](https://travis-ci.com/fhqvst/avanza.svg?branch=master)](https://travis-ci.com/fhqvst/avanza)
 
 A Node.js wrapper for the unofficial Avanza API. Please note that this is only a proof of concept, hence not meant to be used by anyone.
 
