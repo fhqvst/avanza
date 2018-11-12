@@ -141,6 +141,100 @@ test.skip('place valid order, edit it and delete it', async (t) => {
   }
 })
 
+/*
+* This test should be preferably run after market close.
+* If done during market session, the order will be killed
+* before we can delete it.
+*/
+test.skip('place valid FOK order, and delete it', async (t) => {
+  let actual
+  let expected
+  let orderId
+  let price
+
+  const date = new Date(Date.now() + (1000 * 60 * 60 * 24)) // Tomorrow
+  const dateString = date.toLocaleDateString('sv', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  })
+
+  /**
+   * 0. Get orderbook information
+   */
+  try {
+    actual = await avanza.getOrderbook(Avanza.STOCK, process.env.AVANZA_STOCK)
+    price = parseInt(actual.orderbook.buyPrice * 0.9)
+  } catch (e) {
+    t.fail('Could not fetch orderbook information:' + e.statusMessage)
+  }
+
+  /**
+   * 1. Place valid order
+   */
+  try {
+    actual = await avanza.placeWebOrder({
+      accountId: process.env.AVANZA_ACCOUNT,
+      advancedOrder: "true",
+      orderCondition: "FILL_OR_KILL",
+      orderType: Avanza.BUY,
+      orderbookId: process.env.AVANZA_STOCK,
+      parentContext: "order",
+      price,
+      validUntil: dateString,
+      volume: 10,
+      volumeFactor: "1.00"
+    })
+    expected = {
+      messages: [''],
+      requestId: '-1',
+      status: 'SUCCESS'
+    }
+
+    // Save for later
+    orderId = actual.orderId
+
+    t.deepEqual(actual.messages, expected.messages, 'placeOrder().messages')
+    t.is(actual.requestId, '-1', 'placeOrder().requestId')
+    t.is(actual.status, 'SUCCESS', 'placeOrder().status')
+  } catch (e) {
+    t.fail('Could not place FOK buy order:' + e.statusMessage)
+  }
+
+  /**
+   * 2. Get order
+   *
+   * Only check that the endpoint returns a non-error status code.
+   */
+  await new Promise(r => setTimeout(r, 1000 + 500 * Math.random()))
+  try {
+    await avanza.getOrder(Avanza.STOCK, process.env.AVANZA_ACCOUNT, orderId)
+  } catch (e) {
+    t.fail('Could not fetch placed FOK order:' + e.statusMessage)
+  }
+
+  /**
+   * 3. Delete order
+   */
+  await new Promise(r => setTimeout(r, 1000 + 500 * Math.random()))
+  try {
+    actual = await avanza.deleteOrder(process.env.AVANZA_ACCOUNT, orderId)
+    expected = {
+      messages: [''],
+      orderId,
+      requestId: '-1',
+      status: 'SUCCESS'
+    }
+
+    t.deepEqual(actual.messages, expected.messages, 'deleteOrder().messages')
+    t.is(actual.orderId, expected.orderId, 'deleteOrder().orderId')
+    t.is(actual.requestId, '-1', 'deleteOrder().requestId')
+    t.is(actual.status, 'SUCCESS', 'deleteOrder().status')
+  } catch (e) {
+    t.fail('Could not delete FOK buy order:' + e.statusMessage)
+  }
+})
+
 test.cb('subscribe()', (t) => {
   t.plan(2)
   let received = false
