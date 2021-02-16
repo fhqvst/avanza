@@ -4,9 +4,9 @@ A Node.js wrapper for the unofficial Avanza API. Please note that this is only a
 
 It might also be valuable to note that I am not affiliated with Avanza Bank AB in any way. The underlying API can be taken down or changed without warning at any point in time.
 
-## Algorithmic Trading
+## Interested in finance?
 
-If you're interested in algorithmic trading, you should definitely check out [DevAlpha](https://devalpha.io)!
+[Talos](https://talos.com) is hiring senior engineers! Send an email to filip+hiring@talos.com.
 
 ## Installation
 
