@@ -6,7 +6,7 @@ It might also be valuable to note that I am not affiliated with Avanza Bank AB i
 
 ## Interested in finance?
 
-[Talos](https://talos.com) is hiring senior engineers! Send an email to filip+hiring@talos.com.
+[Talos](https://talos.com) is hiring senior engineers! Send an email to `filip+hiring` at `talos.com`.
 
 ## Installation
 
