@@ -1,12 +1,12 @@
 {
   "name": "avanza",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A wrapper for the unofficial Avanza API",
   "main": "dist/index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production babel lib -d dist",
-    "test": "npm start && cross-env NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js",
-    "lint": "eslint lib/**/*",
+    "test": "npm start && cross-env NODE_ENV=test NODE_PATH=lib ava tests/**/*.test.js -s -c 1",
+    "lint": "eslint lib/**/* --max-warnings=0",
     "docs": "npm start && node scripts/generate-documentation.js",
     "prepublishOnly": "npm run lint"
   },
@@ -24,31 +24,46 @@
   ],
   "homepage": "https://github.com/fhqvst/avanza#readme",
   "dependencies": {
-    "ws": "3.2.0"
+    "ws": "^7.4.3"
   },
   "devDependencies": {
-    "ava": "^0.22.0",
-    "babel-cli": "^6.24.0",
-    "babel-preset-env": "^1.6.0",
-    "cross-env": "^5.0.5",
-    "documentation": "^4.0.0-rc.1",
-    "dotenv": "^2.0.0",
-    "eslint": "^3.9.1",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.12.0",
-    "sinon": "^2.3.6"
+    "@babel/cli": "^7.12.16",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.16",
+    "ava": "^3.1.15",
+    "cross-env": "^7.0.3",
+    "documentation": "^13.1.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "sinon": "^9.2.4"
   },
   "babel": {
     "presets": [
       [
-        "env",
+        "@babel/preset-env",
         {
           "targets": {
-            "browsers": "last 2 versions",
-            "node": "6.11"
+            "node": "14.15.5"
           }
         }
       ]
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm start && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --max-warnings 0 --fix",
+      "prettier --config .prettierrc --write"
     ]
   }
 }

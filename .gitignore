@@ -63,3 +63,6 @@ old/
 
 # dist folder only deployed on npm
 dist/
+
+# IntelliJ
+.idea

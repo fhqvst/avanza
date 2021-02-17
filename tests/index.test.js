@@ -1,9 +1,8 @@
 const test = require('ava')
-const sinon = require('sinon')
 const path = require('path')
+const sinon = require('sinon')
 
 const Avanza = require('../dist/index.js')
-const constants = require('../dist/constants.js')
 
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') })
 
@@ -13,32 +12,32 @@ test.before(async () => {
   await avanza.authenticate({
     username: process.env.AVANZA_USERNAME,
     password: process.env.AVANZA_PASSWORD,
-    totpSecret: process.env.AVANZA_TOTP_SECRET
+    totpSecret: process.env.AVANZA_TOTP_SECRET,
   })
 })
 
-test('authenticated', async (t) => {
+test('authenticated', async t => {
   t.is(typeof avanza._authenticationSession, 'string', 'authenticationSession is set')
   t.is(typeof avanza._pushSubscriptionId, 'string', 'pushSubscriptionId is set')
   t.is(typeof avanza._customerId, 'string', 'customerId is set')
   t.is(typeof avanza._securityToken, 'string', 'securityToken is set')
 })
 
-test('make call after being authenticated', async (t) => {
-  t.notThrows(async () => await avanza.getOverview())
+test('make call after being authenticated', async t => {
+  t.truthy(await avanza.getOverview())
 })
 
-test.skip('place valid order, edit it and delete it', async (t) => {
+test('place valid order, edit it and delete it', async t => {
   let actual
   let expected
   let orderId
   let price
 
-  const date = new Date(Date.now() + (1000 * 60 * 60 * 24)) // Tomorrow
+  const date = new Date(Date.now() + 1000 * 60 * 60 * 24) // Tomorrow
   const dateString = date.toLocaleDateString('sv', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
   })
 
   /**
@@ -46,9 +45,9 @@ test.skip('place valid order, edit it and delete it', async (t) => {
    */
   try {
     actual = await avanza.getOrderbook(Avanza.STOCK, process.env.AVANZA_STOCK)
-    price = parseInt(actual.orderbook.buyPrice * 0.9)
+    price = parseFloat(actual.orderbook.lastPrice * 0.99).toFixed(2)
   } catch (e) {
-    t.fail('Could not fetch orderbook information:' + e.statusMessage)
+    t.fail(`Could not fetch orderbook information:${e.statusMessage}`)
   }
 
   /**
@@ -61,12 +60,12 @@ test.skip('place valid order, edit it and delete it', async (t) => {
       orderType: Avanza.BUY,
       price,
       validUntil: dateString,
-      volume: 10
+      volume: 3,
     })
     expected = {
       messages: [''],
       requestId: '-1',
-      status: 'SUCCESS'
+      status: 'SUCCESS',
     }
 
     // Save for later
@@ -76,7 +75,7 @@ test.skip('place valid order, edit it and delete it', async (t) => {
     t.is(actual.requestId, '-1', 'placeOrder().requestId')
     t.is(actual.status, 'SUCCESS', 'placeOrder().status')
   } catch (e) {
-    t.fail('Could not place buy order:' + e.statusMessage)
+    t.fail(`Could not place buy order:${e.statusMessage}`)
   }
 
   /**
@@ -88,7 +87,7 @@ test.skip('place valid order, edit it and delete it', async (t) => {
   try {
     await avanza.getOrder(Avanza.STOCK, process.env.AVANZA_ACCOUNT, orderId)
   } catch (e) {
-    t.fail('Could not fetch placed order:' + e.statusMessage)
+    t.fail(`Could not fetch placed order:${e.statusMessage}`)
   }
 
   /**
@@ -100,15 +99,15 @@ test.skip('place valid order, edit it and delete it', async (t) => {
   try {
     actual = await avanza.editOrder(Avanza.STOCK, orderId, {
       accountId: process.env.AVANZA_ACCOUNT,
-      volume: 11,
-      price: parseInt(price * 0.95),
-      validUntil: dateString
+      volume: 2,
+      price: parseFloat(price * 0.99).toFixed(2),
+      validUntil: dateString,
     })
     expected = {
       messages: [''],
       orderId,
       requestId: '-1',
-      status: 'SUCCESS'
+      status: 'SUCCESS',
     }
 
     t.deepEqual(actual.messages, expected.messages, 'editOrder().messages')
@@ -116,7 +115,7 @@ test.skip('place valid order, edit it and delete it', async (t) => {
     t.is(actual.requestId, '-1', 'editOrder().requestId')
     t.is(actual.status, 'SUCCESS', 'editOrder().status')
   } catch (e) {
-    t.fail('Could not edit placed buy order:' + e.statusMessage)
+    t.fail(`Could not edit placed buy order:${e.statusMessage}`)
   }
 
   /**
@@ -129,7 +128,7 @@ test.skip('place valid order, edit it and delete it', async (t) => {
       messages: [''],
       orderId,
       requestId: '-1',
-      status: 'SUCCESS'
+      status: 'SUCCESS',
     }
 
     t.deepEqual(actual.messages, expected.messages, 'deleteOrder().messages')
@@ -137,21 +136,29 @@ test.skip('place valid order, edit it and delete it', async (t) => {
     t.is(actual.requestId, '-1', 'deleteOrder().requestId')
     t.is(actual.status, 'SUCCESS', 'deleteOrder().status')
   } catch (e) {
-    t.fail('Could not delete buy order:' + e.statusMessage)
+    t.fail(`Could not delete buy order:${e.statusMessage}`)
   }
 })
 
-test.cb('subscribe()', (t) => {
-  t.plan(2)
-  let received = false
-  avanza.subscribe(Avanza.QUOTES, process.env.AVANZA_STOCK2, () => {
-    t.pass()
-    if (received) t.end()
-    received = true
-  })
-  avanza.subscribe(Avanza.QUOTES, process.env.AVANZA_STOCK3, () => {
-    t.pass()
-    if (received) t.end()
-    received = true
-  })
+test.cb('subscribe() and unsubscribe()', t => {
+  const sandbox = sinon.createSandbox()
+  const spy = sandbox.spy(avanza, '_socketHandleMessage')
+
+  const unsubscribe = avanza.subscribe(Avanza.QUOTES, process.env.AVANZA_STOCK2, () => {})
+  setTimeout(() => unsubscribe(), 500)
+
+  setTimeout(() => {
+    t.deepEqual(
+      spy.lastCall.args[0],
+      JSON.stringify([
+        {
+          channel: '/meta/unsubscribe',
+          id: '5',
+          subscription: `/${Avanza.QUOTES}/${process.env.AVANZA_STOCK2}`,
+          successful: true,
+        },
+      ])
+    )
+    t.end()
+  }, 1000)
 })
