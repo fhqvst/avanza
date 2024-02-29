@@ -24,6 +24,7 @@
   ],
   "homepage": "https://github.com/fhqvst/avanza#readme",
   "dependencies": {
+    "follow-redirects": "^1.15.5",
     "ws": "^7.4.3"
   },
   "devDependencies": {
